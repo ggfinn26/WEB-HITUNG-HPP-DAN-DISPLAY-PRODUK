@@ -67,7 +67,7 @@ function closeAppAlert() {
 
 // ── Confirm Modal ─────────────────────────────────────────────────────────────
 
-let _confirmCallback = null;
+var _confirmCallback = null;
 
 function showConfirm(message, onConfirm, okLabel = 'Hapus') {
     const overlay = document.getElementById('app-confirm-overlay');
