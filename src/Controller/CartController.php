@@ -20,27 +20,48 @@ class CartController {
         }
 
         $adminWa = $_ENV['ADMIN_WA'] ?? '62895380123352';
+        $adminIg = $_ENV['ADMIN_IG'] ?? 'arungaarungidunia';
         $waUrl   = null;
+        $igMsg   = null;
 
         if ($success) {
-            $items      = json_decode($success['items'], true) ?? [];
-            $itemsText  = '';
+            $items     = json_decode($success['items'], true) ?? [];
+            $itemsText = '';
             foreach ($items as $item) {
                 $qty      = (int)($item['qty'] ?? 1);
                 $price    = (float)($item['price'] ?? 0);
                 $name     = $item['name'] ?? '';
                 $subtotal = 'Rp ' . number_format($qty * $price, 0, ',', '.');
-                $itemsText .= "• {$name} × {$qty} — {$subtotal}\n";
+                $itemsText .= "• {$name} x {$qty} — {$subtotal}\n";
             }
-            $total   = 'Rp ' . number_format((float)$success['subTotal'], 0, ',', '.');
-            $msg     = "Halo Mbu Titip Arunga! 👋\n\n"
-                     . "Saya mau konfirmasi pesanan:\n\n"
-                     . "🧾 *No. Resi: {$success['orderNumber']}*\n\n"
-                     . "📦 *Pesanan:*\n{$itemsText}\n"
-                     . "💰 *Total: {$total}*\n\n"
-                     . "👤 *Nama:* {$success['namaPemesan']}\n\n"
-                     . "Mohon konfirmasi ketersediaan ya! Terima kasih 🙏";
-            $waUrl   = "https://wa.me/{$adminWa}?text=" . urlencode($msg);
+            $total = 'Rp ' . number_format((float)$success['subTotal'], 0, ',', '.');
+            $nama  = $success['namaPemesan'];
+            $wa    = $success['whatsapp'] ?? '-';
+            $alamat = $success['alamat'] ?? '-';
+            $ig    = $success['instagram'] ?? '';
+
+            $waMsg = "Halo Mbu Titip Arunga! 👋\n\n"
+                   . "Saya mau konfirmasi pesanan:\n\n"
+                   . "🧾 *No. Order: {$success['orderNumber']}*\n\n"
+                   . "📦 *Pesanan:*\n{$itemsText}\n"
+                   . "💰 *Total: {$total}*\n\n"
+                   . "👤 *Nama:* {$nama}\n"
+                   . "📱 *WA:* {$wa}\n"
+                   . ($alamat ? "🏠 *Alamat:* {$alamat}\n" : '')
+                   . "\nMohon konfirmasi ketersediaan ya! Terima kasih 🙏";
+
+            $igMsg = "Halo Mbu Titip Arunga! 👋\n\n"
+                   . "Saya mau konfirmasi pesanan:\n\n"
+                   . "🧾 No. Order: {$success['orderNumber']}\n\n"
+                   . "📦 Pesanan:\n{$itemsText}\n"
+                   . "💰 Total: {$total}\n\n"
+                   . "👤 Nama: {$nama}\n"
+                   . "📱 WA: {$wa}\n"
+                   . ($alamat ? "🏠 Alamat: {$alamat}\n" : '')
+                   . ($ig ? "📸 Instagram: @{$ig}\n" : '')
+                   . "\nMohon konfirmasi ketersediaan ya! Terima kasih 🙏";
+
+            $waUrl = "https://wa.me/{$adminWa}?text=" . urlencode($waMsg);
         }
 
         $title = 'Keranjang Belanja | Mbu Titip';
@@ -94,10 +115,13 @@ class CartController {
         $saved = $this->orderService->saveOrder($order);
 
         $_SESSION['cart_success'] = [
-            'orderNumber' => $saved->getOrderNumber(),
-            'namaPemesan' => $namaPemesan,
-            'items'       => $listItemOrder,
-            'subTotal'    => $subTotal,
+            'orderNumber'  => $saved->getOrderNumber(),
+            'namaPemesan'  => $namaPemesan,
+            'whatsapp'     => $whatsapp,
+            'alamat'       => $alamatPemesan,
+            'instagram'    => $instagram,
+            'items'        => $listItemOrder,
+            'subTotal'     => $subTotal,
         ];
 
         header("Location: ?page=cart&action=success");
