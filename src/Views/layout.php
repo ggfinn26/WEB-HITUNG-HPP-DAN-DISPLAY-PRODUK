@@ -62,12 +62,11 @@ $_seoLd      = $structuredData ?? null;
     <!-- ── Preload Critical CSS ── -->
     <link rel="preload" href="css/app.css" as="style">
     <link rel="preload" href="css/fonts.css" as="style">
-    <link rel="preload" href="css/material-symbols.css" as="style">
 
     <!-- ── CSS ── -->
     <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="css/material-symbols.css">
     <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 
     <!-- ── JS ── -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
@@ -88,7 +87,7 @@ $_seoLd      = $structuredData ?? null;
             </div>
             
             <div class="hidden lg:flex items-center gap-8">
-                <a class="text-secondary dark:text-secondary-fixed font-bold border-b-2 border-secondary font-label-md text-label-md hover:text-secondary transition-colors duration-300" href="?page=home">Katalog</a>
+                <a class="text-secondary dark:text-secondary-fixed font-bold border-b-2 border-secondary font-label-md text-label-md hover:text-secondary transition-colors duration-300" href="?page=catalog">Katalog</a>
                 <a class="text-on-surface-variant dark:text-on-primary-fixed-variant font-medium font-label-md text-label-md hover:text-secondary transition-colors duration-300" href="?page=home#lacak-pesanan">Lacak Pesanan</a>
                 
                 <?php if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true): ?>
@@ -121,7 +120,10 @@ $_seoLd      = $structuredData ?? null;
                         <span class="material-symbols-outlined text-[16px]">expand_more</span>
                     </div>
                 </div>
-                <a href="?page=home#katalog" class="bg-secondary-container text-on-secondary-container px-4 sm:px-6 py-2 rounded-lg font-label-md text-label-md font-bold hover:scale-95 active:scale-90 transition-all shadow-md hidden sm:inline-flex">
+                <a href="?page=cart" class="p-2 rounded-xl hover:bg-surface-container-high transition-colors flex items-center justify-center" aria-label="Keranjang">
+                    <span id="cart-icon" class="material-symbols-outlined text-2xl text-on-surface-variant transition-colors">shopping_cart</span>
+                </a>
+                <a href="?page=catalog" class="bg-secondary-container text-on-secondary-container px-4 sm:px-6 py-2 rounded-lg font-label-md text-label-md font-bold hover:scale-95 active:scale-90 transition-all shadow-md hidden sm:inline-flex">
                     Mulai Belanja
                 </a>
                 <button id="mobile-menu-btn" aria-label="Buka menu" aria-expanded="false"
@@ -193,7 +195,7 @@ $_seoLd      = $structuredData ?? null;
                 </select>
             </div>
 
-            <a href="?page=home#katalog"
+            <a href="?page=catalog"
                class="flex items-center justify-center gap-2 bg-secondary-container text-on-secondary-container mx-1 py-3 rounded-xl font-bold hover:opacity-90 transition-opacity sm:hidden">
                 <span class="material-symbols-outlined text-[20px]">shopping_bag</span>Mulai Belanja
             </a>
@@ -201,6 +203,7 @@ $_seoLd      = $structuredData ?? null;
     </header>
 
     <!-- Main Content -->
+    <script src="js/cart.js"></script>
     <main class="flex-grow w-full relative z-10 p-6 md:p-10 max-w-7xl mx-auto">
         <?php echo $content ?? ''; ?>
     </main>
@@ -216,7 +219,7 @@ $_seoLd      = $structuredData ?? null;
             
             <div class="flex justify-center gap-4">
                 <a class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center hover:text-primary hover:scale-110 transition-all text-primary shadow-sm" 
-                   href="https://instagram.com/arungaarungidunia" target="_blank" title="Instagram Arunga">
+                   href="https://instagram.com/<?= htmlspecialchars($_ENV['ADMIN_IG'] ?? 'arungaarungidunia') ?>" target="_blank" title="Instagram Arunga">
                     <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
                     </svg>
@@ -284,5 +287,57 @@ $_seoLd      = $structuredData ?? null;
             });
         }
     </script>
+
+    <style>
+    .app-modal-box {
+        background:#f8f9ff; color:#0b1c30;
+        border-radius:1rem; padding:1.75rem 1.5rem;
+        width:min(360px, calc(100vw - 2rem));
+        text-align:center;
+        box-shadow:0 24px 64px rgba(0,0,0,.35);
+    }
+    html.dark .app-modal-box { background:#1a2840; color:#dde6f5; }
+    html.pink .app-modal-box { background:#fff0f6; color:#3b0024; }
+    html.sky-blue .app-modal-box { background:#f0f8ff; color:#001e3c; }
+    html.coffee .app-modal-box { background:#fdf6ee; color:#2c1a00; }
+    html.matcha .app-modal-box { background:#f4faf0; color:#0a2600; }
+    .app-modal-btn-cancel {
+        flex:1; padding:.7rem; border-radius:.75rem;
+        font-weight:700; font-size:.875rem; cursor:pointer;
+        background:#e8eaf0; color:#43474f; border:1.5px solid #c3c6d1;
+    }
+    html.dark .app-modal-btn-cancel { background:#2a3d55; color:#c8d8ee; border-color:#3d5570; }
+    .app-modal-btn-ok {
+        flex:1; padding:.7rem; border-radius:.75rem;
+        font-weight:700; font-size:.875rem; cursor:pointer;
+        background:#dc2626; color:#fff; border:none;
+    }
+    .app-modal-msg { font-size:.9rem; line-height:1.6; margin-bottom:1.5rem; }
+    html.dark .app-modal-msg { color:#b0c4de; }
+    .app-modal-msg:not(html.dark *) { color:#43474f; }
+    </style>
+
+    <!-- ── Alert Modal ───────────────────────────────────────────────── -->
+    <div id="app-alert-overlay" style="display:none;z-index:9999;position:fixed;inset:0;align-items:center;justify-content:center;padding:1rem;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)">
+        <div class="app-modal-box">
+            <span id="app-alert-icon" class="material-symbols-outlined" style="font-size:2.5rem;display:block;margin-bottom:.75rem"></span>
+            <p id="app-alert-msg" class="app-modal-msg"></p>
+            <button onclick="closeAppAlert()" style="background:#001e40;color:#fff;border:none;padding:.7rem 2rem;border-radius:.75rem;font-weight:700;font-size:.875rem;cursor:pointer;width:100%">OK</button>
+        </div>
+    </div>
+
+    <!-- ── Confirm Modal ──────────────────────────────────────────────── -->
+    <div id="app-confirm-overlay" style="display:none;z-index:9999;position:fixed;inset:0;align-items:center;justify-content:center;padding:1rem;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)">
+        <div class="app-modal-box">
+            <span class="material-symbols-outlined" style="font-size:2.5rem;color:#d97706;display:block;margin-bottom:.75rem">warning</span>
+            <p id="app-confirm-msg" class="app-modal-msg"></p>
+            <div style="display:flex;gap:.75rem">
+                <button onclick="closeAppConfirm(false)" class="app-modal-btn-cancel">Batal</button>
+                <button id="app-confirm-ok-btn" onclick="closeAppConfirm(true)" class="app-modal-btn-ok">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/cart.js"></script>
 </body>
 </html>

@@ -60,19 +60,25 @@ class HomeController {
     }
 
     public function catalog() {
-        $products = $this->productService->findAll();
+        $perPage = 12;
+        $currentPage = max(1, (int)($_GET['p'] ?? 1));
+        $totalProducts = $this->productService->countAll();
+        $totalPages = max(1, (int)ceil($totalProducts / $perPage));
+        $currentPage = min($currentPage, $totalPages);
+
+        $products = $this->productService->findPaginated($currentPage, $perPage);
 
         $scheme  = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
         $baseUrl = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
 
         $title       = 'Katalog Produk Jastip | Mbu Titip Arunga Arungi Dunia';
         $description = 'Jelajahi katalog lengkap barang jastip dari berbagai pelosok nusantara. Produk pilihan tangan pertama dengan kualitas terjamin untuk keluarga tersayang.';
-        $canonical   = $baseUrl . '/?page=catalog';
+        $canonical   = $baseUrl . '/?page=catalog&p=' . $currentPage;
         $ogImage     = $baseUrl . '/logo.webp';
 
         // ItemList structured data for catalog
         $itemListElements = [];
-        foreach (array_slice($products, 0, 10) as $i => $p) {
+        foreach ($products as $i => $p) {
             $itemListElements[] = [
                 '@type'    => 'ListItem',
                 'position' => $i + 1,
@@ -89,6 +95,48 @@ class HomeController {
             'numberOfItems'   => count($products),
             'itemListElement' => $itemListElements,
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        // Fetch variant data using BATCH queries — no N+1
+        $variantsData = [];
+        $vr = $this->productService->getVariantRepository();
+        if ($vr && !empty($products)) {
+            $productIds = array_map(fn($p) => $p->getId(), $products);
+
+            // 1 query: all groups for all products
+            $groupsByProduct = $vr->getGroupsByProducts($productIds);
+
+            // 1 query: all options for all groups found above
+            $allGroupIds = [];
+            foreach ($groupsByProduct as $groups) {
+                foreach ($groups as $g) {
+                    $allGroupIds[] = $g->getId();
+                }
+            }
+            $optionsByGroup = $vr->getOptionsByGroupIds($allGroupIds);
+
+            // 1 query: all variants + 1 more for combinations (inside getVariantsByProducts)
+            $variantsByProduct = $vr->getVariantsByProducts($productIds);
+
+            // 1 query: all images
+            $imagesByProduct = $vr->getImagesByProducts($productIds);
+
+            // Assemble result map
+            foreach ($productIds as $pid) {
+                $groups = [];
+                foreach ($groupsByProduct[$pid] ?? [] as $g) {
+                    $opts = $optionsByGroup[$g->getId()] ?? [];
+                    $groups[] = [
+                        'name'    => $g->getName(),
+                        'options' => array_map(fn($o) => $o->getName(), $opts),
+                    ];
+                }
+                $variantsData[$pid] = [
+                    'groups'   => $groups,
+                    'variants' => $variantsByProduct[$pid] ?? [],
+                    'images'   => $imagesByProduct[$pid] ?? [],
+                ];
+            }
+        }
 
         ob_start();
         require __DIR__ . '/../Views/Home/catalog.php';

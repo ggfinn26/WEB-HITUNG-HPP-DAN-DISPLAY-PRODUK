@@ -36,7 +36,7 @@
                     <span id="selected-count" class="text-xs text-on-surface-variant hidden"></span>
                 </div>
                 <button type="submit" id="bulk-delete-btn" disabled
-                        onclick="return confirm('Hapus semua order yang dipilih? Tindakan ini tidak bisa dibatalkan.')"
+                        onclick="event.preventDefault(); showConfirm('Hapus semua order yang dipilih? Tindakan ini tidak bisa dibatalkan.', () => this.closest('form').submit())"
                         class="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-xl text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-red-600 transition-colors">
                     <span class="material-symbols-outlined text-[16px]">delete_sweep</span>
                     Hapus Terpilih
@@ -119,7 +119,7 @@
                                         <span class="material-symbols-outlined text-[16px]">edit</span> Edit
                                     </a>
                                     <form method="POST" action="?page=laporan&action=deleteOrder&id=<?= $order->getId() ?>"
-                                          onsubmit="return confirm('Hapus order <?= htmlspecialchars($order->getOrderNumber()) ?>?')" class="w-full md:w-auto flex">
+                                          data-confirm="Hapus order <?= htmlspecialchars($order->getOrderNumber()) ?>?" class="w-full md:w-auto flex">
                                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(\App\Helper\CsrfHelper::getToken()) ?>">
                                         <button type="submit" class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-red-100 text-red-500 transition-colors flex items-center justify-center gap-1 font-bold text-xs w-full" title="Hapus">
                                             <span class="material-symbols-outlined text-[16px]">delete</span> Hapus

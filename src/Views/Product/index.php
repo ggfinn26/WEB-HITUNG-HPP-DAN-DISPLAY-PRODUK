@@ -75,7 +75,7 @@
                                         <a href="?page=products&action=edit&id=<?= $product->getId() ?>" class="bg-secondary-container/10 text-secondary-container hover:bg-secondary-container hover:text-white px-3 py-1.5 rounded-lg transition-colors font-bold text-sm flex items-center gap-1">
                                             <span class="material-symbols-outlined text-[18px]">edit</span> Edit
                                         </a>
-                                        <form method="POST" action="?page=products&action=delete&id=<?= $product->getId() ?>" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
+                                        <form method="POST" action="?page=products&action=delete&id=<?= $product->getId() ?>" data-confirm="Apakah Anda yakin ingin menghapus produk ini?">
                                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(\App\Helper\CsrfHelper::getToken()) ?>">
                                             <button type="submit" class="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-lg transition-colors font-bold text-sm flex items-center gap-1">
                                                 <span class="material-symbols-outlined text-[18px]">delete</span> Hapus

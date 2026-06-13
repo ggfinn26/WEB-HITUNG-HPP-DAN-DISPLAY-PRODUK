@@ -18,9 +18,9 @@ session_set_cookie_params([
 ]);
 session_start();
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(E_ALL);  // still log, just don't display
 
 
 
@@ -46,6 +46,7 @@ use App\LaporanController;
 use App\SesiJastipRepositoryImpl;
 use App\SesiJastipService;
 use App\SesiJastipController;
+use App\CartController;
 use App\ProductVariantRepositoryImpl;
 
 // Inisialisasi Dependensi (Manual Dependency Injection)
@@ -81,6 +82,9 @@ try {
     $sesiRepository  = new SesiJastipRepositoryImpl();
     $sesiService     = new SesiJastipService($sesiRepository);
     $sesiController  = new SesiJastipController($sesiService, $hppRepository, $pengeluaranRepository);
+
+    // Cart Module
+    $cartController = new CartController($orderService);
 
 } catch (\Exception $e) {
     error_log($e->getMessage());
@@ -224,9 +228,17 @@ try {
             }
             break;
 
+        case 'cart':
+            if ($action === 'checkout' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                $cartController->checkout($_POST);
+            } else {
+                $cartController->index();
+            }
+            break;
+
         default:
             http_response_code(404);
-            echo "404 Not Found - Halaman '$page' tidak ditemukan di gerbang aplikasi.";
+            echo "404 Not Found - Halaman '" . htmlspecialchars($page, ENT_QUOTES, 'UTF-8') . "' tidak ditemukan.";
             break;
     }
 } catch (\Exception $e) {

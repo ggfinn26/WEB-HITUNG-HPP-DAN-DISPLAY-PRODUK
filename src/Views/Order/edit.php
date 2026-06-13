@@ -223,7 +223,7 @@ const existingItems = <?= json_encode(array_values($existingItems)) ?>;
         if (e.target.closest('.remove-item')) {
             if (container.querySelectorAll('.order-item').length > 1) {
                 e.target.closest('.order-item').remove(); calculateTotal();
-            } else { alert('Minimal harus ada 1 barang dalam pesanan.'); }
+            } else { showAlert('Minimal harus ada 1 barang dalam pesanan.', 'warning'); }
         }
     });
 
@@ -234,7 +234,7 @@ const existingItems = <?= json_encode(array_values($existingItems)) ?>;
     document.querySelector('form').addEventListener('submit', e => {
         calculateTotal();
         if (JSON.parse(listItemOrderInput.value).length === 0) {
-            e.preventDefault(); alert('Harap isi minimal 1 barang pesanan.');
+            e.preventDefault(); showAlert('Harap isi minimal 1 barang pesanan.', 'warning');
         }
     });
 

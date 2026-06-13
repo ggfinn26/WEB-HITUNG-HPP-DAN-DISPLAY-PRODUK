@@ -115,7 +115,7 @@
                                         <span class="material-symbols-outlined text-[18px]">edit</span>
                                     </a>
                                     <form method="POST" action="?page=hpp&action=delete&id=<?= $hpp->getId() ?>"
-                                          onsubmit="return confirm('Hapus HPP \'<?= htmlspecialchars(addslashes($hpp->getName())) ?>\'?');" class="flex-1 flex">
+                                          data-confirm="Hapus HPP '<?= htmlspecialchars($hpp->getName()) ?>'?" class="flex-1 flex">
                                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(\App\Helper\CsrfHelper::getToken()) ?>">
                                         <button type="submit" class="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-lg transition-colors font-bold text-sm flex flex-1 justify-center items-center gap-1 w-full">
                                             <span class="material-symbols-outlined text-[18px]">delete</span>

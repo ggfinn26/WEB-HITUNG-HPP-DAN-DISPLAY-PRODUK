@@ -112,7 +112,7 @@
                     </button>
                     <?php endif; ?>
                     <form method="POST" action="?page=sesi&action=hapus&id=<?= $sesi->getId() ?>"
-                          onsubmit="return confirm('Hapus sesi \'<?= htmlspecialchars(addslashes($sesi->getNamaSesi())) ?>\'?')">
+                          data-confirm="Hapus sesi '<?= htmlspecialchars($sesi->getNamaSesi()) ?>'?">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
                         <button type="submit" class="p-2 rounded-xl bg-red-50 border border-red-100 text-red-400 hover:bg-red-600 hover:text-white transition-colors" title="Hapus">
                             <span class="material-symbols-outlined text-[18px]">delete</span>

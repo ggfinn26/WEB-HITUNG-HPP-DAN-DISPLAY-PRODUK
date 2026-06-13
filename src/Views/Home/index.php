@@ -12,7 +12,7 @@
                 Temanmu Mengarungi Nusantara. Jasa Titip Terpercaya Seluruh Indonesia. Temukan barang-barang favorit dari berbagai daerah untuk keluarga tersayang.
             </p>
             <div class="flex flex-wrap gap-4 hero-cta">
-                <a href="#katalog" class="bg-secondary-container text-on-secondary-container px-10 py-4 rounded-xl font-headline-md font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all active:scale-95 inline-block text-center">
+                <a href="?page=catalog" class="bg-secondary-container text-on-secondary-container px-10 py-4 rounded-xl font-headline-md font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all active:scale-95 inline-block text-center">
                     Mulai Belanja
                 </a>
                 <a href="#lacak-pesanan" class="border-2 border-primary text-primary px-10 py-4 rounded-xl font-headline-md font-bold hover:bg-primary hover:text-white transition-all active:scale-95 inline-block text-center">
@@ -116,7 +116,11 @@ button.px-10 {
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 <?php foreach($products as $product): ?>
                     <!-- Product Card -->
-                    <div class="group bg-surface rounded-3xl overflow-hidden shadow-sm hover:-translate-y-2 hover:shadow-xl transition-all duration-300 border border-outline-variant/20">
+                    <div class="group bg-surface rounded-3xl overflow-hidden shadow-sm hover:-translate-y-2 hover:shadow-xl transition-all duration-300 border border-outline-variant/20"
+                         data-product-id="<?= $product->getId() ?>"
+                         data-product-name="<?= htmlspecialchars($product->getName()) ?>"
+                         data-product-price="<?= (float)$product->getPrice() ?>"
+                         data-product-image="<?= htmlspecialchars($product->getImageUrl() ?? '') ?>">
                         <div class="relative h-64 overflow-hidden bg-surface-container-high flex items-center justify-center">
                             <?php if ($product->getImageUrl()): ?>
                                 <img src="<?= htmlspecialchars($product->getImageUrl()) ?>" alt="<?= htmlspecialchars($product->getName()) ?>" class="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500" loading="lazy">
@@ -141,11 +145,18 @@ button.px-10 {
                                 <span class="font-headline-md text-xl font-black text-secondary dark:text-secondary-fixed">
                                     Rp. <?= number_format((float)$product->getPrice(), 0, ',', '.') ?>
                                 </span>
-                                <a href="https://wa.me/<?= htmlspecialchars($_ENV['ADMIN_WA'] ?? '62895380123352') ?>?text=Halo%20Jastip%20Arunga,%20saya%20tertarik%20dengan%20<?= urlencode($product->getName()) ?>" target="_blank" 
-                                   class="bg-primary text-white px-5 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors shadow-md active:scale-95 whitespace-nowrap">
-                                    <span class="material-symbols-outlined text-[20px]" data-weight="fill">shopping_cart</span>
-                                    <span class="font-label-md font-bold text-sm">Pesan</span>
-                                </a>
+                                <div class="flex flex-row gap-2 mt-auto">
+                                    <a href="?page=catalog&open=<?= $product->getId() ?>"
+                                       class="flex-1 bg-primary text-white px-3 py-2.5 rounded-xl flex items-center justify-center gap-1.5 hover:bg-primary/90 transition-colors shadow-md active:scale-95">
+                                        <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                        <span class="font-bold text-sm">Detail</span>
+                                    </a>
+                                    <button onclick="addToCart(this)"
+                                            class="flex-1 bg-secondary-container text-on-secondary-container px-3 py-2.5 rounded-xl flex items-center justify-center gap-1.5 hover:bg-secondary hover:text-white transition-colors shadow-md active:scale-95 border border-transparent">
+                                        <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                        <span class="font-bold text-sm">Keranjang</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

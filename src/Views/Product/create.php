@@ -259,10 +259,10 @@
 
         function showPreview(file) {
             if (!file || !file.type.startsWith('image/')) {
-                alert('File harus berupa gambar.'); return;
+                showAlert('File harus berupa gambar.', 'error'); return;
             }
             if (file.size > 5 * 1024 * 1024) {
-                alert('Ukuran gambar maksimal 5MB.'); return;
+                showAlert('Ukuran gambar maksimal 5MB.', 'error'); return;
             }
             const reader = new FileReader();
             reader.onload = e => {

@@ -11,6 +11,12 @@ interface ProductVariantRepository {
     public function getOptionsByGroup(int $groupId): array;
     public function getVariantsByProduct(int $productId): array;
     
+    // Batch methods — no N+1
+    public function getGroupsByProducts(array $productIds): array;   // keyed by product_id
+    public function getOptionsByGroupIds(array $groupIds): array;    // keyed by group_id
+    public function getVariantsByProducts(array $productIds): array; // keyed by product_id
+    public function getImagesByProducts(array $productIds): array;   // keyed by product_id
+
     public function saveImages(int $productId, array $images): array;
     public function getImagesByProduct(int $productId): array;
 

@@ -208,7 +208,7 @@ document.getElementById('hpp-form').addEventListener('submit', function(e) {
     const items = getItemList();
     if (items.length === 0 || items.every(i => !i.nama)) {
         e.preventDefault();
-        alert('Minimal satu komponen biaya harus diisi.');
+        showAlert('Minimal satu komponen biaya harus diisi.', 'warning');
         return;
     }
     document.getElementById('product_item_list_input').value = JSON.stringify(items);

@@ -91,23 +91,111 @@ class ProductVariantRepositoryImpl implements ProductVariantRepository {
         $stmt = $this->pdo->prepare("SELECT * FROM product_variants WHERE product_id = ? ORDER BY id ASC");
         $stmt->execute([$productId]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($rows)) return [];
+
+        // Batch-fetch combinations in ONE query instead of N queries
+        $variantIds = array_column($rows, 'id');
+        $ph = implode(',', array_fill(0, count($variantIds), '?'));
+        $combStmt = $this->pdo->prepare("SELECT variant_id, option_id FROM product_variant_combinations WHERE variant_id IN ($ph)");
+        $combStmt->execute($variantIds);
+        $combMap = [];
+        foreach ($combStmt->fetchAll(PDO::FETCH_ASSOC) as $c) {
+            $combMap[(int)$c['variant_id']][] = (int)$c['option_id'];
+        }
+
         $variants = [];
         foreach ($rows as $r) {
             $variant = new ProductVariant(
-                (int)$r['id'], (int)$r['product_id'], $r['name'], $r['sku'], $r['price'], 
-                (int)$r['stock'], $r['image_id'] ? (int)$r['image_id'] : null, 
+                (int)$r['id'], (int)$r['product_id'], $r['name'], $r['sku'], $r['price'],
+                (int)$r['stock'], $r['image_id'] ? (int)$r['image_id'] : null,
                 new \DateTime($r['created_at']), new \DateTime($r['updated_at'])
             );
-            
-            // Get option IDs
-            $optStmt = $this->pdo->prepare("SELECT option_id FROM product_variant_combinations WHERE variant_id = ?");
-            $optStmt->execute([$variant->getId()]);
-            $optIds = $optStmt->fetchAll(PDO::FETCH_COLUMN);
-            $variant->setOptionIds(array_map('intval', $optIds));
-            
+            $variant->setOptionIds($combMap[(int)$r['id']] ?? []);
             $variants[] = $variant;
         }
         return $variants;
+    }
+
+    // ── BATCH METHODS (no N+1) ────────────────────────────────────────────────
+
+    /** Returns array keyed by product_id => [ProductVariantGroup, ...] */
+    public function getGroupsByProducts(array $productIds): array {
+        if (empty($productIds)) return [];
+        $ph = implode(',', array_fill(0, count($productIds), '?'));
+        $stmt = $this->pdo->prepare("SELECT * FROM product_variant_groups WHERE product_id IN ($ph) ORDER BY id ASC");
+        $stmt->execute($productIds);
+        $result = [];
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $r) {
+            $result[(int)$r['product_id']][] = new ProductVariantGroup(
+                (int)$r['id'], (int)$r['product_id'], $r['name'], new \DateTime($r['created_at'])
+            );
+        }
+        return $result;
+    }
+
+    /** Returns array keyed by group_id => [ProductVariantOption, ...] */
+    public function getOptionsByGroupIds(array $groupIds): array {
+        if (empty($groupIds)) return [];
+        $ph = implode(',', array_fill(0, count($groupIds), '?'));
+        $stmt = $this->pdo->prepare("SELECT * FROM product_variant_options WHERE group_id IN ($ph) ORDER BY id ASC");
+        $stmt->execute($groupIds);
+        $result = [];
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $r) {
+            $result[(int)$r['group_id']][] = new ProductVariantOption(
+                (int)$r['id'], (int)$r['group_id'], $r['name'], new \DateTime($r['created_at'])
+            );
+        }
+        return $result;
+    }
+
+    /** Returns array keyed by product_id => [variant_array, ...] — with option_ids already set */
+    public function getVariantsByProducts(array $productIds): array {
+        if (empty($productIds)) return [];
+        $ph = implode(',', array_fill(0, count($productIds), '?'));
+        $stmt = $this->pdo->prepare("SELECT * FROM product_variants WHERE product_id IN ($ph) ORDER BY id ASC");
+        $stmt->execute($productIds);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($rows)) return [];
+
+        // Batch-fetch combinations
+        $variantIds = array_column($rows, 'id');
+        $ph2 = implode(',', array_fill(0, count($variantIds), '?'));
+        $combStmt = $this->pdo->prepare("SELECT variant_id, option_id FROM product_variant_combinations WHERE variant_id IN ($ph2)");
+        $combStmt->execute($variantIds);
+        $combMap = [];
+        foreach ($combStmt->fetchAll(PDO::FETCH_ASSOC) as $c) {
+            $combMap[(int)$c['variant_id']][] = (int)$c['option_id'];
+        }
+
+        $result = [];
+        foreach ($rows as $r) {
+            $vid = (int)$r['id'];
+            $pid = (int)$r['product_id'];
+            $result[$pid][] = [
+                'id'       => $vid,
+                'name'     => $r['name'],
+                'price'    => $r['price'],
+                'stock'    => (int)$r['stock'],
+                'image_id' => $r['image_id'] ? (int)$r['image_id'] : null,
+            ];
+        }
+        return $result;
+    }
+
+    /** Returns array keyed by product_id => [['id'=>, 'url'=>], ...] */
+    public function getImagesByProducts(array $productIds): array {
+        if (empty($productIds)) return [];
+        $ph = implode(',', array_fill(0, count($productIds), '?'));
+        $stmt = $this->pdo->prepare("SELECT * FROM product_images WHERE product_id IN ($ph) ORDER BY is_primary DESC, id ASC");
+        $stmt->execute($productIds);
+        $result = [];
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $r) {
+            $result[(int)$r['product_id']][] = [
+                'id'  => (int)$r['id'],
+                'url' => $r['image_url'],
+            ];
+        }
+        return $result;
     }
 
     public function saveImages(int $productId, array $images): array {

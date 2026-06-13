@@ -115,6 +115,21 @@ class ProductController {
 
         $title = "Edit Produk";
         
+        $variantGroups = [];
+        $variantOptions = [];
+        $variants = [];
+        $variantImages = [];
+        
+        $vr = $this->productService->getVariantRepository();
+        if ($vr) {
+            $variantGroups = $vr->getGroupsByProduct($id);
+            foreach ($variantGroups as $g) {
+                $variantOptions[$g->getId()] = $vr->getOptionsByGroup($g->getId());
+            }
+            $variants = $vr->getVariantsByProduct($id);
+            $variantImages = $vr->getImagesByProduct($id);
+        }
+        
         ob_start();
         require __DIR__ . '/../Views/Product/edit.php';
         $content = ob_get_clean();

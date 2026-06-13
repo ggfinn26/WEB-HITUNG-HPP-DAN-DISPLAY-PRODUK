@@ -205,7 +205,7 @@ $currentMonthLabel = $namaBulan[$bulan] . ' ' . $tahun;
                                             <span class="material-symbols-outlined text-[16px]">edit</span>
                                         </a>
                                         <form method="POST" action="?page=laporan&action=deletePengeluaran&id=<?= $p->getId() ?>"
-                                              onsubmit="return confirm('Hapus pengeluaran ini?')">
+                                              data-confirm="Hapus pengeluaran ini?">
                                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
                                             <input type="hidden" name="redirect_bulan" value="<?= $bulan ?>">
                                             <input type="hidden" name="redirect_tahun" value="<?= $tahun ?>">

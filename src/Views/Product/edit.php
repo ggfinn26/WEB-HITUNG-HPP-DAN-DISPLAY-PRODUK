@@ -109,6 +109,39 @@
                 </div>
             </div>
 
+            <!-- Variant Editor Container -->
+            <div id="variant-editor-container" class="space-y-6 pt-6 border-t border-outline-variant/30">
+                <div class="flex items-center justify-between mb-2">
+                    <div>
+                        <h3 class="font-bold text-primary text-lg">Variasi Produk</h3>
+                        <p class="text-sm text-on-surface-variant">Tambahkan variasi seperti warna, ukuran, dll.</p>
+                    </div>
+                    <button type="button" id="btn-add-variant-group" class="bg-surface-container-high text-primary px-4 py-2 rounded-xl font-bold hover:bg-primary/10 transition-colors flex items-center gap-2 text-sm">
+                        <span class="material-symbols-outlined">add</span> Tambah Grup Variasi
+                    </button>
+                </div>
+                
+                <div id="variant-groups-container" class="space-y-4"></div>
+                
+                <div id="variant-images-container" class="hidden space-y-4 pt-4 border-t border-outline-variant/30">
+                    <h4 class="font-bold text-on-surface text-md">Foto Variasi</h4>
+                    <p class="text-xs text-on-surface-variant">Upload foto untuk setiap variasi.</p>
+                    <div id="variant-images-list" class="flex gap-4 overflow-x-auto pb-2"></div>
+                </div>
+
+                <div id="variant-table-container" class="hidden space-y-4 pt-4 border-t border-outline-variant/30">
+                    <h4 class="font-bold text-on-surface text-md">Daftar Variasi</h4>
+                    <div class="overflow-x-auto rounded-xl border border-outline-variant/50">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-surface-container-low text-on-surface-variant font-bold">
+                                <tr id="variant-table-head"></tr>
+                            </thead>
+                            <tbody id="variant-table-body" class="divide-y divide-outline-variant/30 bg-surface"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <div class="pt-4 border-t border-outline-variant/30 flex justify-end">
                 <button type="submit" class="bg-primary text-white w-full sm:w-auto px-8 py-4 justify-center rounded-xl font-bold hover:bg-primary-container transition-colors shadow-lg active:scale-95 flex items-center gap-2">
                     <span class="material-symbols-outlined">save</span>
@@ -198,10 +231,10 @@
 
         function showPreview(file) {
             if (!file || !file.type.startsWith('image/')) {
-                alert('File harus berupa gambar.'); return;
+                showAlert('File harus berupa gambar.', 'error'); return;
             }
             if (file.size > 5 * 1024 * 1024) {
-                alert('Ukuran gambar maksimal 5MB.'); return;
+                showAlert('Ukuran gambar maksimal 5MB.', 'error'); return;
             }
             const reader = new FileReader();
             reader.onload = e => {
@@ -235,4 +268,49 @@
             }
         });
     }());
-</script
+</script>
+<?php
+    $jsGroups = [];
+    if (isset($variantGroups) && isset($variantOptions)) {
+        foreach ($variantGroups as $g) {
+            $opts = [];
+            if (isset($variantOptions[$g->getId()])) {
+                foreach ($variantOptions[$g->getId()] as $o) {
+                    $opts[] = $o->getName();
+                }
+            }
+            $jsGroups[] = [
+                'name' => $g->getName(),
+                'options' => $opts
+            ];
+        }
+    }
+    
+    $jsVariants = [];
+    if (isset($variants)) {
+        foreach ($variants as $v) {
+            $jsVariants[] = [
+                'name' => $v->getName(),
+                'price' => $v->getPrice(),
+                'stock' => $v->getStock(),
+                'sku' => $v->getSku()
+            ];
+        }
+    }
+    
+    $jsImages = [];
+    if (isset($variantImages)) {
+        foreach ($variantImages as $img) {
+            $jsImages[] = [
+                'id' => $img->getId(),
+                'url' => $img->getImageUrl()
+            ];
+        }
+    }
+?>
+<script>
+    window.INITIAL_VARIANT_GROUPS = <?= json_encode($jsGroups) ?>;
+    window.INITIAL_VARIANTS = <?= json_encode($jsVariants) ?>;
+    window.INITIAL_VARIANT_IMAGES = <?= json_encode($jsImages) ?>;
+</script>
+<script src="js/variant-editor.js"></script>

@@ -338,7 +338,7 @@
 <span class="text-headline-md font-headline-md text-on-primary font-bold">Mbu Titip</span>
 </div>
 <div class="flex gap-6 text-label-sm font-label-sm">
-<a class="text-on-primary/80 hover:text-secondary-fixed-dim transition-colors" href="https://instagram.com/arungaarungidunia">Instagram</a>
+<a class="text-on-primary/80 hover:text-secondary-fixed-dim transition-colors" href="https://instagram.com/<?= htmlspecialchars($_ENV['ADMIN_IG'] ?? 'arungaarungidunia') ?>">Instagram</a>
 <a class="text-on-primary/80 hover:text-secondary-fixed-dim transition-colors" href="https://wa.me/<?= htmlspecialchars($_ENV['ADMIN_WA'] ?? '62895380123352') ?>">Help Center</a>
 </div>
 </div>
