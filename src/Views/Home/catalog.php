@@ -41,7 +41,7 @@
                             <p class="font-body-md text-on-surface-variant mb-6 line-clamp-2">Barang jastip pilihan terbaik dengan kualitas terjamin.</p>
                             
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto gap-4">
-                                <span class="font-headline-md text-xl font-black text-secondary-container">
+                                <span class="font-headline-md text-xl font-black text-secondary dark:text-secondary-fixed">
                                     Rp. <?= number_format((float)$product->getPrice(), 0, ',', '.') ?>
                                 </span>
                                 <a href="https://wa.me/<?= htmlspecialchars($_ENV['ADMIN_WA'] ?? '62895380123352') ?>?text=Halo%20Jastip%20Arunga,%20saya%20tertarik%20dengan%20<?= urlencode($product->getName()) ?>" target="_blank" 

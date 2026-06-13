@@ -134,7 +134,7 @@
                             <p class="font-body-md text-on-surface-variant mb-6 line-clamp-2">Barang jastip pilihan terbaik dengan kualitas terjamin.</p>
                             
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto gap-4">
-                                <span class="font-headline-md text-xl font-black text-secondary-container">
+                                <span class="font-headline-md text-xl font-black text-secondary dark:text-secondary-fixed">
                                     Rp. <?= number_format((float)$product->getPrice(), 0, ',', '.') ?>
                                 </span>
                                 <a href="https://wa.me/<?= htmlspecialchars($_ENV['ADMIN_WA'] ?? '62895380123352') ?>?text=Halo%20Jastip%20Arunga,%20saya%20tertarik%20dengan%20<?= urlencode($product->getName()) ?>" target="_blank" 
@@ -193,7 +193,7 @@
         <div class="absolute -left-20 -bottom-20 w-64 h-64 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
         
         <div class="text-center space-y-4 mb-12 relative z-10">
-            <span class="inline-block px-5 py-2 rounded-full bg-secondary-container/10 text-secondary-container text-sm font-bold tracking-widest uppercase mb-2">Layanan Khusus</span>
+            <span class="inline-block px-5 py-2 rounded-full bg-secondary-container/10 text-secondary text-sm font-bold tracking-widest uppercase mb-2">Layanan Khusus</span>
             <h2 class="text-4xl font-bold text-primary">Tidak Menemukan Barangmu?</h2>
             <p class="text-on-surface-variant text-lg max-w-2xl mx-auto mt-4">
                 Jangan khawatir! Beritahu kami barang apa yang ingin kamu titip, dan kami akan segera mencarikannya untukmu di seluruh belahan dunia.
@@ -217,7 +217,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="space-y-3">
                     <label class="block text-sm font-bold text-on-surface uppercase tracking-wider">Jumlah (Qty)</label>
-                    <input type="number" id="reqQty" required min="1" value="1"
+                    <input type="number" id="reqQty" aria-label="Jumlah Pesanan" required min="1" value="1"
                            class="w-full px-6 py-4 rounded-2xl border-2 border-outline-variant/50 bg-surface-container focus:bg-surface focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all shadow-sm text-on-surface font-medium">
                 </div>
                 <div class="space-y-3">
@@ -234,7 +234,7 @@
             </div>
 
             <div class="text-center pt-6">
-                <button type="submit" class="px-10 py-5 bg-[#25D366] text-white font-bold text-lg rounded-2xl hover:bg-[#128C7E] transform hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-[#25D366]/30 flex items-center justify-center mx-auto gap-3 w-full sm:w-auto">
+                <button type="submit" class="px-10 py-5 bg-[#075E54] text-white font-bold text-lg rounded-2xl hover:bg-[#128C7E] transform hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-[#075E54]/30 flex items-center justify-center mx-auto gap-3 w-full sm:w-auto">
                     <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.811.922 3.148.922 3.18 0 5.767-2.587 5.768-5.766 0-3.181-2.587-5.764-5.767-5.764zM12.031 16.442c-1.042 0-1.748-.306-2.553-.787l-.183-.111-1.318.347.353-1.286-.122-.194c-.544-.863-.829-1.63-.829-2.478.001-2.613 2.13-4.743 4.745-4.743 2.614 0 4.745 2.13 4.745 4.743 0 2.613-2.131 4.743-4.745 4.743z"></path><path d="M14.659 13.987c-.144-.072-.852-.42-.984-.468-.131-.048-.227-.072-.323.072-.096.144-.372.468-.456.564-.084.096-.168.108-.312.036-.144-.072-.609-.225-1.161-.716-.429-.382-.72-.853-.804-1.002-.084-.144-.009-.222.063-.294.065-.065.144-.168.216-.252.072-.084.096-.144.144-.24.048-.096.024-.18-.012-.252-.036-.072-.323-.779-.442-1.066-.117-.281-.235-.243-.323-.248-.084-.004-.18-.005-.276-.005-.096 0-.252.036-.384.18-.132.144-.504.492-.504 1.2s.516 1.392.588 1.488c.072.096 1.014 1.547 2.455 2.17.344.149.613.238.823.305.346.11.66.094.908.057.279-.041.852-.348.972-.684.12-.336.12-.624.084-.684-.036-.06-.132-.096-.276-.168z"></path></svg>
                     Pesan via WhatsApp Sekarang
                 </button>

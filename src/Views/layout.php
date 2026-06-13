@@ -93,7 +93,7 @@ $_seoLd      = $structuredData ?? null;
                     <a href="?page=hpp" class="font-medium font-label-md text-label-md hover:text-primary transition-colors text-slate-600 dark:text-slate-300">HPP</a>
                     <a href="?page=sesi" class="font-medium font-label-md text-label-md hover:text-primary transition-colors text-slate-600 dark:text-slate-300">Sesi</a>
                     <a href="?page=laporan" class="font-medium font-label-md text-label-md hover:text-primary transition-colors text-slate-600 dark:text-slate-300">Laporan</a>
-                    <a href="?page=auth&action=logout" class="font-medium font-label-md text-label-md text-red-500 hover:text-red-600 transition-colors">Keluar</a>
+                    <a href="?page=auth&action=logout" class="font-medium font-label-md text-label-md text-red-700 dark:text-red-400 hover:text-red-800 transition-colors">Keluar</a>
                 <?php endif; ?>
             </div>
 
@@ -103,7 +103,7 @@ $_seoLd      = $structuredData ?? null;
                 <?php endif; ?>
 
                 <div class="relative group hidden md:block">
-                    <select id="theme-selector" class="appearance-none bg-surface-container-low text-on-surface text-sm rounded-lg px-3 py-2 border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer" onchange="applyTheme(this.value)">
+                    <select id="theme-selector" aria-label="Pilih Tema" class="appearance-none bg-surface-container-low text-on-surface text-sm rounded-lg px-3 py-2 border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer" onchange="applyTheme(this.value)">
                         <option value="system">Auto Mode</option>
                         <option value="dark">Dark Mode</option>
                         <option value="light">Light Mode</option>
@@ -175,7 +175,7 @@ $_seoLd      = $structuredData ?? null;
             <?php endif; ?>
 
             <div class="pt-2 px-1">
-                <select id="mobile-theme-selector"
+                <select id="mobile-theme-selector" aria-label="Pilih Tema Mobile"
                         class="w-full appearance-none bg-surface-container-low text-on-surface text-sm rounded-xl px-4 py-3 border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer"
                         onchange="applyTheme(this.value)">
                     <option value="system">Auto Mode</option>
