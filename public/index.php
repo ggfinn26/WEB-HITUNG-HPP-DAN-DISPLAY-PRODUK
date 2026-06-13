@@ -9,6 +9,8 @@ if (!$isHttps && !in_array($_SERVER['SERVER_NAME'] ?? '', $localHosts, true)) {
     exit;
 }
 
+// __Host- prefix: browser hanya kirim cookie via HTTPS, path harus /, tidak boleh ada Domain
+session_name($isHttps ? '__Host-session' : 'session');
 session_set_cookie_params([
     'lifetime' => 0,
     'path'     => '/',
