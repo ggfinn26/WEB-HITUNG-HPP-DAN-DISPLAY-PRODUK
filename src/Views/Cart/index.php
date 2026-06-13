@@ -166,21 +166,24 @@ unset($_SESSION['cart_error']);
 
         if (!cart.length) { showAlert('Keranjang masih kosong!', 'warning'); return null; }
 
+        const WAVE  = '👋';
+        const CLIP  = '📋';
+        const PRAY  = '🙏';
         const fmt = n => 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.round(n));
-        let msg = `Halo Mbu Titip! 👋 Saya ingin memesan:\n\n`;
+        let msg = `Halo Mbu Titip! ${WAVE} Saya ingin memesan:\n\n`;
         cart.forEach((item, i) => {
             msg += `${i+1}. *${item.name}*`;
             if (item.variant) msg += ` (${item.variant})`;
-            msg += `\n   Qty: ${item.qty} × ${fmt(item.price)} = ${fmt(item.price * item.qty)}\n`;
+            msg += `\n   Qty: ${item.qty} x ${fmt(item.price)} = ${fmt(item.price * item.qty)}\n`;
         });
         const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
         msg += `\n*Total: ${fmt(total)}*\n\n`;
-        msg += `📋 *Data Pemesan:*\n`;
+        msg += `${CLIP} *Data Pemesan:*\n`;
         msg += `- Nama: ${nama}\n`;
         msg += `- WA: ${wa}\n`;
         msg += `- Alamat: ${alamat}\n`;
-        if (ig !== '-') msg += `- Instagram: ${ig}\n`;
-        msg += `\nMohon konfirmasi ketersediaan & info pembayaran. Terima kasih! 🙏`;
+        if (ig !== '-') msg += `- Instagram: @${ig}\n`;
+        msg += `\nMohon konfirmasi ketersediaan & info pembayaran. Terima kasih! ${PRAY}`;
         return msg;
     }
 
