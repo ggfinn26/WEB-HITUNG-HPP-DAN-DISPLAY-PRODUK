@@ -62,11 +62,12 @@ $_seoLd      = $structuredData ?? null;
     <!-- ── Preload Critical CSS ── -->
     <link rel="preload" href="css/app.css" as="style">
     <link rel="preload" href="css/fonts.css" as="style">
+    <link rel="preload" href="css/material-symbols.css" as="style">
 
     <!-- ── CSS ── -->
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="css/material-symbols.css">
 
     <!-- ── JS ── -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
