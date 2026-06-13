@@ -37,7 +37,7 @@
                     </tr>
                 <?php else: ?>
                     <?php foreach ($orders as $order): ?>
-                        <tr class="block md:table-row bg-surface hover:bg-background/80 transition-colors group rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden pt-2 md:pt-0">
+                        <tr class="block md:table-row bg-surface hover:bg-background/80 transition-colors group rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden md:overflow-visible pt-2 md:pt-0">
                             <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
                                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center md:block gap-1 sm:gap-4">
                                     <span class="md:hidden font-bold text-xs uppercase text-muted flex-shrink-0">No. Seri</span>
