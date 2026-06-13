@@ -151,11 +151,12 @@ function openTutupModal(id, nama, produkList) {
     document.getElementById('tutup-form').action = `?page=sesi&action=tutup&id=${id}`;
     document.getElementById('tutup-modal-name').textContent = `Sesi: ${nama}`;
     const list = document.getElementById('tutup-produk-list');
+    const escHtml = s => { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; };
     list.innerHTML = produkList.length === 0
         ? '<p class="text-xs text-on-surface-variant italic">Tidak ada produk terdaftar.</p>'
         : produkList.map(p => `
             <div class="flex items-center gap-3 py-2 border-b border-outline-variant/20 last:border-0">
-                <span class="flex-1 text-sm font-medium text-on-surface truncate">${p.nama}</span>
+                <span class="flex-1 text-sm font-medium text-on-surface truncate">${escHtml(p.nama)}</span>
                 <div class="flex-shrink-0">
                     <label class="block text-[10px] text-on-surface-variant font-bold uppercase mb-0.5 text-right">Aktual</label>
                     <input type="number" name="aktual_qty[${p.id}]" min="0" value="${p.estimasi_qty}"
