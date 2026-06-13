@@ -5,14 +5,14 @@ use App\SesiJastipService;
 use App\ValidationException;
 
 class SesiJastipController {
-    private SesiJastipService       $service;
-    private RincianHppRepositoryImpl $hppRepo;
-    private PengeluaranRepositoryImpl $pengeluaranRepo;
+    private SesiJastipService    $service;
+    private RincianHppInterface  $hppRepo;
+    private PengeluaranInterface $pengeluaranRepo;
 
     public function __construct(
         SesiJastipService $service,
-        RincianHppRepositoryImpl $hppRepo,
-        PengeluaranRepositoryImpl $pengeluaranRepo
+        RincianHppInterface $hppRepo,
+        PengeluaranInterface $pengeluaranRepo
     ) {
         $this->service         = $service;
         $this->hppRepo         = $hppRepo;

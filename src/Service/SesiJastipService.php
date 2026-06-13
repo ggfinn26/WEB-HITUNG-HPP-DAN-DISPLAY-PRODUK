@@ -201,7 +201,7 @@ class SesiJastipService {
         return $saved;
     }
 
-    public function tutupSesi(int $id, array $aktualQtys, PengeluaranRepositoryImpl $pengeluaranRepo): SesiJastip {
+    public function tutupSesi(int $id, array $aktualQtys, PengeluaranInterface $pengeluaranRepo): SesiJastip {
         $sesi = $this->repo->findById($id);
         if (!$sesi) throw new ValidationException("Sesi tidak ditemukan.");
 

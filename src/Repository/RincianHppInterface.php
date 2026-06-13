@@ -16,5 +16,6 @@ namespace App{
         public function findAll(): array;
         public function count(): int;
         public function search(string $query): array;
+        public function findAllForSesi(): array;
     }
 }
