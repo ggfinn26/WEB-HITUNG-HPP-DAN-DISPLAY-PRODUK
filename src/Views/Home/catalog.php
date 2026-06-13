@@ -202,6 +202,12 @@
 .variant-chip.active { border-color: var(--color-primary, #001e40); background: var(--color-primary, #001e40); color: #fff; }
 .modal-desc-label { font-size: 10px; font-weight: 700; color: var(--color-on-surface-variant, #43474f); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; margin-top: 10px; }
 .modal-desc-text { font-size: 13px; color: var(--color-on-surface-variant, #43474f); line-height: 1.6; }
+.modal-desc-text p { margin-bottom: 6px; }
+.modal-desc-text p:last-child { margin-bottom: 0; }
+.modal-desc-text ul, .modal-desc-text ol { padding-left: 18px; margin-bottom: 6px; }
+.modal-desc-text ul { list-style: disc; }
+.modal-desc-text ol { list-style: decimal; }
+.modal-desc-text li { margin-bottom: 2px; }
 .modal-footer { flex-shrink: 0; padding: 12px 16px 20px; border-top: 1px solid var(--color-outline-variant, #c3c6d1); background: var(--color-surface, #fff); }
 .modal-cart-btn {
     width: 100%;
@@ -465,6 +471,36 @@ cw.addEventListener('wheel',function(e){
     wa+=e.deltaX;if(Math.abs(wa)>60){moveModalCarousel(wa>0?1:-1);wa=0;wl=true;setTimeout(function(){wl=false;},500);}
 },{passive:false});
 
+// ── Description formatter ──────────────────────────────────────────────────────
+function descToHtml(text) {
+    if (!text) return '';
+    // Escape raw HTML entities first
+    text = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var lines = text.split('\n');
+    var out = [], inUl = false, inOl = false;
+    lines.forEach(function(line) {
+        var t = line.trim();
+        var isBullet = /^[-*•]\s+/.test(t);
+        var isNum    = /^\d+[.)]\s+/.test(t);
+        if (isBullet) {
+            if (inOl) { out.push('</ol>'); inOl = false; }
+            if (!inUl) { out.push('<ul>'); inUl = true; }
+            out.push('<li>' + t.replace(/^[-*•]\s+/,'') + '</li>');
+        } else if (isNum) {
+            if (inUl) { out.push('</ul>'); inUl = false; }
+            if (!inOl) { out.push('<ol>'); inOl = true; }
+            out.push('<li>' + t.replace(/^\d+[.)]\s+/,'') + '</li>');
+        } else {
+            if (inUl) { out.push('</ul>'); inUl = false; }
+            if (inOl) { out.push('</ol>'); inOl = false; }
+            out.push(t === '' ? '<br>' : '<p>' + t + '</p>');
+        }
+    });
+    if (inUl) out.push('</ul>');
+    if (inOl) out.push('</ol>');
+    return out.join('');
+}
+
 // ── Modal ─────────────────────────────────────────────────────────────────────
 var curId=null, selOpts=[];
 
@@ -496,7 +532,7 @@ function openCatalogModal(id) {
 
     var dw=document.getElementById('modalDescWrap');
     if (p.description && p.description.trim()) {
-        document.getElementById('modalDesc').innerHTML=p.description; dw.style.display='block';
+        document.getElementById('modalDesc').innerHTML=descToHtml(p.description); dw.style.display='block';
     } else { dw.style.display='none'; }
 
     document.getElementById('catalogModal').classList.add('open');
