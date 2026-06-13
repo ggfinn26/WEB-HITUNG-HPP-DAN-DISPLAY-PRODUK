@@ -40,26 +40,38 @@ class CartController {
             $alamat = $success['alamat'] ?? '-';
             $ig    = $success['instagram'] ?? '';
 
-            $waMsg = "Halo Mbu Titip Arunga! 👋\n\n"
-                   . "Saya mau konfirmasi pesanan:\n\n"
-                   . "🧾 *No. Order: {$success['orderNumber']}*\n\n"
-                   . "📦 *Pesanan:*\n{$itemsText}\n"
-                   . "💰 *Total: {$total}*\n\n"
-                   . "👤 *Nama:* {$nama}\n"
-                   . "📱 *WA:* {$wa}\n"
-                   . ($alamat ? "🏠 *Alamat:* {$alamat}\n" : '')
-                   . "\nMohon konfirmasi ketersediaan ya! Terima kasih 🙏";
+            $e = [
+                'wave'  => "\u{1F44B}",
+                'receipt' => "\u{1F9FE}",
+                'box'   => "\u{1F4E6}",
+                'money' => "\u{1F4B0}",
+                'person'=> "\u{1F464}",
+                'phone' => "\u{1F4F1}",
+                'house' => "\u{1F3E0}",
+                'cam'   => "\u{1F4F8}",
+                'pray'  => "\u{1F64F}",
+            ];
 
-            $igMsg = "Halo Mbu Titip Arunga! 👋\n\n"
+            $waMsg = "Halo Mbu Titip Arunga! {$e['wave']}\n\n"
                    . "Saya mau konfirmasi pesanan:\n\n"
-                   . "🧾 No. Order: {$success['orderNumber']}\n\n"
-                   . "📦 Pesanan:\n{$itemsText}\n"
-                   . "💰 Total: {$total}\n\n"
-                   . "👤 Nama: {$nama}\n"
-                   . "📱 WA: {$wa}\n"
-                   . ($alamat ? "🏠 Alamat: {$alamat}\n" : '')
-                   . ($ig ? "📸 Instagram: @{$ig}\n" : '')
-                   . "\nMohon konfirmasi ketersediaan ya! Terima kasih 🙏";
+                   . "{$e['receipt']} *No. Order: {$success['orderNumber']}*\n\n"
+                   . "{$e['box']} *Pesanan:*\n{$itemsText}\n"
+                   . "{$e['money']} *Total: {$total}*\n\n"
+                   . "{$e['person']} *Nama:* {$nama}\n"
+                   . "{$e['phone']} *WA:* {$wa}\n"
+                   . ($alamat ? "{$e['house']} *Alamat:* {$alamat}\n" : '')
+                   . "\nMohon konfirmasi ketersediaan ya! Terima kasih {$e['pray']}";
+
+            $igMsg = "Halo Mbu Titip Arunga! {$e['wave']}\n\n"
+                   . "Saya mau konfirmasi pesanan:\n\n"
+                   . "{$e['receipt']} No. Order: {$success['orderNumber']}\n\n"
+                   . "{$e['box']} Pesanan:\n{$itemsText}\n"
+                   . "{$e['money']} Total: {$total}\n\n"
+                   . "{$e['person']} Nama: {$nama}\n"
+                   . "{$e['phone']} WA: {$wa}\n"
+                   . ($alamat ? "{$e['house']} Alamat: {$alamat}\n" : '')
+                   . ($ig ? "{$e['cam']} Instagram: @{$ig}\n" : '')
+                   . "\nMohon konfirmasi ketersediaan ya! Terima kasih {$e['pray']}";
 
             $waUrl = "https://wa.me/{$adminWa}?text=" . urlencode($waMsg);
         }
