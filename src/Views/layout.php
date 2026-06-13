@@ -36,11 +36,14 @@ $_seoLd      = $structuredData ?? null;
     <meta property="og:title"       content="<?= htmlspecialchars($_seoTitle) ?>">
     <meta property="og:description" content="<?= htmlspecialchars($_seoDesc) ?>">
     <meta property="og:url"         content="<?= htmlspecialchars($_seoCanon) ?>">
-    <meta property="og:image"       content="<?= htmlspecialchars($_seoOgImg) ?>">
+    <meta property="og:image"        content="<?= htmlspecialchars($_seoOgImg) ?>">
     <meta property="og:image:alt"   content="<?= htmlspecialchars($_seoTitle) ?>">
+    <meta property="og:image:type"   content="image/webp">
+    <meta property="og:image:width"  content="1024">
+    <meta property="og:image:height" content="1024">
 
     <!-- ── Twitter Card ── -->
-    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:card"        content="summary">
     <meta name="twitter:title"       content="<?= htmlspecialchars($_seoTitle) ?>">
     <meta name="twitter:description" content="<?= htmlspecialchars($_seoDesc) ?>">
     <meta name="twitter:image"       content="<?= htmlspecialchars($_seoOgImg) ?>">
