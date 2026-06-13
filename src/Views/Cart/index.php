@@ -28,6 +28,8 @@ unset($_SESSION['cart_error']);
                 Konfirmasi via WhatsApp
             </a>
             <button id="ig-confirm-btn"
+                    data-ig-msg="<?= htmlspecialchars($igMsg ?? '') ?>"
+                    data-admin-ig="<?= htmlspecialchars($adminIg ?? 'arungaarungidunia') ?>"
                     class="flex items-center justify-center gap-2 bg-gradient-to-br from-[#833AB4] via-[#E1306C] to-[#F77737] hover:opacity-90 text-white font-bold py-3.5 rounded-xl transition-all shadow-md active:scale-95">
                 <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                 Konfirmasi via Instagram DM
@@ -148,24 +150,22 @@ unset($_SESSION['cart_error']);
 </section>
 
 <script src="js/cart-page.js"></script>
-<?php if ($success && $igMsg): ?>
 <script>
 (function() {
-    const igMsg   = <?= json_encode($igMsg) ?>;
-    const adminIg = <?= json_encode($adminIg) ?>;
     const btn = document.getElementById('ig-confirm-btn');
     if (!btn) return;
 
     btn.addEventListener('click', function() {
+        const igMsg   = btn.dataset.igMsg;
+        const adminIg = btn.dataset.adminIg;
+
         try { navigator.clipboard.writeText(igMsg); } catch(e) {}
 
-        // Ganti tombol jadi notifikasi countdown
         btn.disabled = true;
-        btn.classList.remove('from-[#833AB4]', 'via-[#E1306C]', 'to-[#F77737]');
-        btn.classList.add('bg-green-600');
+        btn.style.background = '#16a34a';
 
         let sisa = 5;
-        btn.innerHTML = `<span class="material-symbols-outlined text-[20px]">check</span> Pesan disalin! Membuka Instagram dalam <span id="ig-countdown">${sisa}</span> detik...`;
+        btn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check</span>&nbsp;Pesan disalin! Membuka Instagram dalam <span id="ig-countdown">' + sisa + '</span> detik...';
 
         const interval = setInterval(function() {
             sisa--;
@@ -174,15 +174,12 @@ unset($_SESSION['cart_error']);
             if (sisa <= 0) {
                 clearInterval(interval);
                 window.open('https://ig.me/m/' + adminIg, '_blank');
-                // Kembalikan tombol
                 btn.disabled = false;
-                btn.classList.remove('bg-green-600');
-                btn.classList.add('from-[#833AB4]', 'via-[#E1306C]', 'to-[#F77737]');
-                btn.innerHTML = `<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> Konfirmasi via Instagram DM`;
+                btn.style.background = '';
+                btn.innerHTML = '<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> Konfirmasi via Instagram DM';
             }
         }, 1000);
     });
 })();
 </script>
-<?php endif; ?>
 <?php endif; ?>
