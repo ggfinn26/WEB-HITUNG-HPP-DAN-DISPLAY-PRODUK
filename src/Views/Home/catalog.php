@@ -288,8 +288,10 @@ if (!empty($products)) {
         const product = productsData[currentProductId];
         
         // Reset classes
-        btn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-        btn.removeAttribute('href');
+        if (btn) {
+            btn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+            btn.removeAttribute('href');
+        }
         
         const cartBtn = document.getElementById('modal-cart-btn');
         cartBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
