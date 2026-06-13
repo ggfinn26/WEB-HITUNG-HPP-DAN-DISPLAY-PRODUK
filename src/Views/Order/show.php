@@ -145,7 +145,7 @@
                                 $waMessage .= "Catatan: " . $lastItem['detail'] . "\n\n";
                             }
                             $waMessage .= "Terima kasih!";
-                            $waNumber = "62895380123352";
+                            $waNumber = preg_replace('/[^0-9]/', '', $order->getWhatsappPemesan());
                             $waUrl = "https://wa.me/" . $waNumber . "?text=" . urlencode($waMessage);
                         ?>
                         <a href="<?php echo $waUrl; ?>" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold transition-colors shadow-sm text-sm">

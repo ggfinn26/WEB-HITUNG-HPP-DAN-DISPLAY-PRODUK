@@ -364,6 +364,7 @@
                     });
 
                 // Add dynamic pinpoints for live products
+                const escHtml = s => { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; };
                 const rawProducts = <?= $productsJson ?? '[]' ?>;
                 const mapProducts = rawProducts.filter(p => p.latitude !== null && p.longitude !== null);
 
@@ -405,9 +406,9 @@
                         const miniCatalogHtml = `
                             <div class="bg-surface p-3 rounded-xl shadow-lg border border-outline-variant/30 w-48 font-sans">
                                 <div class="bg-surface-container-high h-24 rounded-lg flex items-center justify-center mb-2 overflow-hidden">
-                                    ${d[0].imageUrl ? `<img src="${d[0].imageUrl}" class="w-full h-full object-cover">` : `<span class="text-3xl">📦</span>`}
+                                    ${d[0].imageUrl ? `<img src="${escHtml(d[0].imageUrl)}" class="w-full h-full object-cover">` : `<span class="text-3xl">📦</span>`}
                                 </div>
-                                <h4 class="font-bold text-sm text-on-surface line-clamp-1 mb-1">${pName}</h4>
+                                <h4 class="font-bold text-sm text-on-surface line-clamp-1 mb-1">${escHtml(pName)}</h4>
                                 <p class="text-xs text-on-surface-variant italic">Klik untuk melihat detail</p>
                             </div>
                         `;
@@ -458,10 +459,10 @@
                             return `
                                 <div class="flex items-center gap-4 p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors border border-outline-variant/20">
                                     <div class="w-16 h-16 rounded-xl bg-surface-container-high flex-shrink-0 flex items-center justify-center overflow-hidden">
-                                        ${p.imageUrl ? `<img src="${p.imageUrl}" class="w-full h-full object-contain p-1">` : `<span class="text-2xl">📦</span>`}
+                                        ${p.imageUrl ? `<img src="${escHtml(p.imageUrl)}" class="w-full h-full object-contain p-1">` : `<span class="text-2xl">📦</span>`}
                                     </div>
                                     <div class="flex-1">
-                                        <h4 class="font-bold text-on-surface text-sm line-clamp-2">${p.name}</h4>
+                                        <h4 class="font-bold text-on-surface text-sm line-clamp-2">${escHtml(p.name)}</h4>
                                         <p class="text-secondary-container font-black text-sm mt-1">${priceFormatted}</p>
                                     </div>
                                     <a href="https://wa.me/62895380123352?text=Halo%20Jastip%20Arunga,%20saya%20tertarik%20dengan%20${encodeURIComponent(p.name)}" target="_blank" class="bg-primary text-white p-2 rounded-full hover:bg-primary-container transition-colors shadow-sm active:scale-95">

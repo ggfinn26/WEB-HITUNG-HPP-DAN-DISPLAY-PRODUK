@@ -353,9 +353,10 @@ function recalc() {
     const bep         = marginRata > 0 ? Math.ceil(totalBiaya / marginRata) : null;
     document.getElementById('bep-display').textContent = bep !== null ? bep + ' item' : '∞';
 
+    const escHtml = s => { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; };
     tbody.innerHTML = hasil.map(h => `
         <tr class="hover:bg-surface-container/40 transition-colors">
-            <td class="px-4 py-3 font-bold text-on-surface text-sm">${h.nama}</td>
+            <td class="px-4 py-3 font-bold text-on-surface text-sm">${escHtml(h.nama)}</td>
             <td class="px-4 py-3 text-right text-on-surface-variant text-sm">${h.estimasi_qty}</td>
             <td class="px-4 py-3 text-right text-sm font-mono text-red-500">${fmt(h.beban)}</td>
             <td class="px-4 py-3 text-right font-bold text-sm font-mono text-primary">${fmt(h.sugesti)}</td>
