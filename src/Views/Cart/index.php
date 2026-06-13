@@ -161,7 +161,7 @@ unset($_SESSION['cart_error']);
         waBtn.addEventListener('click', function() {
             const msg     = waBtn.dataset.waMsg;
             const adminWa = waBtn.dataset.adminWa;
-            window.open('https://wa.me/' + adminWa + '?text=' + encodeURIComponent(msg), '_blank');
+            location.href = 'https://wa.me/' + adminWa + '?text=' + encodeURIComponent(msg);
         });
     }
 
@@ -174,7 +174,7 @@ unset($_SESSION['cart_error']);
 
         try { navigator.clipboard.writeText(igMsg); } catch(e) {}
 
-        window.open('https://ig.me/m/' + adminIg, '_blank');
+        location.href = 'https://ig.me/m/' + adminIg;
 
         btn.disabled = true;
         btn.style.background = '#16a34a';
