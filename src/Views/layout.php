@@ -13,7 +13,7 @@ $_seoTitle   = $title       ?? 'Mbu Titip by Arunga Arungi Dunia';
 $_seoDesc    = $description ?? 'Jasa titip terpercaya dari berbagai penjuru Nusantara. Temukan barang-barang favorit keluarga dengan layanan personal shopper terbaik.';
 $_seoRobots  = $metaRobots  ?? (in_array($_curPage, $_adminPages) ? 'noindex, nofollow' : 'index, follow');
 $_seoCanon   = $canonical   ?? ($_seoBaseUrl . $_seoUri);
-$_seoOgImg   = $ogImage     ?? ($_seoBaseUrl . '/favicon.png');
+$_seoOgImg   = $ogImage     ?? ($_seoBaseUrl . '/logo_transparent.svg');
 $_seoOgType  = $ogType      ?? 'website';
 $_seoLd      = $structuredData ?? null;
 ?>
@@ -51,8 +51,8 @@ $_seoLd      = $structuredData ?? null;
     <?php endif; ?>
 
     <!-- ── Favicon ── -->
-    <link rel="icon"             type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon"                  href="favicon.png">
+    <link rel="icon"             type="image/svg+xml" href="logo_transparent.svg">
+    <link rel="apple-touch-icon"                  href="logo_transparent.svg">
 
     <!-- ── Preconnect (performance + SEO Core Web Vitals) ── -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -77,7 +77,7 @@ $_seoLd      = $structuredData ?? null;
         <nav class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
             <div class="flex items-center gap-4">
                 <a href="?page=home" class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity flex items-center">
-                    <img src="favicon.png" alt="Logo" class="inline-block w-10 h-10 rounded-full mr-3 object-cover shadow-sm" />
+                    <img src="logo_transparent.svg" alt="Logo" class="inline-block w-10 h-10 rounded-full mr-3 object-cover shadow-sm" />
                     <span class="hidden sm:inline">Mbu Titip</span>
                 </a>
             </div>
@@ -204,7 +204,7 @@ $_seoLd      = $structuredData ?? null;
     <footer class="bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline w-full mt-auto no-print">
         <div class="flex flex-col items-center text-center px-6 py-12 max-w-2xl mx-auto">
             <span class="font-headline-md text-headline-md font-extrabold text-primary dark:text-primary-fixed-dim mb-4 flex items-center justify-center gap-2">
-                <img src="favicon.png" alt="Logo" class="w-8 h-8 rounded-full object-cover" />
+                <img src="logo_transparent.svg" alt="Logo" class="w-8 h-8 rounded-full object-cover" />
                 Mbu Titip
             </span>
             <p class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant mb-6">Membawa keajaiban Nusantara ke depan pintu rumah Anda dengan layanan personal shopper terpercaya untuk keluarga.</p>

@@ -6,7 +6,7 @@
     
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
         <div id="hero-content">
-            <img alt="Arunga Kids Friendly Logo" class="h-36 w-auto mb-8 hero-logo rounded-2xl shadow-sm" src="favicon.png" />
+            <img alt="Arunga Kids Friendly Logo" class="h-36 w-auto mb-8 hero-logo rounded-2xl shadow-sm" src="logo_transparent.svg" />
             <h1 class="font-display-lg text-4xl md:text-5xl lg:text-display-lg text-secondary-container mb-4 hero-headline font-bold">Mbu Titip by Arunga Arungi Dunia</h1>
             <p class="font-headline-md text-xl md:text-headline-md text-on-surface-variant mb-10 hero-tagline">
                 Temanmu Mengarungi Nusantara. Jasa Titip Terpercaya Seluruh Indonesia. Temukan barang-barang favorit dari berbagai daerah untuk keluarga tersayang.

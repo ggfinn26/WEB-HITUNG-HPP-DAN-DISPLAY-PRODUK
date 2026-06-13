@@ -125,7 +125,7 @@ if (!isset($order)) {
 <!-- Header -->
 <header class="p-gutter md:p-[40px] flex justify-between items-start border-b border-surface-variant bg-surface-bright print:bg-white">
 <div class="flex items-center gap-unit">
-<img alt="Arunga Mascot Logo" class="w-16 h-16 rounded-full object-cover shadow-sm" src="favicon.png"/>
+<img alt="Arunga Mascot Logo" class="w-16 h-16 rounded-full object-cover shadow-sm" src="logo_transparent.svg"/>
 <div>
 <h1 class="text-headline-md font-headline-md text-primary-container">Mbu Titip</h1>
 <p class="text-label-sm font-label-sm text-on-surface-variant mt-1">by Arunga Arungi Dunia</p>

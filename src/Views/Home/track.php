@@ -165,7 +165,7 @@
 <!-- TopAppBar -->
 <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 bg-surface shadow-sm transition-all duration-300">
 <div class="flex items-center gap-4">
-<a href="?page=home"><img alt="Mbu Titip Logo" class="h-10 w-10 rounded-DEFAULT object-cover" src="favicon.png"/></a>
+<a href="?page=home"><img alt="Mbu Titip Logo" class="h-10 w-10 rounded-DEFAULT object-cover" src="logo_transparent.svg"/></a>
 <span class="text-headline-md font-headline-md font-bold text-primary"><a href="?page=home">Mbu Titip</a></span>
 </div>
 <div class="flex items-center gap-4">
