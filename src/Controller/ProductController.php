@@ -62,28 +62,12 @@ class ProductController {
             }
 
             // Handle Image Upload
-            if (isset($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
-                $maxSize = 5 * 1024 * 1024;
-                if ($_FILES['image_file']['size'] > $maxSize) {
-                    throw new \Exception("Ukuran file maksimal 5MB.");
+            $uploadDir = __DIR__ . '/../../public/uploads/products/';
+            if (isset($_FILES['image_file'])) {
+                $fileName = $this->validateAndHandleImageUpload($_FILES['image_file'], $uploadDir);
+                if ($fileName !== null) {
+                    $data['image_url'] = 'uploads/products/' . $fileName;
                 }
-
-                $uploadDir = __DIR__ . '/../../public/uploads/products/';
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
-
-                $finfo    = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_file($finfo, $_FILES['image_file']['tmp_name']);
-                finfo_close($finfo);
-
-                $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/avif'];
-                if (!in_array($mimeType, $allowed, true)) {
-                    throw new \Exception("File yang diunggah harus berupa gambar (jpg, png, gif, webp).");
-                }
-
-                $fileName = $this->processUploadedImage($_FILES['image_file']['tmp_name'], $mimeType, $uploadDir);
-                $data['image_url'] = 'uploads/products/' . $fileName;
             }
 
             $savedProduct = $this->productService->save($data);
@@ -155,28 +139,12 @@ class ProductController {
             }
 
             // Handle Image Upload
-            if (isset($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
-                $maxSize = 5 * 1024 * 1024;
-                if ($_FILES['image_file']['size'] > $maxSize) {
-                    throw new \Exception("Ukuran file maksimal 5MB.");
+            $uploadDir = __DIR__ . '/../../public/uploads/products/';
+            if (isset($_FILES['image_file'])) {
+                $fileName = $this->validateAndHandleImageUpload($_FILES['image_file'], $uploadDir);
+                if ($fileName !== null) {
+                    $data['image_url'] = 'uploads/products/' . $fileName;
                 }
-
-                $uploadDir = __DIR__ . '/../../public/uploads/products/';
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
-
-                $finfo    = finfo_open(FILEINFO_MIME_TYPE);
-                $mimeType = finfo_file($finfo, $_FILES['image_file']['tmp_name']);
-                finfo_close($finfo);
-
-                $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/avif'];
-                if (!in_array($mimeType, $allowed, true)) {
-                    throw new \Exception("File yang diunggah harus berupa gambar (jpg, png, gif, webp).");
-                }
-
-                $fileName = $this->processUploadedImage($_FILES['image_file']['tmp_name'], $mimeType, $uploadDir);
-                $data['image_url'] = 'uploads/products/' . $fileName;
             }
 
             $this->productService->update($id, $data);
