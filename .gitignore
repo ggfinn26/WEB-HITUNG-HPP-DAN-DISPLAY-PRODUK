@@ -7,7 +7,6 @@ node_modules/
 src/Logs/*.log
 src/uploads/
 public/uploads/
-public/css/app.css
 .htaccess
 database/
 DEPLOYMENT.md
