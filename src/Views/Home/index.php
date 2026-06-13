@@ -49,6 +49,10 @@
     border: none !important;
     overflow: hidden !important;
 }
+button.px-10 {
+    background-color: #001E40 !important;
+    color: #FFFFFF !important;
+}
 </style>
 
         <!-- Map Pinpoint Modal -->
