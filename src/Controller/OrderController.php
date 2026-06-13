@@ -46,6 +46,25 @@ class OrderController implements OrderControllerInterface {
         return $catalog;
     }
 
+    private function syncJastipProducts(array $items): void {
+        if (empty($items)) return;
+        try {
+            $conn = \App\Database::getConnection();
+            $insert = $conn->prepare("INSERT IGNORE INTO jastip_products (name, estimated_price) VALUES (?, ?)");
+            $bump   = $conn->prepare("UPDATE jastip_products SET request_count = request_count + 1 WHERE name = ?");
+            foreach ($items as $item) {
+                $name = $item['name'] ?? '';
+                if ($name === '') continue;
+                $insert->execute([$name, $item['price'] ?? 0]);
+                if ($insert->rowCount() === 0) {
+                    $bump->execute([$name]);
+                }
+            }
+        } catch (\Exception $e) {
+            error_log("Gagal menyimpan jastip_product: " . $e->getMessage());
+        }
+    }
+
     public function index(): void {
         $perPage = 20;
         $currentPage = max(1, (int)($_GET['p'] ?? 1));
@@ -78,31 +97,7 @@ class OrderController implements OrderControllerInterface {
         $listItemOrder = $data['list_item_order'] ?? '[]';
         $subTotal = $data['subTotal'] ?? '0';
 
-        // Logika simpan produk jastip baru secara otomatis
-        try {
-            $items = json_decode($listItemOrder, true);
-            if (is_array($items)) {
-                $conn = \App\Database::getConnection();
-                foreach ($items as $item) {
-                    $name = $item['name'] ?? '';
-                    $price = $item['price'] ?? 0;
-                    if (!empty($name)) {
-                        // Insert jika belum ada, atau biarkan jika sudah ada (karena field name UNIQUE di DB)
-                        $stmt = $conn->prepare("INSERT IGNORE INTO jastip_products (name, estimated_price) VALUES (?, ?)");
-                        $stmt->execute([$name, $price]);
-                        
-                        // Opsional: Jika sudah ada, update request_count
-                        if ($stmt->rowCount() == 0) {
-                            $stmtUpdate = $conn->prepare("UPDATE jastip_products SET request_count = request_count + 1 WHERE name = ?");
-                            $stmtUpdate->execute([$name]);
-                        }
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            // Lanjutkan meski ada error (misal tabel belum ada), karena ini fitur sampingan
-            error_log("Gagal menyimpan jastip_product: " . $e->getMessage());
-        }
+        $this->syncJastipProducts(json_decode($listItemOrder, true) ?: []);
 
         $order = new Order(
             0, 
