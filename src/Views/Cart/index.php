@@ -49,10 +49,9 @@ unset($_SESSION['cart_error']);
 <script>
 localStorage.removeItem('mbutitip_cart');
 updateCartBadge();
-window._CART_WA_MSG  = <?= json_encode($waMsg  ?? '', JSON_UNESCAPED_UNICODE) ?>;
-window._CART_IG_MSG  = <?= json_encode($igMsg  ?? '', JSON_UNESCAPED_UNICODE) ?>;
-window._CART_ADMIN_WA = <?= json_encode($adminWa,     JSON_UNESCAPED_UNICODE) ?>;
-window._CART_ADMIN_IG = <?= json_encode($adminIg,     JSON_UNESCAPED_UNICODE) ?>;
+window._ORDER = <?= json_encode($success,  JSON_UNESCAPED_UNICODE) ?>;
+window._ADMIN_WA = <?= json_encode($adminWa, JSON_UNESCAPED_UNICODE) ?>;
+window._ADMIN_IG = <?= json_encode($adminIg, JSON_UNESCAPED_UNICODE) ?>;
 </script>
 
 <?php else: ?>
@@ -159,12 +158,33 @@ window._CART_ADMIN_IG = <?= json_encode($adminIg,     JSON_UNESCAPED_UNICODE) ?>
 <script src="js/cart-page.js"></script>
 <script>
 (function() {
+    function buildMsg(bold) {
+        const d = window._ORDER;
+        if (!d) return '';
+        const fmt = n => 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.round(Number(n)));
+        let items = '';
+        (d.items || []).forEach(item => {
+            const qty = item.qty || 1;
+            const sub = fmt((item.price || 0) * qty);
+            items += '• ' + item.name + ' x ' + qty + ' — ' + sub + '\n';
+        });
+        const b = bold ? '*' : '';
+        return 'Halo Mbu Titip Arunga! 👋\n\n'
+            + 'Saya mau konfirmasi pesanan:\n\n'
+            + '🧾 ' + b + 'No. Order: ' + d.orderNumber + b + '\n\n'
+            + '📦 ' + b + 'Pesanan:' + b + '\n' + items + '\n'
+            + '💰 ' + b + 'Total: ' + d.total + b + '\n\n'
+            + '👤 ' + b + 'Nama:' + b + ' ' + d.nama + '\n'
+            + '📱 ' + b + 'WA:' + b + ' ' + d.wa + '\n'
+            + (d.alamat ? '🏠 ' + b + 'Alamat:' + b + ' ' + d.alamat + '\n' : '')
+            + ((!bold && d.ig) ? '📸 Instagram: @' + d.ig + '\n' : '')
+            + '\nMohon konfirmasi ketersediaan ya! Terima kasih 🙏';
+    }
+
     const waBtn = document.getElementById('wa-confirm-btn');
     if (waBtn) {
         waBtn.addEventListener('click', function() {
-            const msg     = window._CART_WA_MSG  || '';
-            const adminWa = window._CART_ADMIN_WA || '';
-            location.href = 'https://wa.me/' + adminWa + '?text=' + encodeURIComponent(msg);
+            location.href = 'https://wa.me/' + (window._ADMIN_WA || '') + '?text=' + encodeURIComponent(buildMsg(true));
         });
     }
 
@@ -172,8 +192,8 @@ window._CART_ADMIN_IG = <?= json_encode($adminIg,     JSON_UNESCAPED_UNICODE) ?>
     if (!btn) return;
 
     btn.addEventListener('click', function() {
-        const igMsg   = window._CART_IG_MSG  || '';
-        const adminIg = window._CART_ADMIN_IG || '';
+        const igMsg   = buildMsg(false);
+        const adminIg = window._ADMIN_IG || '';
 
         try { navigator.clipboard.writeText(igMsg); } catch(e) {}
 

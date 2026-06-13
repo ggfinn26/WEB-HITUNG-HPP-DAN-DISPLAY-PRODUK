@@ -16,8 +16,6 @@ class CartController {
         $success = null;
         $adminWa = $_ENV['ADMIN_WA'] ?? '62895380123352';
         $adminIg = $_ENV['ADMIN_IG'] ?? 'arungaarungidunia';
-        $waMsg   = null;
-        $igMsg   = null;
 
         $orderNumber = trim($_GET['order'] ?? '');
         if ($orderNumber !== '') {
@@ -38,36 +36,15 @@ class CartController {
                 $alamat = $order->getAlamatPemesan() ?: '';
                 $ig     = $order->getInstagramUserNamePemesan() ?: '';
 
-                $e = [
-                    'wave'    => "\u{1F44B}", 'receipt' => "\u{1F9FE}",
-                    'box'     => "\u{1F4E6}", 'money'   => "\u{1F4B0}",
-                    'person'  => "\u{1F464}", 'phone'   => "\u{1F4F1}",
-                    'house'   => "\u{1F3E0}", 'cam'     => "\u{1F4F8}",
-                    'pray'    => "\u{1F64F}",
+                $success = [
+                    'orderNumber' => $orderNumber,
+                    'items'       => $items,
+                    'total'       => $total,
+                    'nama'        => $nama,
+                    'wa'          => $wa,
+                    'alamat'      => $alamat,
+                    'ig'          => $ig,
                 ];
-
-                $waMsg = "Halo Mbu Titip Arunga! {$e['wave']}\n\n"
-                       . "Saya mau konfirmasi pesanan:\n\n"
-                       . "{$e['receipt']} *No. Order: {$orderNumber}*\n\n"
-                       . "{$e['box']} *Pesanan:*\n{$itemsText}\n"
-                       . "{$e['money']} *Total: {$total}*\n\n"
-                       . "{$e['person']} *Nama:* {$nama}\n"
-                       . "{$e['phone']} *WA:* {$wa}\n"
-                       . ($alamat ? "{$e['house']} *Alamat:* {$alamat}\n" : '')
-                       . "\nMohon konfirmasi ketersediaan ya! Terima kasih {$e['pray']}";
-
-                $igMsg = "Halo Mbu Titip Arunga! {$e['wave']}\n\n"
-                       . "Saya mau konfirmasi pesanan:\n\n"
-                       . "{$e['receipt']} No. Order: {$orderNumber}\n\n"
-                       . "{$e['box']} Pesanan:\n{$itemsText}\n"
-                       . "{$e['money']} Total: {$total}\n\n"
-                       . "{$e['person']} Nama: {$nama}\n"
-                       . "{$e['phone']} WA: {$wa}\n"
-                       . ($alamat ? "{$e['house']} Alamat: {$alamat}\n" : '')
-                       . ($ig ? "{$e['cam']} Instagram: @{$ig}\n" : '')
-                       . "\nMohon konfirmasi ketersediaan ya! Terima kasih {$e['pray']}";
-
-                $success = ['orderNumber' => $orderNumber];
             }
         }
 
