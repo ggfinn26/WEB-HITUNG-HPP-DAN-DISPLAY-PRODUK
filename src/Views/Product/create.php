@@ -16,7 +16,7 @@
         </div>
     <?php endif; ?>
 
-    <div class="glass-panel p-8 md:p-10 rounded-3xl shadow-lg border border-outline-variant/30 max-w-4xl">
+    <div class="glass-panel p-5 sm:p-6 md:p-10 rounded-3xl shadow-lg border border-outline-variant/30 max-w-4xl">
         <form action="?page=products&action=store" method="POST" enctype="multipart/form-data" class="space-y-6">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
             <input type="hidden" name="hpp_id" id="hpp_id_input" value="<?= $selectedHppId ?>">
@@ -138,7 +138,7 @@
             </div>
 
             <div class="pt-4 border-t border-outline-variant/30 flex justify-end">
-                <button type="submit" class="bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary-container transition-colors shadow-lg active:scale-95 flex items-center gap-2">
+                <button type="submit" class="bg-primary text-white w-full sm:w-auto px-8 py-4 justify-center rounded-xl font-bold hover:bg-primary-container transition-colors shadow-lg active:scale-95 flex items-center gap-2">
                     <span class="material-symbols-outlined">save</span>
                     Simpan Produk
                 </button>

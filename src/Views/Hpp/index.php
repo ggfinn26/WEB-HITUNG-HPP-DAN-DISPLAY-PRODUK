@@ -1,12 +1,12 @@
 <div class="px-4 md:px-margin-desktop py-12">
-    <div class="flex justify-between items-center mb-8">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 md:mb-8">
         <div>
-            <h1 class="font-display-lg text-4xl font-bold text-primary mb-2">Kalkulasi Harga Jual</h1>
-            <p class="text-on-surface-variant text-lg">HPP Dasar per item — harga beli + biaya langsung, sebelum biaya trip.</p>
+            <h1 class="font-display-lg text-2xl md:text-4xl font-bold text-primary mb-1 md:mb-2">Kalkulasi Harga Jual</h1>
+            <p class="text-on-surface-variant text-base md:text-lg">HPP Dasar per item — harga beli + biaya langsung, sebelum biaya trip.</p>
         </div>
-        <a href="?page=hpp&action=create" class="bg-primary text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-container transition-colors shadow-md flex items-center gap-2">
+        <a href="?page=hpp&action=create" class="bg-primary text-white px-5 md:px-6 py-2.5 md:py-3 w-full sm:w-auto justify-center rounded-xl font-bold hover:bg-primary-container transition-colors shadow-md flex items-center gap-2">
             <span class="material-symbols-outlined">add</span>
-            Buat Kalkulasi Baru
+            Buat Kalkulasi
         </a>
     </div>
 

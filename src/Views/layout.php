@@ -51,13 +51,18 @@ $_seoLd      = $structuredData ?? null;
     <?php endif; ?>
 
     <!-- ── Favicon ── -->
-    <link rel="icon"             type="image/svg+xml" href="logo_transparent.svg">
-    <link rel="apple-touch-icon"                  href="logo_transparent.svg">
+    <link rel="icon"             type="image/webp" href="logo.webp">
+    <link rel="apple-touch-icon"                  href="logo.webp">
 
     <!-- ── Preconnect (performance + SEO Core Web Vitals) ── -->
     <!-- Removed preconnect for fonts.googleapis.com -->
     <!-- Removed preconnect for fonts.gstatic.com -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- ── Preload Critical CSS ── -->
+    <link rel="preload" href="css/app.css" as="style">
+    <link rel="preload" href="css/fonts.css" as="style">
+    <link rel="preload" href="css/material-symbols.css" as="style">
 
     <!-- ── CSS ── -->
     <link rel="stylesheet" href="css/app.css">
@@ -77,7 +82,7 @@ $_seoLd      = $structuredData ?? null;
         <nav class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
             <div class="flex items-center gap-4">
                 <a href="?page=home" class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity flex items-center">
-                    <img src="logo_transparent.svg" alt="Logo" class="inline-block w-10 h-10 rounded-full mr-3 object-cover shadow-sm" />
+                    <img src="logo.webp" alt="Logo" width="40" height="40" class="inline-block w-10 h-10 rounded-full mr-3 object-cover shadow-sm" />
                     <span class="hidden sm:inline">Mbu Titip</span>
                 </a>
             </div>

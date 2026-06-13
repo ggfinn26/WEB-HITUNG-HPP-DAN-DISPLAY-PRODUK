@@ -34,14 +34,14 @@
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
                 <input type="hidden" name="product_item_list" id="product_item_list_input">
 
-                <div class="glass-panel p-6 rounded-2xl border border-outline-variant/30">
+                <div class="glass-panel p-4 sm:p-6 rounded-2xl border border-outline-variant/30">
                     <label class="block font-bold text-on-surface text-sm uppercase tracking-wider mb-2">Nama Produk *</label>
                     <input type="text" name="name" required placeholder="Misal: Kain Sutra Toraja, Kerajinan Perak"
                            class="w-full px-5 py-4 rounded-xl border-2 border-outline-variant/50 bg-surface-container focus:bg-surface focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all">
                 </div>
 
                 <!-- Rincian Biaya -->
-                <div class="glass-panel p-6 rounded-2xl border border-outline-variant/30">
+                <div class="glass-panel p-4 sm:p-6 rounded-2xl border border-outline-variant/30">
                     <div class="flex justify-between items-center mb-1">
                         <h3 class="font-bold text-on-surface text-lg">Rincian Biaya per Item</h3>
                         <button type="button" id="add-bahan-btn"
@@ -63,7 +63,7 @@
                 </div>
 
                 <!-- Batch & Margin -->
-                <div class="glass-panel p-6 rounded-2xl border border-outline-variant/30">
+                <div class="glass-panel p-4 sm:p-6 rounded-2xl border border-outline-variant/30">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block font-bold text-on-surface text-sm uppercase tracking-wider mb-2">
