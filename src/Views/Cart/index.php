@@ -157,7 +157,7 @@ unset($_SESSION['cart_error']);
     if (!btn) return;
 
     btn.addEventListener('click', function() {
-        navigator.clipboard.writeText(igMsg).catch(() => {});
+        try { navigator.clipboard.writeText(igMsg); } catch(e) {}
 
         // Ganti tombol jadi notifikasi countdown
         btn.disabled = true;
