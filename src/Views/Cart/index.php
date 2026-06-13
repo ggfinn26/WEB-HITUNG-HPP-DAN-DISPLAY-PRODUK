@@ -11,7 +11,7 @@ unset($_SESSION['cart_error']);
         <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
             <span class="material-symbols-outlined text-green-600 text-[40px]">check_circle</span>
         </div>
-        <h1 class="text-2xl font-bold text-on-surface mb-2">Pesanan Berhasil! 🎉</h1>
+        <h1 class="text-2xl font-bold text-on-surface mb-2">Pesanan Berhasil! &#127881;</h1>
         <p class="text-on-surface-variant mb-6">Pesananmu sudah kami terima. Simpan nomor order untuk melacak status.</p>
 
         <div class="bg-surface-container-low rounded-2xl p-5 mb-6">
@@ -49,9 +49,9 @@ unset($_SESSION['cart_error']);
 <script>
 localStorage.removeItem('mbutitip_cart');
 updateCartBadge();
-window._ORDER = <?= json_encode($success,  JSON_UNESCAPED_UNICODE) ?>;
-window._ADMIN_WA = <?= json_encode($adminWa, JSON_UNESCAPED_UNICODE) ?>;
-window._ADMIN_IG = <?= json_encode($adminIg, JSON_UNESCAPED_UNICODE) ?>;
+window._ORDER    = <?= json_encode($success,  JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
+window._ADMIN_WA = <?= json_encode($adminWa,  JSON_UNESCAPED_UNICODE) ?>;
+window._ADMIN_IG = <?= json_encode($adminIg,  JSON_UNESCAPED_UNICODE) ?>;
 </script>
 
 <?php else: ?>
@@ -71,7 +71,7 @@ window._ADMIN_IG = <?= json_encode($adminIg, JSON_UNESCAPED_UNICODE) ?>;
 
     <!-- Empty state -->
     <div id="cart-empty" class="hidden text-center py-24">
-        <div class="text-7xl mb-6">🛒</div>
+        <div class="text-7xl mb-6">&#128722;</div>
         <h2 class="text-2xl font-bold text-on-surface mb-3">Keranjang Kosong</h2>
         <p class="text-on-surface-variant mb-8">Belum ada produk yang ditambahkan.</p>
         <a href="?page=catalog" class="inline-flex items-center gap-2 bg-primary text-white px-8 py-3.5 rounded-xl font-bold hover:-translate-y-0.5 hover:shadow-lg transition-all active:scale-95">
@@ -136,6 +136,7 @@ window._ADMIN_IG = <?= json_encode($adminIg, JSON_UNESCAPED_UNICODE) ?>;
                             <input type="text" name="instagramUserNamePemesan" placeholder="@username"
                                    class="w-full px-4 py-2.5 rounded-xl border border-outline-variant bg-surface-container-low text-sm focus:ring-2 focus:ring-primary/30 outline-none">
                         </div>
+
                         <div class="pt-2 border-t border-outline-variant/30">
                             <button type="submit"
                                     class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl active:scale-95 transition-all shadow-md flex items-center justify-center gap-2 text-base">
@@ -152,48 +153,57 @@ window._ADMIN_IG = <?= json_encode($adminIg, JSON_UNESCAPED_UNICODE) ?>;
         </div>
     </div>
 </section>
-
 <?php endif; ?>
 
 <script src="js/cart-page.js"></script>
 <script>
 (function() {
     function buildMsg(bold) {
-        const d = window._ORDER;
+        var d = window._ORDER;
         if (!d) return '';
-        const fmt = n => 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.round(Number(n)));
-        let items = '';
-        (d.items || []).forEach(item => {
-            const qty = item.qty || 1;
-            const sub = fmt((item.price || 0) * qty);
+        var wave    = String.fromCodePoint(0x1F44B);
+        var receipt = String.fromCodePoint(0x1F9FE);
+        var box     = String.fromCodePoint(0x1F4E6);
+        var money   = String.fromCodePoint(0x1F4B0);
+        var person  = String.fromCodePoint(0x1F464);
+        var phone   = String.fromCodePoint(0x1F4F1);
+        var house   = String.fromCodePoint(0x1F3E0);
+        var cam     = String.fromCodePoint(0x1F4F8);
+        var pray    = String.fromCodePoint(0x1F64F);
+        var fmt = function(n) { return 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.round(Number(n))); };
+        var items = '';
+        (d.items || []).forEach(function(item) {
+            var qty = item.qty || 1;
+            var sub = fmt((item.price || 0) * qty);
             items += '• ' + item.name + ' x ' + qty + ' — ' + sub + '\n';
         });
-        const b = bold ? '*' : '';
-        return 'Halo Mbu Titip Arunga! 👋\n\n'
+        var b = bold ? '*' : '';
+        var msg = 'Halo Mbu Titip Arunga! ' + wave + '\n\n'
             + 'Saya mau konfirmasi pesanan:\n\n'
-            + '🧾 ' + b + 'No. Order: ' + d.orderNumber + b + '\n\n'
-            + '📦 ' + b + 'Pesanan:' + b + '\n' + items + '\n'
-            + '💰 ' + b + 'Total: ' + d.total + b + '\n\n'
-            + '👤 ' + b + 'Nama:' + b + ' ' + d.nama + '\n'
-            + '📱 ' + b + 'WA:' + b + ' ' + d.wa + '\n'
-            + (d.alamat ? '🏠 ' + b + 'Alamat:' + b + ' ' + d.alamat + '\n' : '')
-            + ((!bold && d.ig) ? '📸 Instagram: @' + d.ig + '\n' : '')
-            + '\nMohon konfirmasi ketersediaan ya! Terima kasih 🙏';
+            + receipt + ' ' + b + 'No. Order: ' + d.orderNumber + b + '\n\n'
+            + box + ' ' + b + 'Pesanan:' + b + '\n' + items + '\n'
+            + money + ' ' + b + 'Total: ' + d.total + b + '\n\n'
+            + person + ' ' + b + 'Nama:' + b + ' ' + d.nama + '\n'
+            + phone + ' ' + b + 'WA:' + b + ' ' + d.wa + '\n';
+        if (d.alamat) msg += house + ' ' + b + 'Alamat:' + b + ' ' + d.alamat + '\n';
+        if (!bold && d.ig) msg += cam + ' Instagram: @' + d.ig + '\n';
+        msg += '\nMohon konfirmasi ketersediaan ya! Terima kasih ' + pray;
+        return msg;
     }
 
-    const waBtn = document.getElementById('wa-confirm-btn');
+    var waBtn = document.getElementById('wa-confirm-btn');
     if (waBtn) {
         waBtn.addEventListener('click', function() {
             location.href = 'https://wa.me/' + (window._ADMIN_WA || '') + '?text=' + encodeURIComponent(buildMsg(true));
         });
     }
 
-    const btn = document.getElementById('ig-confirm-btn');
+    var btn = document.getElementById('ig-confirm-btn');
     if (!btn) return;
 
     btn.addEventListener('click', function() {
-        const igMsg   = buildMsg(false);
-        const adminIg = window._ADMIN_IG || '';
+        var igMsg   = buildMsg(false);
+        var adminIg = window._ADMIN_IG || '';
 
         try { navigator.clipboard.writeText(igMsg); } catch(e) {}
 
@@ -202,12 +212,12 @@ window._ADMIN_IG = <?= json_encode($adminIg, JSON_UNESCAPED_UNICODE) ?>;
         btn.disabled = true;
         btn.style.background = '#16a34a';
 
-        let sisa = 5;
+        var sisa = 5;
         btn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check</span>&nbsp;Pesan disalin! Instagram sudah terbuka, paste pesannya. Tombol aktif lagi dalam <span id="ig-countdown">' + sisa + '</span> detik...';
 
-        const interval = setInterval(function() {
+        var interval = setInterval(function() {
             sisa--;
-            const el = document.getElementById('ig-countdown');
+            var el = document.getElementById('ig-countdown');
             if (el) el.textContent = sisa;
             if (sisa <= 0) {
                 clearInterval(interval);
