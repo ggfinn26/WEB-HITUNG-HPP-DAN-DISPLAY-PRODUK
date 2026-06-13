@@ -46,7 +46,7 @@ unset($_SESSION['cart_error']);
 <?php else: ?>
 <!-- ── CART STATE ─────────────────────────────────────────────────── -->
 <section class="max-w-7xl mx-auto px-4 md:px-8 py-12">
-    <h1 class="text-3xl font-bold text-primary mb-8 flex items-center gap-3">
+    <h1 class="text-3xl font-bold text-primary mb-8 flex justify-center items-center gap-3 text-center">
         <span class="material-symbols-outlined text-[32px]">shopping_cart</span>
         Keranjang Belanja
     </h1>
