@@ -1,3 +1,20 @@
+# ── Social media scrapers — allow full access for link previews ──
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+# ── General crawlers ──────────────────────────────────────────────
 User-agent: *
 
 # Public pages — allow
@@ -20,5 +37,4 @@ Disallow: /src/
 Disallow: /vendor/
 Disallow: /node_modules/
 
-Sitemap: https://GANTI_DOMAIN_ANDA/sitemap.xml
-# Ganti GANTI_DOMAIN_ANDA dengan domain production kamu sebelum deploy
+Sitemap: https://jastipmbu.arungaarungidunia.my.id/sitemap.xml
