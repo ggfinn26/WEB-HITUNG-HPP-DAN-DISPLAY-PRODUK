@@ -80,9 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
             optsInput.onkeyup = (e) => {
                 const vals = e.target.value.split(',').map(v => v.trim()).filter(v => v !== '');
                 group.options = vals.length > 0 ? vals : [''];
-                // Update name of the input dynamically in case group name changes
                 e.target.name = `variant_options[${group.name || 'group_'+groupIndex}]`;
                 renderTable();
+                if (groups.length > 0 && groups[0].options.some(o => o.trim() !== '')) {
+                    imagesContainer.classList.remove('hidden');
+                    renderImageUploader();
+                } else {
+                    imagesContainer.classList.add('hidden');
+                }
             };
 
             groupDiv.appendChild(btnRemove);
