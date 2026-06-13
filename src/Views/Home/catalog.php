@@ -123,6 +123,7 @@
                     <div id="modal-stock-container" class="text-on-surface-variant mb-2" style="font-size:0.75rem">
                         Stok: <span id="modal-stock" class="font-bold text-on-surface"></span>
                     </div>
+                    <div id="modal-desc" class="text-xs text-on-surface-variant mb-3 whitespace-pre-wrap max-h-24 overflow-y-auto"></div>
                     <div id="modal-variants-container" class="space-y-3"></div>
                 </div>
             </div>
@@ -176,6 +177,14 @@ if (!empty($products)) {
         const vData = variantsData[productId];
         
         document.getElementById('modal-title').textContent = product.name;
+        
+        const descEl = document.getElementById('modal-desc');
+        if (product.description && product.description.trim() !== '') {
+            descEl.textContent = product.description;
+            descEl.classList.remove('hidden');
+        } else {
+            descEl.classList.add('hidden');
+        }
         
         // Setup initial image
         const imgEl = document.getElementById('modal-img');
