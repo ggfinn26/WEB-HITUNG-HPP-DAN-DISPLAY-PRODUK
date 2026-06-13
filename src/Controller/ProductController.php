@@ -123,9 +123,8 @@ class ProductController {
         $vr = $this->productService->getVariantRepository();
         if ($vr) {
             $variantGroups = $vr->getGroupsByProduct($id);
-            foreach ($variantGroups as $g) {
-                $variantOptions[$g->getId()] = $vr->getOptionsByGroup($g->getId());
-            }
+            $groupIds = array_map(fn($g) => $g->getId(), $variantGroups);
+            $variantOptions = $groupIds ? $vr->getOptionsByGroupIds($groupIds) : [];
             $variants = $vr->getVariantsByProduct($id);
             $variantImages = $vr->getImagesByProduct($id);
         }
@@ -198,6 +197,28 @@ class ProductController {
             header("Location: ?page=products&action=edit&id=" . $id);
             exit;
         }
+    }
+
+    private function validateAndHandleImageUpload(array $fileEntry, string $uploadDir): ?string {
+        if (!isset($fileEntry) || $fileEntry['error'] !== UPLOAD_ERR_OK) {
+            return null;
+        }
+        $maxSize = 5 * 1024 * 1024;
+        if ($fileEntry['size'] > $maxSize) {
+            throw new \Exception("Ukuran file maksimal 5MB.");
+        }
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+        $finfo    = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $fileEntry['tmp_name']);
+        finfo_close($finfo);
+
+        $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/avif'];
+        if (!in_array($mimeType, $allowed, true)) {
+            throw new \Exception("File yang diunggah harus berupa gambar (jpg, png, gif, webp).");
+        }
+        return $this->processUploadedImage($fileEntry['tmp_name'], $mimeType, $uploadDir);
     }
 
     private function processUploadedImage(string $tmpPath, string $mimeType, string $uploadDir): string {

@@ -5,6 +5,7 @@ namespace App{
 use App\Database;
 use App\Order;
 use App\OrderInterface;
+use App\Helper\AppLogger;
 use Exception;
 use PDO;
 
@@ -17,7 +18,7 @@ use PDO;
 
         public function saveOrder(Order $order): Order{
             try{
-                file_put_contents(__DIR__ . "/../Logs/process.log", "[" . date('Y-m-d H:i:s') . "] PROSES: SAVE ORDER" . PHP_EOL, FILE_APPEND);
+                AppLogger::info('SAVE ORDER');
                 $this->connection->beginTransaction();
                 $stmt = $this->connection->prepare("INSERT INTO `order`(order_number,
                 list_item_order,
@@ -53,7 +54,7 @@ use PDO;
         
         public function updateOrder(Order $order): Order{
             try{
-                file_put_contents(__DIR__ . "/../Logs/process.log", "[" . date('Y-m-d H:i:s') . "] PROSES: UPDATE ORDER" . PHP_EOL, FILE_APPEND);
+                AppLogger::info('UPDATE ORDER id=' . $order->getId());
                 $this->connection->beginTransaction();
                 $stmt = $this->connection->prepare("UPDATE `order` SET order_number = ?,
                 list_item_order = ?,

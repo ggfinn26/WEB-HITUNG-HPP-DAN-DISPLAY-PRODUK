@@ -8,6 +8,7 @@ namespace App{
 use App\Database;
 use App\RincianHpp;
 use App\RincianHppInterface;
+use App\Helper\AppLogger;
 use Exception;
 
     class RincianHppRepositoryImpl implements RincianHppInterface{
@@ -19,7 +20,7 @@ use Exception;
 
         public function create(RincianHpp $rincianHpp): RincianHpp{
             try{
-            file_put_contents(__DIR__ . "/../Logs/process.log", "[" . date('Y-m-d H:i:s') . "] PROSES: SAVE RINCIAN HPP - " . $rincianHpp->getName() . "\n", FILE_APPEND);
+            AppLogger::info('SAVE RINCIAN HPP - ' . $rincianHpp->getName());
                 $this->connection->beginTransaction();
                 $stmt = $this->connection->prepare("INSERT INTO rincian_hpp(product_id, name, margin_keuntungan,
                 product_item_list, jumlah_produksi, total_biaya_hpp, hpp_per_pcs, harga_jual_produk
@@ -48,7 +49,7 @@ use Exception;
         
         public function update(RincianHpp $rincianHpp): RincianHpp{
             try{
-            file_put_contents(__DIR__ . "/../Logs/process.log", "[" . date('Y-m-d H:i:s') . "] PROSES: UPDATE RINCIAN HPP - " . $rincianHpp->getName() . "\n", FILE_APPEND);
+            AppLogger::info('UPDATE RINCIAN HPP - ' . $rincianHpp->getName());
                 $this->connection->beginTransaction();
                 $stmt = $this->connection->prepare("UPDATE rincian_hpp SET
                 product_id = ?,
@@ -82,7 +83,7 @@ use Exception;
 
         public function updateHargaJualProduk(int $id, string $hargaJualProduk): RincianHpp{
             try{
-            file_put_contents(__DIR__ . "/../Logs/process.log", "[" . date('Y-m-d H:i:s') . "] PROSES: UPDATE HARGA JUAL" . $id . "dengan harga jual" . $hargaJualProduk . "\n", FILE_APPEND);
+            AppLogger::info('UPDATE HARGA JUAL id=' . $id . ' harga=' . $hargaJualProduk);
                 $this->connection->beginTransaction();
                 $stmt = $this->connection->prepare("UPDATE rincian_hpp SET harga_jual_produk = ? WHERE id = ?");
                 $stmt->execute([$hargaJualProduk, $id]);
@@ -98,7 +99,7 @@ use Exception;
 
         public function updateMarginKeuntungan(int $id, int $marginKeuntungan): RincianHpp{
             try{
-            file_put_contents(__DIR__ . "/../Logs/process.log", "[" . date('Y-m-d H:i:s') . "] PROSES: UPDATE MARGIN KEUNTUNGAN" . $id . "dengan margin keuntungan" . $marginKeuntungan . "\n", FILE_APPEND);
+            AppLogger::info('UPDATE MARGIN KEUNTUNGAN id=' . $id . ' margin=' . $marginKeuntungan);
                 $this->connection->beginTransaction();
                 $stmt = $this->connection->prepare("UPDATE rincian_hpp SET margin_keuntungan = ? WHERE id = ?");
                 $stmt->execute([$marginKeuntungan, $id]);
@@ -114,7 +115,7 @@ use Exception;
 
         public function updateJumlahProduksi(int $id, int $jumlahProduksi): RincianHpp{
             try{
-            file_put_contents(__DIR__ . "/../Logs/process.log", "[" . date('Y-m-d H:i:s') . "] PROSES: UPDATE JUMLAH PRODUKSI" . $id . "dengan jumlah produksi" . $jumlahProduksi . "\n", FILE_APPEND);
+            AppLogger::info('UPDATE JUMLAH PRODUKSI id=' . $id . ' jumlah=' . $jumlahProduksi);
                 $this->connection->beginTransaction();
                 $stmt = $this->connection->prepare("UPDATE rincian_hpp SET jumlah_produksi = ? WHERE id = ?");
                 $stmt->execute([$jumlahProduksi, $id]);
@@ -130,7 +131,7 @@ use Exception;
 
         public function updateItemProduksi(int $id, string $productItemList): RincianHpp{
             try{
-            file_put_contents(__DIR__ . "/../Logs/process.log", "[" . date('Y-m-d H:i:s') . "] PROSES: UPDATE ITEM PRODUKSI" . $id . "dengan item produksi" . $productItemList . "\n", FILE_APPEND);
+            AppLogger::info('UPDATE ITEM PRODUKSI id=' . $id);
                 $this->connection->beginTransaction();
                 $stmt = $this->connection->prepare("UPDATE rincian_hpp SET product_item_list = ? WHERE id = ?");
                 $stmt->execute([$productItemList, $id]);
@@ -146,7 +147,7 @@ use Exception;
 
         public function delete(int $id): bool{
             try{
-            file_put_contents(__DIR__ . "/../Logs/process.log", "[" . date('Y-m-d H:i:s') . "] PROSES: DELETE RINCIAN HPP" . $id . "\n", FILE_APPEND);
+            AppLogger::info('DELETE RINCIAN HPP id=' . $id);
                 $this->connection->beginTransaction();
                 $stmt = $this->connection->prepare("UPDATE rincian_hpp SET is_deleted = 1 WHERE id = ?");
                 $stmt->execute([$id]);

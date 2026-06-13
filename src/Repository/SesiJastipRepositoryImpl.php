@@ -49,6 +49,7 @@ class SesiJastipRepositoryImpl implements SesiJastipInterface {
             $sesi->getRataHppDasar(),
             $sesi->getTotalBiayaTetap(),
             $sesi->getJumlahOrderAktual(),
+            $sesi->getStatus(),
             $sesi->getCatatan(),
             $sesi->getId(),
         ]);

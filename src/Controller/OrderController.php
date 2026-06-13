@@ -229,7 +229,7 @@ class OrderController implements OrderControllerInterface {
             $newColor = $data['statusColor'] ?? 'blue';
             $newDetail = isset($data['statusDetail']) ? trim($data['statusDetail']) : '';
             
-            if ($order->getOrderStatus() !== $newStatus || true) { // allow forcing color update even if text is same
+            {
                 $order->setOrderStatus($newStatus);
                 
                 $historyStr = $order->getStatusHistory();
