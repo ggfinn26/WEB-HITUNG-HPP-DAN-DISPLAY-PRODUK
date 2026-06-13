@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tableHead.appendChild(th);
         });
         
-        ['Harga', 'Stok', 'SKU'].forEach(label => {
+        ['Harga', 'SKU'].forEach(label => {
             const th = document.createElement('th');
             th.className = 'px-4 py-3 border-r border-outline-variant/30';
             th.textContent = label;
@@ -220,21 +220,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Save current inputs if they exist to not lose data
         const currentData = {};
-        
-        // Add initial variants to currentData
+
         initialVariants.forEach(v => {
-            currentData[v.name] = {
-                price: v.price,
-                stock: v.stock,
-                sku: v.sku
-            };
+            currentData[v.name] = { price: v.price, sku: v.sku };
         });
-        
+
         document.querySelectorAll('.variant-row').forEach(row => {
             const key = row.dataset.key;
             currentData[key] = {
                 price: row.querySelector('.variant-price').value,
-                stock: row.querySelector('.variant-stock').value,
                 sku: row.querySelector('.variant-sku').value,
             };
         });
@@ -287,17 +281,6 @@ document.addEventListener('DOMContentLoaded', () => {
             inPrice.value = currentData[comboKey]?.price || basePrice || '';
             tdPrice.appendChild(inPrice);
             tr.appendChild(tdPrice);
-
-            // Stok
-            const tdStock = document.createElement('td');
-            tdStock.className = 'px-4 py-2 border-r border-outline-variant/30';
-            const inStock = document.createElement('input');
-            inStock.type = 'number';
-            inStock.name = `variants[${index}][stock]`;
-            inStock.className = 'variant-stock w-20 px-2 py-1 border rounded bg-surface focus:border-primary outline-none';
-            inStock.value = currentData[comboKey]?.stock || '0';
-            tdStock.appendChild(inStock);
-            tr.appendChild(tdStock);
 
             // SKU
             const tdSku = document.createElement('td');
