@@ -141,7 +141,18 @@ unset($_SESSION['cart_error']);
                                 </button>
                             </div>
                             <p class="text-xs text-on-surface-variant text-center pt-1">
-                                Pilih channel konfirmasi. Pesananmu akan kami proses segera! 🚀
+                                Pilih channel konfirmasi terlebih dahulu, lalu klik tombol di bawah.
+                            </p>
+                        </div>
+
+                        <div class="pt-2 border-t border-outline-variant/30">
+                            <button type="submit"
+                                    class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl active:scale-95 transition-all shadow-md flex items-center justify-center gap-2 text-base">
+                                <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+                                Buat Pesanan
+                            </button>
+                            <p class="text-xs text-on-surface-variant text-center mt-2">
+                                Pesananmu akan tercatat dan bisa dilacak dengan nomor resi.
                             </p>
                         </div>
                     </form>
@@ -157,20 +168,21 @@ unset($_SESSION['cart_error']);
     const ADMIN_WA = '<?= htmlspecialchars($_ENV['ADMIN_WA'] ?? '62895380123352') ?>';
     const ADMIN_IG = '<?= htmlspecialchars($_ENV['ADMIN_IG'] ?? 'arungaarungidunia') ?>';
 
-    function buildCartMessage() {
-        const cart  = getCart();
-        const nama  = document.querySelector('[name="namaPemesan"]')?.value?.trim()  || '(tidak diisi)';
-        const wa    = document.querySelector('[name="whatsappPemesan"]')?.value?.trim() || '(tidak diisi)';
-        const alamat= document.querySelector('[name="alamatPemesan"]')?.value?.trim() || '-';
-        const ig    = document.querySelector('[name="instagramUserNamePemesan"]')?.value?.trim() || '-';
+    function getFormData() {
+        return {
+            nama  : document.querySelector('[name="namaPemesan"]')?.value?.trim()            || '(tidak diisi)',
+            wa    : document.querySelector('[name="whatsappPemesan"]')?.value?.trim()        || '(tidak diisi)',
+            alamat: document.querySelector('[name="alamatPemesan"]')?.value?.trim()          || '-',
+            ig    : document.querySelector('[name="instagramUserNamePemesan"]')?.value?.trim() || '-',
+        };
+    }
 
+    function buildWaMessage() {
+        const cart = getCart();
         if (!cart.length) { showAlert('Keranjang masih kosong!', 'warning'); return null; }
-
-        const WAVE  = '👋';
-        const CLIP  = '📋';
-        const PRAY  = '🙏';
+        const { nama, wa, alamat, ig } = getFormData();
         const fmt = n => 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.round(n));
-        let msg = `Halo Mbu Titip! ${WAVE} Saya ingin memesan:\n\n`;
+        let msg = `Halo Mbu Titip! 👋 Saya ingin memesan:\n\n`;
         cart.forEach((item, i) => {
             msg += `${i+1}. *${item.name}*`;
             if (item.variant) msg += ` (${item.variant})`;
@@ -178,23 +190,45 @@ unset($_SESSION['cart_error']);
         });
         const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
         msg += `\n*Total: ${fmt(total)}*\n\n`;
-        msg += `${CLIP} *Data Pemesan:*\n`;
+        msg += `📋 *Data Pemesan:*\n`;
         msg += `- Nama: ${nama}\n`;
         msg += `- WA: ${wa}\n`;
         msg += `- Alamat: ${alamat}\n`;
         if (ig !== '-') msg += `- Instagram: @${ig}\n`;
-        msg += `\nMohon konfirmasi ketersediaan & info pembayaran. Terima kasih! ${PRAY}`;
+        msg += `\nMohon konfirmasi ketersediaan & info pembayaran. Terima kasih! 🙏`;
+        return msg;
+    }
+
+    function buildIgMessage() {
+        const cart = getCart();
+        if (!cart.length) { showAlert('Keranjang masih kosong!', 'warning'); return null; }
+        const { nama, wa, alamat, ig } = getFormData();
+        const fmt = n => 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.round(n));
+        let msg = `Halo Mbu Titip! 👋 Saya ingin memesan:\n\n`;
+        cart.forEach((item, i) => {
+            msg += `${i+1}. ${item.name}`;
+            if (item.variant) msg += ` (${item.variant})`;
+            msg += `\n   ${item.qty} x ${fmt(item.price)} = ${fmt(item.price * item.qty)}\n`;
+        });
+        const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        msg += `\nTotal: ${fmt(total)}\n\n`;
+        msg += `📋 Data saya:\n`;
+        msg += `Nama: ${nama}\n`;
+        msg += `WA: ${wa}\n`;
+        msg += `Alamat: ${alamat}\n`;
+        if (ig !== '-') msg += `Instagram: @${ig}\n`;
+        msg += `\nMohon konfirmasi ketersediaan dan info pembayarannya. Terima kasih! 🙏`;
         return msg;
     }
 
     document.getElementById('send-wa-btn').addEventListener('click', function() {
-        const msg = buildCartMessage();
+        const msg = buildWaMessage();
         if (!msg) return;
         window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`, '_blank');
     });
 
     document.getElementById('send-ig-btn').addEventListener('click', function() {
-        const msg = buildCartMessage();
+        const msg = buildIgMessage();
         if (!msg) return;
         // Copy message to clipboard, then open IG DM
         navigator.clipboard.writeText(msg).then(() => {
