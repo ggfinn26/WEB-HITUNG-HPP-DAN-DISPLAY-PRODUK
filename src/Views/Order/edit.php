@@ -22,7 +22,7 @@ $existingItems = json_decode($order->getListItemOrder(), true) ?? [];
     <?php endif; ?>
 
     <form action="?page=orders&action=updateDetail&id=<?= urlencode($order->getOrderNumber()) ?>" method="POST" class="space-y-6 relative z-10">
-        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2 group">

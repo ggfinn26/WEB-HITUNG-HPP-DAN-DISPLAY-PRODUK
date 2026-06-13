@@ -26,7 +26,7 @@
     <?php endif; ?>
 
     <form id="sesi-form" action="?page=sesi&action=store" method="POST">
-        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
         <input type="hidden" name="komponen" id="komponen-json">
 
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">

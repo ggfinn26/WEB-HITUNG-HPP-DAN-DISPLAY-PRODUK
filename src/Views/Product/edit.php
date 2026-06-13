@@ -18,7 +18,7 @@
 
     <div class="glass-panel p-8 md:p-10 rounded-3xl shadow-lg border border-outline-variant/30 max-w-4xl">
         <form action="?page=products&action=update&id=<?= $product->getId() ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Nama Produk -->

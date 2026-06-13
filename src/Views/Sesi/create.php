@@ -17,7 +17,7 @@
     <?php endif; ?>
 
     <form id="sesi-form" action="?page=sesi&action=store" method="POST">
-        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
         <input type="hidden" name="komponen" id="komponen-json">
         <input type="hidden" name="produk_json" id="produk-json">
 
@@ -139,9 +139,19 @@
                                     · Margin: Rp. <?= number_format((float)$h['margin'], 0, ',', '.') ?>
                                 </p>
                             </div>
-                            <div class="qty-wrap hidden flex-shrink-0">
-                                <label class="block text-[10px] text-on-surface-variant font-bold uppercase mb-0.5 text-right">Est. Qty</label>
-                                <input type="number" class="produk-qty w-20 px-2 py-1.5 rounded-lg border-2 border-outline-variant/50 bg-surface text-sm text-center focus:border-primary outline-none" min="1" value="1">
+                            <div class="qty-wrap hidden flex-shrink-0 gap-2">
+                                <div>
+                                    <label class="block text-[10px] text-on-surface-variant font-bold uppercase mb-0.5 text-right">Est. Qty</label>
+                                    <input type="number" class="produk-qty w-20 px-2 py-1.5 rounded-lg border-2 border-outline-variant/50 bg-surface text-sm text-center focus:border-primary outline-none" min="1" value="1">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-on-surface-variant font-bold uppercase mb-0.5 text-right" title="Bobot Proporsional (Kosongkan = otomatis dari nilai jual)">Bobot Prop.</label>
+                                    <input type="number" name="custom_prop[<?= $h['hpp_id'] ?>]" class="produk-prop w-20 px-2 py-1.5 rounded-lg border-2 border-outline-variant/50 bg-surface text-sm text-center focus:border-primary outline-none" placeholder="auto" step="0.01">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-on-surface-variant font-bold uppercase mb-0.5 text-right" title="Bobot Flat (Kosongkan = dibagi rata)">Bobot Flat</label>
+                                    <input type="number" name="custom_flat[<?= $h['hpp_id'] ?>]" class="produk-flat w-24 px-2 py-1.5 rounded-lg border-2 border-outline-variant/50 bg-surface text-sm text-center focus:border-primary outline-none" placeholder="auto">
+                                </div>
                             </div>
                         </div>
                         <?php endforeach; ?>
@@ -241,13 +251,13 @@ document.querySelectorAll('.produk-checkbox').forEach(cb => {
     cb.addEventListener('change', () => {
         const row = cb.closest('.produk-row');
         const qw  = row.querySelector('.qty-wrap');
-        if (cb.checked) { qw.classList.remove('hidden'); qw.classList.add('flex', 'flex-col'); }
-        else            { qw.classList.add('hidden'); qw.classList.remove('flex', 'flex-col'); }
+        if (cb.checked) { qw.classList.remove('hidden'); qw.classList.add('flex', 'items-center'); }
+        else            { qw.classList.add('hidden'); qw.classList.remove('flex', 'items-center'); }
         updateLabelTerpilih();
         recalc();
     });
 });
-document.querySelectorAll('.produk-qty').forEach(el => {
+document.querySelectorAll('.produk-qty, .produk-prop, .produk-flat').forEach(el => {
     el.addEventListener('input', recalc);
 });
 
@@ -267,6 +277,8 @@ function getSelectedProduk() {
     document.querySelectorAll('.produk-checkbox:checked').forEach(cb => {
         const row = cb.closest('.produk-row');
         const qty = Math.max(1, parseInt(row.querySelector('.produk-qty').value) || 1);
+        const propVal = row.querySelector('.produk-prop').value;
+        const flatVal = row.querySelector('.produk-flat').value;
         result.push({
             hpp_id:      parseInt(row.dataset.hppId),
             nama:        row.dataset.nama,
@@ -274,6 +286,8 @@ function getSelectedProduk() {
             hpp_per_pcs: parseFloat(row.dataset.hppPerPcs),
             margin:      parseFloat(row.dataset.margin),
             estimasi_qty: qty,
+            custom_prop: propVal !== '' ? parseFloat(propVal) : null,
+            custom_flat: flatVal !== '' ? parseFloat(flatVal) : null,
         });
     });
     return result;
@@ -287,9 +301,15 @@ function hitungDistribusi(produkList, totalBiaya, persenProp) {
     const bebanRata  = totalQty > 0 ? bagianRata / totalQty : 0;
 
     return produkList.map(p => {
-        const weight     = totalNilai > 0 ? (p.harga_jual * p.estimasi_qty) / totalNilai : 1 / produkList.length;
+        let weight = totalNilai > 0 ? (p.harga_jual * p.estimasi_qty) / totalNilai : 1 / produkList.length;
+        if (p.custom_prop !== null) weight = p.custom_prop;
+        
         const bebanProp  = p.estimasi_qty > 0 ? (bagianProp * weight) / p.estimasi_qty : 0;
-        const beban      = bebanProp + bebanRata;
+        
+        let bebanRataItem = bebanRata;
+        if (p.custom_flat !== null) bebanRataItem = p.custom_flat;
+        
+        const beban      = bebanProp + bebanRataItem;
         const trueCost   = p.hpp_per_pcs + beban;
         const sugesti    = trueCost + p.margin;
         const selisih    = p.harga_jual - sugesti;

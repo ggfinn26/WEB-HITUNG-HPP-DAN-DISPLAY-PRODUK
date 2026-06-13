@@ -42,9 +42,7 @@ namespace App{
             $this->adminRepository->resetPasswordAdmin($email, $newPassword);
         }
 
-        public function generateCSRF(): string{
-            return bin2hex(random_bytes(32));
-        }
+
 
         public function checkPassword(string $password, string $hash): bool{
             return password_verify($password, $hash);
@@ -54,9 +52,7 @@ namespace App{
             session_destroy();
         }
 
-        public function verifyCSRF(string $csrf): bool{
-            return isset($_SESSION['csrf']) && hash_equals($_SESSION['csrf'], $csrf);
-        }
+
 
         private function checkRateLimit(string $ip): void{
             $data = $this->loadAttempts($ip);

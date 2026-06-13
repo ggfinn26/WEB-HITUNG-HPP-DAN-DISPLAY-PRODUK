@@ -91,7 +91,7 @@
                                 </a>
                                 <form method="POST" action="?page=hpp&action=delete&id=<?= $hpp->getId() ?>"
                                       onsubmit="return confirm('Hapus HPP \'<?= htmlspecialchars(addslashes($hpp->getName())) ?>\'?');">
-                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
                                     <button type="submit" class="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-lg transition-colors font-bold text-sm flex items-center gap-1">
                                         <span class="material-symbols-outlined text-[18px]">delete</span>
                                     </button>

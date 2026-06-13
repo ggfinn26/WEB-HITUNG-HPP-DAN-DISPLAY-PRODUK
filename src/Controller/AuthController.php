@@ -21,7 +21,7 @@ class AuthController {
             return;
         }
 
-        $csrf = csrf_token();
+        $csrf = App\Helper\CsrfHelper::getToken();
 
         $error = $_SESSION['error'] ?? null;
         unset($_SESSION['error']);
@@ -35,7 +35,7 @@ class AuthController {
     }
 
     public function loginProcess(array $postData) {
-        if (!csrf_verify($postData)) {
+        if (!App\Helper\CsrfHelper::verifyToken($postData)) {
             $_SESSION['error'] = "Invalid CSRF Token. Silakan coba lagi.";
             header("Location: ?page=auth&action=login");
             return;

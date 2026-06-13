@@ -113,7 +113,7 @@
                     <?php endif; ?>
                     <form method="POST" action="?page=sesi&action=hapus&id=<?= $sesi->getId() ?>"
                           onsubmit="return confirm('Hapus sesi \'<?= htmlspecialchars(addslashes($sesi->getNamaSesi())) ?>\'?')">
-                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
                         <button type="submit" class="p-2 rounded-xl bg-red-50 border border-red-100 text-red-400 hover:bg-red-600 hover:text-white transition-colors" title="Hapus">
                             <span class="material-symbols-outlined text-[18px]">delete</span>
                         </button>
@@ -132,7 +132,7 @@
         <h3 class="font-bold text-lg text-on-surface mb-1">Tutup Sesi</h3>
         <p class="text-sm text-on-surface-variant mb-4" id="tutup-modal-name"></p>
         <form method="POST" id="tutup-form">
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
             <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Qty Aktual per Produk</p>
             <div id="tutup-produk-list" class="space-y-2 mb-4 max-h-60 overflow-y-auto pr-1"></div>
             <p class="text-xs text-on-surface-variant mb-4">Biaya tetap sesi akan otomatis masuk ke <strong>Pengeluaran</strong>. Sesi berubah menjadi <strong>Selesai</strong>.</p>

@@ -46,7 +46,7 @@ class SesiJastipController {
     }
 
     public function store(array $data): void {
-        if (!csrf_verify($data)) {
+        if (!App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=sesi&action=create");
             exit;
@@ -69,7 +69,7 @@ class SesiJastipController {
     }
 
     public function tutup(int $id, array $data): void {
-        if (!csrf_verify($data)) {
+        if (!App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=sesi");
             exit;
@@ -90,7 +90,7 @@ class SesiJastipController {
     }
 
     public function hapus(int $id, array $data): void {
-        if (!csrf_verify($data)) {
+        if (!App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=sesi");
             exit;
@@ -128,15 +128,17 @@ class SesiJastipController {
                 'qty'        => $p->getEstimasiQty(),
             ], $produkList);
 
+            $bobot = $this->service->findSesiBobotBySesiId($id);
+
             $kalkulasi = $this->service->hitungDistribusi(
-                $inputEstimasi, $totalBiaya, $sesi->getPersenProporsional()
+                $inputEstimasi, $totalBiaya, $bobot
             );
 
             $bep = $this->service->hitungBEPMultiProduk($inputEstimasi, $totalBiaya);
 
             if ($sesi->getStatus() === 'selesai') {
                 $aktualResult = $this->service->hitungLabaAktual(
-                    $produkList, $totalBiaya, $sesi->getPersenProporsional()
+                    $produkList, $totalBiaya
                 );
                 $labaAktual = $aktualResult;
             }

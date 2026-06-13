@@ -17,7 +17,7 @@
 
     <div class="glass-panel p-8 rounded-2xl border border-outline-variant/30">
         <form action="?page=laporan&action=updatePengeluaran&id=<?= $pengeluaran->getId() ?>" method="POST" class="space-y-5">
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
 
             <div class="space-y-2">
                 <label class="block font-bold text-on-surface text-sm uppercase tracking-wider">Tanggal *</label>

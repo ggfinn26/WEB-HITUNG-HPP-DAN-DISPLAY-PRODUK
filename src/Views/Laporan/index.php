@@ -159,7 +159,7 @@ $currentMonthLabel = $namaBulan[$bulan] . ' ' . $tahun;
             <!-- Form tambah pengeluaran -->
             <div class="p-5 border-b border-outline-variant/20 bg-surface-container/30">
                 <form action="?page=laporan&action=storePengeluaran" method="POST" class="space-y-3">
-                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
                     <input type="hidden" name="redirect_bulan" value="<?= $bulan ?>">
                     <input type="hidden" name="redirect_tahun" value="<?= $tahun ?>">
                     <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">+ Tambah Pengeluaran</p>
@@ -206,7 +206,7 @@ $currentMonthLabel = $namaBulan[$bulan] . ' ' . $tahun;
                                         </a>
                                         <form method="POST" action="?page=laporan&action=deletePengeluaran&id=<?= $p->getId() ?>"
                                               onsubmit="return confirm('Hapus pengeluaran ini?')">
-                                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+                                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
                                             <input type="hidden" name="redirect_bulan" value="<?= $bulan ?>">
                                             <input type="hidden" name="redirect_tahun" value="<?= $tahun ?>">
                                             <button type="submit" class="p-1.5 rounded-lg bg-surface-container hover:bg-red-100 text-red-500 transition-colors" title="Hapus">

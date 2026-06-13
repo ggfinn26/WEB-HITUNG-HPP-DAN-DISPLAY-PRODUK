@@ -18,22 +18,11 @@ session_set_cookie_params([
 ]);
 session_start();
 
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-error_reporting(0);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-function csrf_token(): string {
-    if (empty($_SESSION['csrf_token'])) {
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-    }
-    return $_SESSION['csrf_token'];
-}
 
-function csrf_verify(array $data): bool {
-    return !empty($data['csrf_token'])
-        && !empty($_SESSION['csrf_token'])
-        && hash_equals($_SESSION['csrf_token'], $data['csrf_token']);
-}
 
 // Autoload dari Composer agar semua class App\* terbaca otomatis
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -101,13 +90,6 @@ try {
 $page = $_GET['page'] ?? 'home';
 $action = $_GET['action'] ?? 'index';
 
-// Fungsi bantuan untuk proteksi halaman admin
-function requireAdmin() {
-    if (empty($_SESSION['admin_logged_in'])) {
-        header("Location: ?page=auth&action=login");
-        exit;
-    }
-}
 
 try {
     switch ($page) {
@@ -140,7 +122,7 @@ try {
             break;
 
         case 'orders':
-            requireAdmin();
+            App\Helper\AuthHelper::requireAdmin();
             if ($action === 'index') {
                 $orderController->index();
             } elseif ($action === 'create') {
@@ -164,7 +146,7 @@ try {
             break;
             
         case 'products':
-            requireAdmin();
+            App\Helper\AuthHelper::requireAdmin();
             if ($action === 'index') {
                 $productController->index();
             } elseif ($action === 'create') {
@@ -184,7 +166,7 @@ try {
             break;
             
         case 'hpp':
-            requireAdmin();
+            App\Helper\AuthHelper::requireAdmin();
             if ($action === 'create') {
                 $rincianHppController->create();
             } elseif ($action === 'store' && $_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -201,7 +183,7 @@ try {
             break;
             
         case 'sesi':
-            requireAdmin();
+            App\Helper\AuthHelper::requireAdmin();
             if ($action === 'create') {
                 $sesiController->create();
             } elseif ($action === 'store' && $_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -218,7 +200,7 @@ try {
             break;
 
         case 'laporan':
-            requireAdmin();
+            App\Helper\AuthHelper::requireAdmin();
             if ($action === 'exportPdf') {
                 $laporanController->exportPdf();
             } elseif ($action === 'pendapatan') {

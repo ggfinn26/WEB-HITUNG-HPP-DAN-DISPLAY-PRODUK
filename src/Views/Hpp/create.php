@@ -31,7 +31,7 @@
         <!-- Form -->
         <div class="lg:col-span-2">
             <form id="hpp-form" action="?page=hpp&action=store" method="POST" class="space-y-6">
-                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
                 <input type="hidden" name="product_item_list" id="product_item_list_input">
 
                 <div class="glass-panel p-6 rounded-2xl border border-outline-variant/30">

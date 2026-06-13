@@ -12,6 +12,9 @@ interface SesiJastipInterface {
     public function findKomponenBySesiId(int $sesiId): array;
     public function deleteKomponenBySesiId(int $sesiId): void;
 
+    public function saveSesiBobot(SesiBobot $b): SesiBobot;
+    public function findSesiBobotBySesiId(int $sesiId): ?SesiBobot;
+
     public function saveProduk(SesiProduk $p): SesiProduk;
     public function findProdukBySesiId(int $sesiId): array;
     public function updateProdukAktualQty(int $sesiProdukId, int $aktualQty): void;

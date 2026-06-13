@@ -11,8 +11,7 @@ class SesiJastip {
     private ?int    $jumlahOrderAktual;
     private string  $status;
     private ?string $catatan;
-    private string  $metodeDistribusi;
-    private int     $persenProporsional;
+
     private \DateTime $createdAt;
     private \DateTime $updatedAt;
 
@@ -20,7 +19,6 @@ class SesiJastip {
         int $id, string $namaSesi, \DateTime $tanggal,
         float $rataHargaJual, float $rataHppDasar, float $totalBiayaTetap,
         ?int $jumlahOrderAktual, string $status, ?string $catatan,
-        string $metodeDistribusi, int $persenProporsional,
         \DateTime $createdAt, \DateTime $updatedAt
     ) {
         $this->id                 = $id;
@@ -30,10 +28,9 @@ class SesiJastip {
         $this->rataHppDasar       = $rataHppDasar;
         $this->totalBiayaTetap    = $totalBiayaTetap;
         $this->jumlahOrderAktual  = $jumlahOrderAktual;
+
         $this->status             = $status;
         $this->catatan            = $catatan;
-        $this->metodeDistribusi   = $metodeDistribusi;
-        $this->persenProporsional = $persenProporsional;
         $this->createdAt          = $createdAt;
         $this->updatedAt          = $updatedAt;
     }
@@ -65,10 +62,7 @@ class SesiJastip {
     public function getCatatan(): ?string                { return $this->catatan; }
     public function setCatatan(?string $v): void         { $this->catatan = $v; }
 
-    public function getMetodeDistribusi(): string           { return $this->metodeDistribusi; }
-    public function setMetodeDistribusi(string $v): void    { $this->metodeDistribusi = $v; }
-    public function getPersenProporsional(): int            { return $this->persenProporsional; }
-    public function setPersenProporsional(int $v): void     { $this->persenProporsional = $v; }
+
 
     public function getCreatedAt(): \DateTime            { return $this->createdAt; }
     public function getUpdatedAt(): \DateTime            { return $this->updatedAt; }

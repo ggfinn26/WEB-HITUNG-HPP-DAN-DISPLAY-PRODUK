@@ -16,9 +16,8 @@ class SesiJastipRepositoryImpl implements SesiJastipInterface {
         $stmt = $this->connection->prepare(
             "INSERT INTO sesi_jastip
                 (nama_sesi, tanggal, rata_harga_jual, rata_hpp_dasar,
-                 total_biaya_tetap, jumlah_order_aktual, status, catatan,
-                 metode_distribusi, persen_proporsional)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                 total_biaya_tetap, jumlah_order_aktual, status, catatan)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
         );
         $stmt->execute([
             $sesi->getNamaSesi(),
@@ -28,9 +27,7 @@ class SesiJastipRepositoryImpl implements SesiJastipInterface {
             $sesi->getTotalBiayaTetap(),
             $sesi->getJumlahOrderAktual(),
             $sesi->getStatus(),
-            $sesi->getCatatan(),
-            $sesi->getMetodeDistribusi(),
-            $sesi->getPersenProporsional(),
+            $sesi->getCatatan()
         ]);
         $sesi->setId((int)$this->connection->lastInsertId());
         return $sesi;
@@ -42,7 +39,6 @@ class SesiJastipRepositoryImpl implements SesiJastipInterface {
                 nama_sesi = ?, tanggal = ?, rata_harga_jual = ?,
                 rata_hpp_dasar = ?, total_biaya_tetap = ?,
                 jumlah_order_aktual = ?, status = ?, catatan = ?,
-                metode_distribusi = ?, persen_proporsional = ?,
                 updated_at = NOW()
              WHERE id = ?"
         );
@@ -53,10 +49,7 @@ class SesiJastipRepositoryImpl implements SesiJastipInterface {
             $sesi->getRataHppDasar(),
             $sesi->getTotalBiayaTetap(),
             $sesi->getJumlahOrderAktual(),
-            $sesi->getStatus(),
             $sesi->getCatatan(),
-            $sesi->getMetodeDistribusi(),
-            $sesi->getPersenProporsional(),
             $sesi->getId(),
         ]);
         return $sesi;
@@ -172,10 +165,52 @@ class SesiJastipRepositoryImpl implements SesiJastipInterface {
             isset($row['jumlah_order_aktual']) ? (int)$row['jumlah_order_aktual'] : null,
             $row['status'],
             $row['catatan'] ?? null,
-            $row['metode_distribusi'] ?? 'proporsional',
-            (int)($row['persen_proporsional'] ?? 100),
             new \DateTime($row['created_at']),
             new \DateTime($row['updated_at'])
+        );
+    }
+    
+    // ── OrderSesi & SesiBobot ────────────────────────────────────────────────
+
+    public function saveSesiBobot(SesiBobot $b): SesiBobot {
+        $stmt = $this->connection->prepare(
+            "INSERT INTO sesi_bobot (sesi_id, item_proporsional, item_flat) VALUES (?, ?, ?)"
+        );
+        $stmt->execute([$b->getSesiId(), $b->getItemProporsionalJson(), $b->getItemFlatJson()]);
+        return new SesiBobot(
+            (int)$this->connection->lastInsertId(),
+            $b->getSesiId(), $b->getItemProporsional(), $b->getItemFlat(),
+            new \DateTime(), new \DateTime()
+        );
+    }
+
+    public function findSesiBobotBySesiId(int $sesiId): ?SesiBobot {
+        $stmt = $this->connection->prepare("SELECT * FROM sesi_bobot WHERE sesi_id = ?");
+        $stmt->execute([$sesiId]);
+        $r = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$r) return null;
+        return new SesiBobot(
+            (int)$r['id'], (int)$r['sesi_id'],
+            $r['item_proporsional'] ? json_decode($r['item_proporsional'], true) : null,
+            $r['item_flat'] ? json_decode($r['item_flat'], true) : null,
+            new \DateTime($r['created_at']), new \DateTime($r['updated_at'])
+        );
+    }
+
+    public function deleteSesiBobotBySesiId(int $sesiId): void {
+        $stmt = $this->connection->prepare("DELETE FROM sesi_bobot WHERE sesi_id = ?");
+        $stmt->execute([$sesiId]);
+    }
+
+    public function saveOrderSesi(OrderSesi $os): OrderSesi {
+        $stmt = $this->connection->prepare(
+            "INSERT INTO order_sesi (sesi_id, order_id, order_number) VALUES (?, ?, ?)"
+        );
+        $stmt->execute([$os->getSesiId(), $os->getOrderId(), $os->getOrderNumber()]);
+        return new OrderSesi(
+            (int)$this->connection->lastInsertId(),
+            $os->getSesiId(), $os->getOrderId(), $os->getOrderNumber(),
+            new \DateTime(), new \DateTime()
         );
     }
 }

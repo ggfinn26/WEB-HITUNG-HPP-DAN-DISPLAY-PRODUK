@@ -158,7 +158,7 @@
                 </div>
                 
                 <form action="?page=orders&action=update&id=<?php echo urlencode($order->getOrderNumber()); ?>" method="POST" class="flex flex-col w-full sm:w-auto gap-3 p-4 bg-background rounded-2xl border border-outline-variant no-print shadow-sm">
-                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
                     <div class="flex flex-col sm:flex-row items-center gap-2 w-full">
                         <select name="statusColor" class="px-3 py-2 rounded-xl bg-surface border border-outline-variant/30 text-text outline-none focus:ring-2 focus:ring-primary/20 text-sm font-semibold">
                             <option value="blue" <?php echo ($savedColor === 'blue') ? 'selected' : ''; ?>>🔵 Biru (Info)</option>

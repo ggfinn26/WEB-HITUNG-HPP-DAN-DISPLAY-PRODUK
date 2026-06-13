@@ -25,7 +25,7 @@
     <?php else: ?>
 
     <form id="bulk-form" method="POST" action="?page=laporan&action=bulkDeleteOrders">
-        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
 
         <div class="glass-panel rounded-2xl border border-outline-variant/30 overflow-hidden">
             <!-- Bulk Actions Bar -->
@@ -87,7 +87,7 @@
                             <td class="px-4 py-3 text-center">
                                 <form method="POST" action="?page=laporan&action=deleteOrder&id=<?= $order->getId() ?>"
                                       onsubmit="return confirm('Hapus order <?= htmlspecialchars($order->getOrderNumber()) ?>?')">
-                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
                                     <button type="submit" class="p-1.5 rounded-lg bg-surface-container hover:bg-red-100 text-red-500 transition-colors" title="Hapus">
                                         <span class="material-symbols-outlined text-[18px]">delete</span>
                                     </button>

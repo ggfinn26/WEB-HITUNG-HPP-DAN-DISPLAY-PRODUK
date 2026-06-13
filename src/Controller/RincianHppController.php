@@ -31,7 +31,7 @@ class RincianHppController {
     }
 
     public function store(array $data): void {
-        if (!csrf_verify($data)) {
+        if (!App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=hpp&action=create");
             exit;
@@ -97,7 +97,7 @@ class RincianHppController {
     }
 
     public function updateHpp(int $id, array $data): void {
-        if (!csrf_verify($data)) {
+        if (!App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=hpp&action=edit&id=$id");
             exit;
@@ -119,7 +119,7 @@ class RincianHppController {
     }
 
     public function delete(int $id, array $data = []): void {
-        if (!csrf_verify($data)) {
+        if (!App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=hpp");
             exit;

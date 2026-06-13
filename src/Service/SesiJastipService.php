@@ -22,12 +22,21 @@ class SesiJastipService {
      *
      * @param  array $produkList  [['harga_jual'=>float, 'hpp'=>float, 'margin'=>float, 'qty'=>int], ...]
      * @param  float $totalBiayaTetap
-     * @param  int   $persenProporsional  0-100
+     * @param  ?SesiBobot $bobot Konfigurasi bobot dinamis
      * @return array  Sama seperti input, ditambah key 'beban_per_item', 'true_cost', 'sugesti_harga', 'selisih', 'is_boncos'
      */
-    public function hitungDistribusi(array $produkList, float $totalBiayaTetap, int $persenProporsional): array {
+    public function hitungDistribusi(array $produkList, float $totalBiayaTetap, ?SesiBobot $bobot = null): array {
         $totalQty   = array_sum(array_column($produkList, 'qty'));
         $totalNilai = array_sum(array_map(fn($p) => $p['harga_jual'] * $p['qty'], $produkList));
+
+        // Default slider percentages if bobot is null or doesn't have it
+        $persenProporsional = 60; 
+        $itemPropConfig = $bobot ? $bobot->getItemProporsional() : null;
+        $itemFlatConfig = $bobot ? $bobot->getItemFlat() : null;
+
+        if ($itemPropConfig && isset($itemPropConfig['global_persen'])) {
+            $persenProporsional = (int)$itemPropConfig['global_persen'];
+        }
 
         if ($totalQty <= 0 || $totalBiayaTetap <= 0) {
             return array_map(fn($p) => array_merge($p, [
@@ -44,13 +53,20 @@ class SesiJastipService {
 
         $result = [];
         foreach ($produkList as $p) {
-            $weight      = $totalNilai > 0
-                ? ($p['harga_jual'] * $p['qty']) / $totalNilai
-                : (1 / count($produkList));
-            $bebanProp   = $p['qty'] > 0
-                ? ($bagianProp * $weight) / $p['qty']
-                : 0;
-            $bebanTotal  = $bebanProp + $bebanRataPerItem;
+            $weight = $totalNilai > 0 ? ($p['harga_jual'] * $p['qty']) / $totalNilai : (1 / count($produkList));
+            if ($itemPropConfig && isset($itemPropConfig['custom_weights'][$p['id'] ?? $p['hpp_id']])) {
+                $weight = (float)$itemPropConfig['custom_weights'][$p['id'] ?? $p['hpp_id']];
+            }
+            
+            $bebanProp   = $p['qty'] > 0 ? ($bagianProp * $weight) / $p['qty'] : 0;
+            
+            // Custom flat
+            $bebanRataItem = $bebanRataPerItem;
+            if ($itemFlatConfig && isset($itemFlatConfig['custom_weights'][$p['id'] ?? $p['hpp_id']])) {
+                $bebanRataItem = (float)$itemFlatConfig['custom_weights'][$p['id'] ?? $p['hpp_id']];
+            }
+            
+            $bebanTotal  = $bebanProp + $bebanRataItem;
             $trueCost    = $p['hpp'] + $bebanTotal;
             $sugesti     = $trueCost + $p['margin'];
             $selisih     = $p['harga_jual'] - $sugesti;
@@ -82,7 +98,7 @@ class SesiJastipService {
      * Hitung laba aktual pasca-trip menggunakan data aktual_qty.
      * Distribusi dihitung ulang berdasarkan qty aktual.
      */
-    public function hitungLabaAktual(array $sesiProdukList, float $totalBiayaTetap, int $persenProporsional): array {
+    public function hitungLabaAktual(array $sesiProdukList, float $totalBiayaTetap): array {
         $input = array_map(fn(SesiProduk $p) => [
             'id'         => $p->getId(),
             'nama'       => $p->getNamaSnapshot(),
@@ -92,7 +108,11 @@ class SesiJastipService {
             'qty'        => $p->getAktualQty() ?? 0,
         ], $sesiProdukList);
 
-        $kalkulasi   = $this->hitungDistribusi($input, $totalBiayaTetap, $persenProporsional);
+        $bobot = null;
+        if (!empty($sesiProdukList)) {
+            $bobot = $this->repo->findSesiBobotBySesiId($sesiProdukList[0]->getSesiId());
+        }
+        $kalkulasi   = $this->hitungDistribusi($input, $totalBiayaTetap, $bobot);
         $totalLabaSesi = 0;
         $rows = [];
         foreach ($kalkulasi as $i => $k) {
@@ -128,18 +148,40 @@ class SesiJastipService {
             }
         }
 
-        $komponen        = $this->parseKomponen($data['komponen'] ?? '[]');
+        $komponen        = \App\Helper\SesiHelper::parseKomponen($data['komponen'] ?? '[]');
         $totalBiayaTetap = array_sum(array_column($komponen, 'jumlah'));
 
         $sesi = new SesiJastip(
             0, $nama, $tanggal, 0, 0, $totalBiayaTetap,
             null, 'draft',
             trim($data['catatan'] ?? '') ?: null,
-            'proporsional', $persen,
             new \DateTime(), new \DateTime()
         );
 
         $saved = $this->repo->save($sesi);
+
+        // Parsing bobot proporsional and flat from inputs
+        $itemProp = [
+            'global_persen' => $persen,
+            'custom_weights' => []
+        ];
+        $itemFlat = [
+            'custom_weights' => []
+        ];
+
+        // We assume data contains custom_prop and custom_flat arrays
+        if (isset($data['custom_prop']) && is_array($data['custom_prop'])) {
+            foreach ($data['custom_prop'] as $hppId => $weight) {
+                if ($weight !== '') $itemProp['custom_weights'][$hppId] = (float)$weight;
+            }
+        }
+        if (isset($data['custom_flat']) && is_array($data['custom_flat'])) {
+            foreach ($data['custom_flat'] as $hppId => $weight) {
+                if ($weight !== '') $itemFlat['custom_weights'][$hppId] = (float)$weight;
+            }
+        }
+
+        $this->repo->saveSesiBobot(new SesiBobot(0, $saved->getId(), $itemProp, $itemFlat, new \DateTime(), new \DateTime()));
 
         foreach ($komponen as $k) {
             $this->repo->saveKomponen(new BiayaKomponenSesi(
@@ -190,25 +232,11 @@ class SesiJastipService {
     public function findAll(): array                     { return $this->repo->findAll(); }
     public function findKomponenBySesiId(int $id): array { return $this->repo->findKomponenBySesiId($id); }
     public function findProdukBySesiId(int $id): array   { return $this->repo->findProdukBySesiId($id); }
+    public function findSesiBobotBySesiId(int $id): ?SesiBobot { return $this->repo->findSesiBobotBySesiId($id); }
 
     public function hapusSesi(int $id): void {
         if (!$this->repo->findById($id)) throw new ValidationException("Sesi tidak ditemukan.");
         $this->repo->delete($id);
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
-    private function parseKomponen(string $json): array {
-        $raw = json_decode($json, true);
-        if (!is_array($raw)) return [];
-        $result = [];
-        foreach ($raw as $item) {
-            $nama   = trim($item['nama'] ?? '');
-            $jumlah = (float)($item['jumlah'] ?? 0);
-            if ($nama !== '' && $jumlah > 0) {
-                $result[] = ['nama' => $nama, 'jumlah' => $jumlah];
-            }
-        }
-        return $result;
-    }
 }
