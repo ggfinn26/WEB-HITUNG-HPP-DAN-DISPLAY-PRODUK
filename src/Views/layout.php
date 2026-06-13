@@ -103,7 +103,7 @@ $_seoLd      = $structuredData ?? null;
                 <?php endif; ?>
 
                 <div class="relative group hidden md:block">
-                    <select id="theme-selector" aria-label="Pilih Tema" class="appearance-none bg-surface-container-low text-on-surface text-sm rounded-lg px-3 py-2 border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer" onchange="applyTheme(this.value)">
+                    <select id="theme-selector" aria-label="Pilih Tema" class="appearance-none bg-surface-container-low text-on-surface text-sm rounded-lg pl-3 pr-8 py-2 border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer" onchange="applyTheme(this.value)">
                         <option value="system">Auto Mode</option>
                         <option value="dark">Dark Mode</option>
                         <option value="light">Light Mode</option>
