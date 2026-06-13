@@ -22,6 +22,7 @@ class CartController {
         $adminWa = $_ENV['ADMIN_WA'] ?? '62895380123352';
         $adminIg = $_ENV['ADMIN_IG'] ?? 'arungaarungidunia';
         $waUrl   = null;
+        $waMsg   = null;
         $igMsg   = null;
 
         if ($success) {
