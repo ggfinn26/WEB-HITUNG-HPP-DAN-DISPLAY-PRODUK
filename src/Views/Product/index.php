@@ -35,14 +35,14 @@
                         <th class="py-4 px-4 font-bold uppercase tracking-wider text-sm text-center whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="block md:table-row-group divide-y divide-transparent md:divide-outline-variant/30">
+                <tbody class="flex flex-col md:table-row-group gap-4 md:gap-0 divide-y divide-transparent md:divide-outline-variant/30">
                     <?php if (empty($products)): ?>
                         <tr class="block md:table-row">
                             <td colspan="4" class="block md:table-cell py-10 text-center text-on-surface-variant">Belum ada produk. Silakan tambahkan produk baru.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach($products as $product): ?>
-                            <tr class="block md:table-row bg-surface hover:bg-surface-container-low transition-colors mb-4 md:mb-0 rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden">
+                            <tr class="block md:table-row bg-surface hover:bg-surface-container-low transition-colors rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden">
                                 <td class="block md:table-cell py-3 md:py-4 px-4 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
                                     <div class="flex justify-between items-center md:block">
                                         <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant">Nama Produk</span>
@@ -89,5 +89,35 @@
                 </tbody>
             </table>
         </div>
+
+        <?php if (isset($totalPages) && $totalPages > 1): ?>
+        <div class="flex flex-col md:flex-row items-center justify-between mt-6 relative z-10 gap-4">
+            <p class="text-sm text-on-surface-variant font-medium">
+                Halaman <?= $currentPage ?> dari <?= $totalPages ?> (<?= $totalProducts ?> produk)
+            </p>
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto justify-center">
+                <?php if ($currentPage > 1): ?>
+                    <a href="?page=products&p=<?= $currentPage - 1 ?>" class="px-4 py-2 rounded-xl bg-surface border border-outline-variant text-sm font-semibold hover:border-primary hover:text-primary transition-colors whitespace-nowrap">
+                        &larr; Prev
+                    </a>
+                <?php endif; ?>
+                <?php
+                    $start = max(1, $currentPage - 2);
+                    $end   = min($totalPages, $currentPage + 2);
+                    for ($i = $start; $i <= $end; $i++):
+                ?>
+                    <a href="?page=products&p=<?= $i ?>"
+                       class="px-4 py-2 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap <?= $i === $currentPage ? 'bg-primary text-on-primary shadow-sm' : 'bg-surface border border-outline-variant hover:border-primary hover:text-primary' ?>">
+                        <?= $i ?>
+                    </a>
+                <?php endfor; ?>
+                <?php if ($currentPage < $totalPages): ?>
+                    <a href="?page=products&p=<?= $currentPage + 1 ?>" class="px-4 py-2 rounded-xl bg-surface border border-outline-variant text-sm font-semibold hover:border-primary hover:text-primary transition-colors whitespace-nowrap">
+                        Next &rarr;
+                    </a>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
 </div>

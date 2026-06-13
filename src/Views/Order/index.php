@@ -25,7 +25,7 @@
                     <th class="py-4 px-6 text-right font-semibold text-sm uppercase tracking-wider whitespace-nowrap">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="block md:table-row-group divide-y divide-transparent md:divide-outline-variant px-4 md:px-0 bg-transparent md:bg-transparent">
+            <tbody class="flex flex-col md:table-row-group gap-4 md:gap-0 divide-y divide-transparent md:divide-outline-variant px-4 md:px-0 bg-transparent md:bg-transparent">
                 <?php if (empty($orders)): ?>
                     <tr class="block md:table-row">
                         <td colspan="6" class="block md:table-cell py-12 text-center text-muted">
@@ -37,7 +37,7 @@
                     </tr>
                 <?php else: ?>
                     <?php foreach ($orders as $order): ?>
-                        <tr class="block md:table-row bg-surface hover:bg-background/80 transition-colors group mb-4 md:mb-0 rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden pt-2 md:pt-0">
+                        <tr class="block md:table-row bg-surface hover:bg-background/80 transition-colors group rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden pt-2 md:pt-0">
                             <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
                                 <div class="flex justify-between items-center md:block">
                                     <span class="md:hidden font-bold text-xs uppercase text-muted">No. Seri</span>

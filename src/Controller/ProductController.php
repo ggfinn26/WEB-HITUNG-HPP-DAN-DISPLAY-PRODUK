@@ -44,7 +44,7 @@ class ProductController {
     }
 
     public function store(array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid. Silakan coba lagi.";
             header("Location: ?page=products&action=create");
             exit;
@@ -119,7 +119,7 @@ class ProductController {
     }
 
     public function update(int $id, array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid. Silakan coba lagi.";
             header("Location: ?page=products&action=edit&id=" . $id);
             exit;
@@ -210,7 +210,7 @@ class ProductController {
     }
 
     public function delete(int $id, array $data = []): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=products");
             exit;

@@ -59,9 +59,14 @@
                         <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-center whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="block md:table-row-group divide-y divide-transparent md:divide-outline-variant/30">
+                <tbody class="flex flex-col md:table-row-group gap-4 md:gap-0 divide-y divide-transparent md:divide-outline-variant/30 px-4 md:px-0">
+                    <?php if (empty($hppList)): ?>
+                    <tr class="block md:table-row">
+                        <td colspan="6" class="block md:table-cell px-4 py-8 text-center text-on-surface-variant">Belum ada data Kalkulasi Jastip.</td>
+                    </tr>
+                    <?php else: ?>
                     <?php foreach ($hppList as $hpp): ?>
-                    <tr class="block md:table-row bg-surface hover:bg-surface-container-low transition-colors mb-4 md:mb-0 rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden">
+                    <tr class="block md:table-row bg-surface hover:bg-surface-container/50 transition-colors rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden pt-2 md:pt-0">
                         <td class="block md:table-cell py-3 md:py-4 px-4 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
                             <div class="flex justify-between items-center md:block">
                                 <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant">Nama Produk</span>
@@ -121,6 +126,7 @@
                         </td>
                     </tr>
                     <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
