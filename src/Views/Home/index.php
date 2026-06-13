@@ -137,7 +137,7 @@
                                 <span class="font-headline-md text-xl font-black text-secondary-container">
                                     Rp. <?= number_format((float)$product->getPrice(), 0, ',', '.') ?>
                                 </span>
-                                <a href="https://wa.me/62895380123352?text=Halo%20Jastip%20Arunga,%20saya%20tertarik%20dengan%20<?= urlencode($product->getName()) ?>" target="_blank" 
+                                <a href="https://wa.me/<?= htmlspecialchars($_ENV['ADMIN_WA'] ?? '62895380123352') ?>?text=Halo%20Jastip%20Arunga,%20saya%20tertarik%20dengan%20<?= urlencode($product->getName()) ?>" target="_blank" 
                                    class="bg-primary text-white px-5 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-primary-container transition-colors shadow-md active:scale-95 whitespace-nowrap">
                                     <span class="material-symbols-outlined text-[20px]" data-weight="fill">shopping_cart</span>
                                     <span class="font-label-md font-bold text-sm">Pesan</span>
@@ -262,7 +262,7 @@
         if (note) message += `- *Catatan Tambahan:* ${note}\n`;
         message += `\nMohon informasi cara pembayaran dan konfirmasinya. Terima kasih!`;
         
-        const waUrl = `https://wa.me/62895380123352?text=${encodeURIComponent(message)}`;
+        const waUrl = `https://wa.me/<?= htmlspecialchars($_ENV['ADMIN_WA'] ?? '62895380123352') ?>?text=${encodeURIComponent(message)}`;
         window.open(waUrl, '_blank');
         
         this.reset();
@@ -465,7 +465,7 @@
                                         <h4 class="font-bold text-on-surface text-sm line-clamp-2">${escHtml(p.name)}</h4>
                                         <p class="text-secondary-container font-black text-sm mt-1">${priceFormatted}</p>
                                     </div>
-                                    <a href="https://wa.me/62895380123352?text=Halo%20Jastip%20Arunga,%20saya%20tertarik%20dengan%20${encodeURIComponent(p.name)}" target="_blank" class="bg-primary text-white p-2 rounded-full hover:bg-primary-container transition-colors shadow-sm active:scale-95">
+                                    <a href="https://wa.me/<?= htmlspecialchars($_ENV['ADMIN_WA'] ?? '62895380123352') ?>?text=Halo%20Jastip%20Arunga,%20saya%20tertarik%20dengan%20${encodeURIComponent(p.name)}" target="_blank" class="bg-primary text-white p-2 rounded-full hover:bg-primary-container transition-colors shadow-sm active:scale-95">
                                         <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
                                     </a>
                                 </div>

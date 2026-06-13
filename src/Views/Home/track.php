@@ -312,7 +312,7 @@
 </div>
 
 <!-- Help Action -->
-<a href="https://wa.me/62895380123352" target="_blank" class="w-full py-3 px-4 rounded-lg border-2 border-on-tertiary-container text-on-tertiary-container font-label-md font-semibold hover:bg-inverse-on-surface transition-colors flex items-center justify-center gap-2">
+<a href="https://wa.me/<?= htmlspecialchars($_ENV['ADMIN_WA'] ?? '62895380123352') ?>" target="_blank" class="w-full py-3 px-4 rounded-lg border-2 border-on-tertiary-container text-on-tertiary-container font-label-md font-semibold hover:bg-inverse-on-surface transition-colors flex items-center justify-center gap-2">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">support_agent</span>
     Need Help with this Order?
 </a>
@@ -339,7 +339,7 @@
 </div>
 <div class="flex gap-6 text-label-sm font-label-sm">
 <a class="text-on-primary/80 hover:text-secondary-fixed-dim transition-colors" href="https://instagram.com/arungaarungidunia">Instagram</a>
-<a class="text-on-primary/80 hover:text-secondary-fixed-dim transition-colors" href="https://wa.me/62895380123352">Help Center</a>
+<a class="text-on-primary/80 hover:text-secondary-fixed-dim transition-colors" href="https://wa.me/<?= htmlspecialchars($_ENV['ADMIN_WA'] ?? '62895380123352') ?>">Help Center</a>
 </div>
 </div>
 <div class="text-body-md font-body-md text-on-primary/60 w-full max-w-container-max text-center border-t border-on-primary/20 pt-8">

@@ -44,7 +44,7 @@
                                 <span class="font-headline-md text-xl font-black text-secondary-container">
                                     Rp. <?= number_format((float)$product->getPrice(), 0, ',', '.') ?>
                                 </span>
-                                <a href="https://wa.me/62895380123352?text=Halo%20Jastip%20Arunga,%20saya%20tertarik%20dengan%20<?= urlencode($product->getName()) ?>" target="_blank" 
+                                <a href="https://wa.me/<?= htmlspecialchars($_ENV['ADMIN_WA'] ?? '62895380123352') ?>?text=Halo%20Jastip%20Arunga,%20saya%20tertarik%20dengan%20<?= urlencode($product->getName()) ?>" target="_blank" 
                                    class="bg-primary text-white px-5 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-primary-container transition-colors shadow-md active:scale-95 whitespace-nowrap">
                                     <span class="material-symbols-outlined text-[20px]" data-weight="fill">shopping_cart</span>
                                     <span class="font-label-md font-bold text-sm">Pesan</span>
