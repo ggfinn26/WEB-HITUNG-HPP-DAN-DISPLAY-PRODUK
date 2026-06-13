@@ -6,7 +6,7 @@
     
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
         <div id="hero-content">
-            <img alt="Arunga Kids Friendly Logo" class="h-36 w-auto mb-8 hero-logo rounded-2xl shadow-sm" src="logo_transparent.svg" />
+            <img alt="Arunga Kids Friendly Logo" class="h-20 md:h-24 w-auto max-w-full mb-8 hero-logo rounded-2xl shadow-sm" src="logo_transparent.svg" />
             <h1 class="font-display-lg text-4xl md:text-5xl lg:text-display-lg text-secondary-container mb-4 hero-headline font-bold">Mbu Titip by Arunga Arungi Dunia</h1>
             <p class="font-headline-md text-xl md:text-headline-md text-on-surface-variant mb-10 hero-tagline">
                 Temanmu Mengarungi Nusantara. Jasa Titip Terpercaya Seluruh Indonesia. Temukan barang-barang favorit dari berbagai daerah untuk keluarga tersayang.
@@ -119,7 +119,7 @@ button.px-10 {
                     <div class="group bg-surface rounded-3xl overflow-hidden shadow-sm hover:-translate-y-2 hover:shadow-xl transition-all duration-300 border border-outline-variant/20">
                         <div class="relative h-64 overflow-hidden bg-surface-container-high flex items-center justify-center">
                             <?php if ($product->getImageUrl()): ?>
-                                <img src="<?= htmlspecialchars($product->getImageUrl()) ?>" alt="<?= htmlspecialchars($product->getName()) ?>" class="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500">
+                                <img src="<?= htmlspecialchars($product->getImageUrl()) ?>" alt="<?= htmlspecialchars($product->getName()) ?>" class="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500" loading="lazy">
                             <?php else: ?>
                                 <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary-container/10 group-hover:scale-110 transition-transform duration-500"></div>
                                 <span class="text-6xl relative z-10 drop-shadow-sm group-hover:scale-110 transition-transform duration-500">📦</span>
@@ -410,7 +410,7 @@ button.px-10 {
                         const miniCatalogHtml = `
                             <div class="bg-surface p-3 rounded-xl shadow-lg border border-outline-variant/30 w-48 font-sans">
                                 <div class="bg-surface-container-high h-24 rounded-lg flex items-center justify-center mb-2 overflow-hidden">
-                                    ${d[0].imageUrl ? `<img src="${escHtml(d[0].imageUrl)}" class="w-full h-full object-cover">` : `<span class="text-3xl">📦</span>`}
+                                    ${d[0].imageUrl ? `<img src="${escHtml(d[0].imageUrl)}" class="w-full h-full object-cover" loading="lazy">` : `<span class="text-3xl">📦</span>`}
                                 </div>
                                 <h4 class="font-bold text-sm text-on-surface line-clamp-1 mb-1">${escHtml(pName)}</h4>
                                 <p class="text-xs text-on-surface-variant italic">Klik untuk melihat detail</p>
@@ -463,7 +463,7 @@ button.px-10 {
                             return `
                                 <div class="flex items-center gap-4 p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors border border-outline-variant/20">
                                     <div class="w-16 h-16 rounded-xl bg-surface-container-high flex-shrink-0 flex items-center justify-center overflow-hidden">
-                                        ${p.imageUrl ? `<img src="${escHtml(p.imageUrl)}" class="w-full h-full object-contain p-1">` : `<span class="text-2xl">📦</span>`}
+                                        ${p.imageUrl ? `<img src="${escHtml(p.imageUrl)}" class="w-full h-full object-contain p-1" loading="lazy">` : `<span class="text-2xl">📦</span>`}
                                     </div>
                                     <div class="flex-1">
                                         <h4 class="font-bold text-on-surface text-sm line-clamp-2">${escHtml(p.name)}</h4>

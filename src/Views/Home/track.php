@@ -25,8 +25,8 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Order Tracking Result - Mbu Titip</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/material-symbols.css">
 <script id="tailwind-config">
         tailwind.config = {
           darkMode: "class",

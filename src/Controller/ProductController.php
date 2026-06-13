@@ -57,9 +57,9 @@ class ProductController {
 
             // Handle Image Upload
             if (isset($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
-                $maxSize = 2 * 1024 * 1024; // 2MB
+                $maxSize = 5 * 1024 * 1024;
                 if ($_FILES['image_file']['size'] > $maxSize) {
-                    throw new \Exception("Ukuran file maksimal 2MB.");
+                    throw new \Exception("Ukuran file maksimal 5MB.");
                 }
 
                 $uploadDir = __DIR__ . '/../../public/uploads/products/';
@@ -67,8 +67,7 @@ class ProductController {
                     mkdir($uploadDir, 0755, true);
                 }
 
-                // Validate file type
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $finfo    = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_file($finfo, $_FILES['image_file']['tmp_name']);
                 finfo_close($finfo);
 
@@ -76,14 +75,9 @@ class ProductController {
                 if (!in_array($mimeType, $allowed, true)) {
                     throw new \Exception("File yang diunggah harus berupa gambar (jpg, png, gif, webp).");
                 }
-                $extMap = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif', 'image/webp' => 'webp', 'image/avif' => 'avif'];
-                $ext = $extMap[$mimeType];
-                $fileName = bin2hex(random_bytes(16)) . '.' . $ext;
-                $targetPath = $uploadDir . $fileName;
 
-                if (move_uploaded_file($_FILES['image_file']['tmp_name'], $targetPath)) {
-                    $data['image_url'] = 'uploads/products/' . $fileName;
-                }
+                $fileName = $this->processUploadedImage($_FILES['image_file']['tmp_name'], $mimeType, $uploadDir);
+                $data['image_url'] = 'uploads/products/' . $fileName;
             }
 
             $this->productService->save($data);
@@ -138,9 +132,9 @@ class ProductController {
 
             // Handle Image Upload
             if (isset($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
-                $maxSize = 2 * 1024 * 1024; // 2MB
+                $maxSize = 5 * 1024 * 1024;
                 if ($_FILES['image_file']['size'] > $maxSize) {
-                    throw new \Exception("Ukuran file maksimal 2MB.");
+                    throw new \Exception("Ukuran file maksimal 5MB.");
                 }
 
                 $uploadDir = __DIR__ . '/../../public/uploads/products/';
@@ -148,8 +142,7 @@ class ProductController {
                     mkdir($uploadDir, 0755, true);
                 }
 
-                // Validate file type
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $finfo    = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_file($finfo, $_FILES['image_file']['tmp_name']);
                 finfo_close($finfo);
 
@@ -157,14 +150,9 @@ class ProductController {
                 if (!in_array($mimeType, $allowed, true)) {
                     throw new \Exception("File yang diunggah harus berupa gambar (jpg, png, gif, webp).");
                 }
-                $extMap = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif', 'image/webp' => 'webp', 'image/avif' => 'avif'];
-                $ext = $extMap[$mimeType];
-                $fileName = bin2hex(random_bytes(16)) . '.' . $ext;
-                $targetPath = $uploadDir . $fileName;
 
-                if (move_uploaded_file($_FILES['image_file']['tmp_name'], $targetPath)) {
-                    $data['image_url'] = 'uploads/products/' . $fileName;
-                }
+                $fileName = $this->processUploadedImage($_FILES['image_file']['tmp_name'], $mimeType, $uploadDir);
+                $data['image_url'] = 'uploads/products/' . $fileName;
             }
 
             $this->productService->update($id, $data);
@@ -181,6 +169,38 @@ class ProductController {
             header("Location: ?page=products&action=edit&id=" . $id);
             exit;
         }
+    }
+
+    private function processUploadedImage(string $tmpPath, string $mimeType, string $uploadDir): string {
+        $src = imagecreatefromstring(file_get_contents($tmpPath));
+        if (!$src) throw new \Exception("Gagal membaca file gambar.");
+
+        $origW = imagesx($src);
+        $origH = imagesy($src);
+        $maxDim = 500;
+
+        if ($origW > $maxDim || $origH > $maxDim) {
+            $ratio = min($maxDim / $origW, $maxDim / $origH);
+            $newW  = (int)round($origW * $ratio);
+            $newH  = (int)round($origH * $ratio);
+        } else {
+            $newW = $origW;
+            $newH = $origH;
+        }
+
+        $dst = imagecreatetruecolor($newW, $newH);
+        imagealphablending($dst, false);
+        imagesavealpha($dst, true);
+        imagefilledrectangle($dst, 0, 0, $newW, $newH, imagecolorallocatealpha($dst, 0, 0, 0, 127));
+        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newW, $newH, $origW, $origH);
+        imagedestroy($src);
+
+        $fileName   = bin2hex(random_bytes(16)) . '.webp';
+        $targetPath = $uploadDir . $fileName;
+        imagewebp($dst, $targetPath, 85);
+        imagedestroy($dst);
+
+        return $fileName;
     }
 
     public function delete(int $id, array $data = []): void {

@@ -55,14 +55,14 @@ $_seoLd      = $structuredData ?? null;
     <link rel="apple-touch-icon"                  href="logo_transparent.svg">
 
     <!-- ── Preconnect (performance + SEO Core Web Vitals) ── -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Removed preconnect for fonts.googleapis.com -->
+    <!-- Removed preconnect for fonts.gstatic.com -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
     <!-- ── CSS ── -->
     <link rel="stylesheet" href="css/app.css">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800&family=Inter:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/material-symbols.css">
+    <link rel="stylesheet" href="css/fonts.css">
 
     <!-- ── JS ── -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
