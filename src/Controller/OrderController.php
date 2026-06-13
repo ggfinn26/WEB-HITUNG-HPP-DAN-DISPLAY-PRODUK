@@ -90,7 +90,7 @@ class OrderController implements OrderControllerInterface {
     }
 
     public function store(array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             header("Location: ?page=orders&action=create");
             exit;
         }
@@ -167,7 +167,7 @@ class OrderController implements OrderControllerInterface {
     }
 
     public function updateDetail(string $orderNumber, array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=orders&action=editDetail&id=" . urlencode($orderNumber));
             exit;
@@ -207,7 +207,7 @@ class OrderController implements OrderControllerInterface {
     }
 
     public function update(string $orderNumber, array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             header("Location: ?page=orders&action=show&id=" . urlencode($orderNumber));
             exit;
         }

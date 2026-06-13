@@ -203,7 +203,6 @@ $_seoLd      = $structuredData ?? null;
     </header>
 
     <!-- Main Content -->
-    <script src="js/cart.js"></script>
     <main class="flex-grow w-full relative z-10 p-6 md:p-10 max-w-7xl mx-auto">
         <?php echo $content ?? ''; ?>
     </main>

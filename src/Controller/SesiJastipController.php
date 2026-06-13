@@ -42,7 +42,7 @@ class SesiJastipController {
     }
 
     public function store(array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=sesi&action=create");
             exit;
@@ -65,7 +65,7 @@ class SesiJastipController {
     }
 
     public function tutup(int $id, array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=sesi");
             exit;
@@ -86,7 +86,7 @@ class SesiJastipController {
     }
 
     public function hapus(int $id, array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=sesi");
             exit;

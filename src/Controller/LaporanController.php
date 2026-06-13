@@ -41,7 +41,7 @@ class LaporanController {
     }
 
     public function deleteOrder(int $id, array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=laporan&action=pendapatan");
             exit;
@@ -58,7 +58,7 @@ class LaporanController {
     }
 
     public function bulkDeleteOrders(array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=laporan&action=pendapatan");
             exit;
@@ -81,7 +81,7 @@ class LaporanController {
     }
 
     public function storePengeluaran(array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: " . $this->redirectBack($data));
             exit;
@@ -115,7 +115,7 @@ class LaporanController {
     }
 
     public function updatePengeluaran(int $id, array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=laporan&action=editPengeluaran&id=$id");
             exit;
@@ -138,7 +138,7 @@ class LaporanController {
     }
 
     public function deletePengeluaran(int $id, array $data): void {
-        if (!App\Helper\CsrfHelper::verifyToken($data)) {
+        if (!\App\Helper\CsrfHelper::verifyToken($data)) {
             $_SESSION['error_message'] = "Permintaan tidak valid.";
             header("Location: ?page=laporan");
             exit;

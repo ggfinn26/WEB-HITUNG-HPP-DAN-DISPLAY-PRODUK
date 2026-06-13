@@ -17,7 +17,11 @@ class AppLogger {
 
     private static function logPath(string $filename): string {
         if (!isset(self::$logPaths[$filename])) {
-            self::$logPaths[$filename] = __DIR__ . '/../Logs/' . $filename;
+            $logDir = __DIR__ . '/../Logs';
+            if (!is_dir($logDir)) {
+                mkdir($logDir, 0777, true);
+            }
+            self::$logPaths[$filename] = $logDir . '/' . $filename;
         }
         return self::$logPaths[$filename];
     }

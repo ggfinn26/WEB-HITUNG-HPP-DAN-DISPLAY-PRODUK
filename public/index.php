@@ -26,6 +26,7 @@ error_reporting(E_ALL);  // still log, just don't display
 
 // Autoload dari Composer agar semua class App\* terbaca otomatis
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/Helper/AppLogger.php';
 
 use App\OrderRepositoryImpl;
 use App\OrderService;
