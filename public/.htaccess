@@ -1,0 +1,72 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Route semua request ke index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Images
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+
+    # Fonts
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/x-font-woff "access plus 1 year"
+
+    # CSS, JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+
+<IfModule mod_headers.c>
+    # ── Cache headers ──────────────────────────────────────────────
+    <FilesMatch "\.(jpeg|jpg|png|gif|webp|svg|ico)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+    <FilesMatch "\.(woff2|woff)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "max-age=2592000, public"
+    </FilesMatch>
+
+    # ── Security headers ───────────────────────────────────────────
+
+    # Paksa HTTPS selama 1 tahun, termasuk subdomain
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # Cegah clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Cegah MIME-type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Kontrol referrer info — kirim origin saja ke cross-origin
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Nonaktifkan fitur browser yang tidak dipakai
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+
+    # Content Security Policy
+    # unsafe-inline diperlukan karena PHP views pakai inline <script> dan style=""
+    # Untuk grade A+: pindahkan semua JS ke file eksternal + gunakan nonce
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com d3js.org unpkg.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' api.bigdatacloud.net raw.githubusercontent.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+
+    # Sembunyikan versi PHP
+    Header always unset X-Powered-By
+</IfModule>
