@@ -59,7 +59,7 @@
                     </thead>
                     <tbody class="flex flex-col md:table-row-group gap-4 md:gap-0 md:divide-y md:divide-outline-variant/30 px-4 md:px-0 bg-transparent md:bg-transparent">
                         <?php foreach ($orders as $order): ?>
-                        <tr class="block md:table-row bg-surface hover:bg-surface-container/50 transition-colors rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden pt-2 md:pt-0">
+                        <tr class="block md:table-row bg-surface hover:bg-surface-container/50 transition-colors rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden md:overflow-visible pt-2 md:pt-0">
                             <td class="block md:table-cell px-4 py-3 border-b border-outline-variant/10 md:border-none">
                                 <div class="flex justify-between items-center md:block">
                                     <span class="md:hidden font-bold text-xs uppercase text-muted">Pilih</span>
