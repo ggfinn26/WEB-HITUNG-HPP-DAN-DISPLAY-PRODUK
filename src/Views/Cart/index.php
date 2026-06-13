@@ -161,33 +161,24 @@ window._ADMIN_IG = <?= json_encode($adminIg,  JSON_UNESCAPED_UNICODE) ?>;
     function buildMsg(bold) {
         var d = window._ORDER;
         if (!d) return '';
-        var wave    = String.fromCodePoint(0x1F44B);
-        var receipt = String.fromCodePoint(0x1F9FE);
-        var box     = String.fromCodePoint(0x1F4E6);
-        var money   = String.fromCodePoint(0x1F4B0);
-        var person  = String.fromCodePoint(0x1F464);
-        var phone   = String.fromCodePoint(0x1F4F1);
-        var house   = String.fromCodePoint(0x1F3E0);
-        var cam     = String.fromCodePoint(0x1F4F8);
-        var pray    = String.fromCodePoint(0x1F64F);
         var fmt = function(n) { return 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.round(Number(n))); };
         var items = '';
         (d.items || []).forEach(function(item) {
             var qty = item.qty || 1;
             var sub = fmt((item.price || 0) * qty);
-            items += '• ' + item.name + ' x ' + qty + ' — ' + sub + '\n';
+            items += '- ' + item.name + ' x ' + qty + ' (' + sub + ')\n';
         });
         var b = bold ? '*' : '';
-        var msg = 'Halo Mbu Titip Arunga! ' + wave + '\n\n'
+        var msg = 'Halo Mbu Titip Arunga!\n\n'
             + 'Saya mau konfirmasi pesanan:\n\n'
-            + receipt + ' ' + b + 'No. Order: ' + d.orderNumber + b + '\n\n'
-            + box + ' ' + b + 'Pesanan:' + b + '\n' + items + '\n'
-            + money + ' ' + b + 'Total: ' + d.total + b + '\n\n'
-            + person + ' ' + b + 'Nama:' + b + ' ' + d.nama + '\n'
-            + phone + ' ' + b + 'WA:' + b + ' ' + d.wa + '\n';
-        if (d.alamat) msg += house + ' ' + b + 'Alamat:' + b + ' ' + d.alamat + '\n';
-        if (!bold && d.ig) msg += cam + ' Instagram: @' + d.ig + '\n';
-        msg += '\nMohon konfirmasi ketersediaan ya! Terima kasih ' + pray;
+            + b + 'No. Order: ' + d.orderNumber + b + '\n\n'
+            + b + 'Pesanan:' + b + '\n' + items + '\n'
+            + b + 'Total: ' + d.total + b + '\n\n'
+            + 'Nama: ' + d.nama + '\n'
+            + 'WA: ' + d.wa + '\n';
+        if (d.alamat) msg += 'Alamat: ' + d.alamat + '\n';
+        if (!bold && d.ig) msg += 'Instagram: @' + d.ig + '\n';
+        msg += '\nMohon konfirmasi ketersediaan ya! Terima kasih.';
         return msg;
     }
 
