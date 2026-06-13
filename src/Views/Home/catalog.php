@@ -123,7 +123,12 @@
                     <div id="modal-stock-container" class="text-on-surface-variant mb-2" style="font-size:0.75rem">
                         Stok: <span id="modal-stock" class="font-bold text-on-surface"></span>
                     </div>
-                    <div id="modal-desc" class="text-xs text-on-surface-variant mb-3 whitespace-pre-wrap max-h-24 overflow-y-auto"></div>
+                    <style>
+                        #modal-desc ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 0.5rem; }
+                        #modal-desc ol { list-style-type: decimal; margin-left: 1.5rem; margin-bottom: 0.5rem; }
+                        #modal-desc p { margin-bottom: 0.25rem; }
+                    </style>
+                    <div id="modal-desc" class="text-xs text-on-surface-variant mb-3 max-h-24 overflow-y-auto"></div>
                     <div id="modal-variants-container" class="space-y-3"></div>
                 </div>
             </div>
@@ -180,7 +185,7 @@ if (!empty($products)) {
         
         const descEl = document.getElementById('modal-desc');
         if (product.description && product.description.trim() !== '') {
-            descEl.textContent = product.description;
+            descEl.innerHTML = product.description;
             descEl.classList.remove('hidden');
         } else {
             descEl.classList.add('hidden');

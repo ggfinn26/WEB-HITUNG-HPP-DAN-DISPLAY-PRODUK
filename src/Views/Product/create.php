@@ -112,8 +112,12 @@
 
             <div class="space-y-2">
                 <label class="block font-bold text-on-surface text-sm uppercase tracking-wider">Deskripsi Singkat</label>
-                <textarea name="description" rows="3" placeholder="Jelaskan sedikit tentang produk ini..."
-                          class="w-full px-5 py-4 rounded-xl border-2 border-outline-variant/50 bg-surface-container focus:bg-surface focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all resize-none"></textarea>
+                <!-- Quill CSS -->
+                <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+                <!-- Quill Editor Container -->
+                <div id="quill-editor" class="bg-surface-container border-2 border-outline-variant/50 rounded-xl" style="height: 150px;"></div>
+                <!-- Hidden input to store actual value -->
+                <input type="hidden" name="description" id="hidden-description">
             </div>
 
             <!-- Upload Gambar Produk -->
@@ -180,7 +184,25 @@
     </div>
 </div>
 
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script>
+    // Initialize Quill
+    var quill = new Quill('#quill-editor', {
+        theme: 'snow',
+        placeholder: 'Jelaskan sedikit tentang produk ini...',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['clean']
+            ]
+        }
+    });
+
+    document.querySelector('form').addEventListener('submit', function() {
+        document.getElementById('hidden-description').value = quill.root.innerHTML;
+    });
+
     // URL Base API Wilayah Indonesia
     const apiBase = 'https://www.emsifa.com/api-wilayah-indonesia/api';
 
