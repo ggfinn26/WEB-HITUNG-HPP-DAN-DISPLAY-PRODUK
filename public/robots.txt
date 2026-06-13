@@ -1,0 +1,24 @@
+User-agent: *
+
+# Public pages — allow
+Allow: /$
+Allow: /index.php?page=home
+Allow: /index.php?page=catalog
+Allow: /css/
+Allow: /uploads/
+
+# Admin & private pages — block
+Disallow: /index.php?page=orders
+Disallow: /index.php?page=products
+Disallow: /index.php?page=hpp
+Disallow: /index.php?page=laporan
+Disallow: /index.php?page=auth
+Disallow: /index.php?page=track
+
+# Block source & config directories
+Disallow: /src/
+Disallow: /vendor/
+Disallow: /node_modules/
+
+Sitemap: https://GANTI_DOMAIN_ANDA/sitemap.xml
+# Ganti GANTI_DOMAIN_ANDA dengan domain production kamu sebelum deploy

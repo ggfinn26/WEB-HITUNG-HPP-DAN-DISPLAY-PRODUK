@@ -1,0 +1,12 @@
+.blackboxcli/
+.claude/
+.sixth/
+vendor/
+node_modules/
+.env
+src/Logs/*.log
+src/uploads/
+public/uploads/
+public/css/app.css
+.htaccess
+
