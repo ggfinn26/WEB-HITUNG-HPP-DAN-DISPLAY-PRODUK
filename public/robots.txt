@@ -1,4 +1,4 @@
-# ── Social media scrapers — allow full access for link previews ──
+# ── Social media scrapers — full access for OG link previews ─────
 User-agent: facebookexternalhit
 Allow: /
 
@@ -17,24 +17,20 @@ Allow: /
 # ── General crawlers ──────────────────────────────────────────────
 User-agent: *
 
-# Public pages — allow
-Allow: /$
-Allow: /index.php?page=home
-Allow: /index.php?page=catalog
-Allow: /css/
-Allow: /uploads/
+# Admin & private pages (query-param wildcard agar cocok semua URL pattern)
+Disallow: /*?page=orders
+Disallow: /*?page=products
+Disallow: /*?page=hpp
+Disallow: /*?page=laporan
+Disallow: /*?page=sesi
+Disallow: /*?page=auth
+Disallow: /*?page=track
 
-# Admin & private pages — block
-Disallow: /index.php?page=orders
-Disallow: /index.php?page=products
-Disallow: /index.php?page=hpp
-Disallow: /index.php?page=laporan
-Disallow: /index.php?page=auth
-Disallow: /index.php?page=track
-
-# Block source & config directories
+# Source & dependency directories (tidak boleh diakses publik)
 Disallow: /src/
 Disallow: /vendor/
 Disallow: /node_modules/
+Disallow: /.env
+Disallow: /.git/
 
 Sitemap: https://jastipmbu.arungaarungidunia.my.id/sitemap.xml
