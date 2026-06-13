@@ -100,11 +100,12 @@ const CATALOG = <?= json_encode(array_values($catalogProducts)) ?>;
         return 'Rp. ' + new Intl.NumberFormat('id-ID').format(Math.round(n));
     }
 
+    const escHtml = s => { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; };
     function productOptions(selectedName) {
         let opts = `<option value="">— Isi Manual —</option>`;
         CATALOG.forEach(p => {
             const sel = p.name === selectedName ? 'selected' : '';
-            opts += `<option value="${p.id}" data-name="${p.name.replace(/"/g,'&quot;')}" data-price="${p.price}" data-modal="${p.modal}" ${sel}>${p.name}</option>`;
+            opts += `<option value="${p.id}" data-name="${escHtml(p.name)}" data-price="${p.price}" data-modal="${p.modal}" ${sel}>${escHtml(p.name)}</option>`;
         });
         return opts;
     }

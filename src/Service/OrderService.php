@@ -23,9 +23,9 @@ namespace App{
 
             while(true) {
                 $timestamp = date('Ymd');
-                $random = str_pad((string)mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
+                $random = strtoupper(bin2hex(random_bytes(4)));
                 $orderNumber = "ORD-" . $timestamp . "-" . $random;
-                
+
                 if(!in_array($orderNumber, $existingOrderNumbers)){
                     return $orderNumber;
                 }
