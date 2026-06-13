@@ -15,18 +15,9 @@ namespace App{
         }
 
         public function generateOrderNumber(): string{
-            $existingOrders = $this->orderRepository->findAll();
-            $existingOrderNumbers = [];
-            foreach($existingOrders as $o){
-                $existingOrderNumbers[] = $o->getOrderNumber();
-            }
-
-            while(true) {
-                $timestamp = date('Ymd');
-                $random = strtoupper(bin2hex(random_bytes(4)));
-                $orderNumber = "ORD-" . $timestamp . "-" . $random;
-
-                if(!in_array($orderNumber, $existingOrderNumbers)){
+            while (true) {
+                $orderNumber = "ORD-" . date('Ymd') . "-" . strtoupper(bin2hex(random_bytes(4)));
+                if (!$this->orderRepository->orderNumberExists($orderNumber)) {
                     return $orderNumber;
                 }
             }

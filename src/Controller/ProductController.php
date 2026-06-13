@@ -86,7 +86,11 @@ class ProductController {
                 $data['image_url'] = 'uploads/products/' . $fileName;
             }
 
-            $this->productService->save($data);
+            $savedProduct = $this->productService->save($data);
+            
+            // Process variants
+            $this->processVariantsData($savedProduct->getId(), $data, $_FILES);
+
             $_SESSION['success_message'] = "Produk berhasil ditambahkan!";
             header("Location: ?page=products");
             exit;
@@ -162,6 +166,10 @@ class ProductController {
             }
 
             $this->productService->update($id, $data);
+
+            // Process variants
+            $this->processVariantsData($id, $data, $_FILES);
+
             $_SESSION['success_message'] = "Produk berhasil diupdate!";
             header("Location: ?page=products");
             exit;
@@ -207,6 +215,74 @@ class ProductController {
         imagedestroy($dst);
 
         return $fileName;
+    }
+
+    private function processVariantsData(int $productId, array $data, array $files): void {
+        $groups = $data['variant_groups'] ?? [];
+        $options = $data['variant_options'] ?? [];
+        $variants = $data['variants'] ?? [];
+        
+        // Ensure options are arrays
+        foreach ($options as $groupName => $opts) {
+            if (is_string($opts)) {
+                $options[$groupName] = array_map('trim', explode(',', $opts));
+            }
+        }
+
+        $images = [];
+        $uploadDir = __DIR__ . '/../../public/uploads/products/';
+
+        // Handle uploaded variant images
+        if (isset($files['variant_images']) && is_array($files['variant_images']['name'])) {
+            foreach ($files['variant_images']['name'] as $index => $name) {
+                if ($files['variant_images']['error'][$index] === UPLOAD_ERR_OK) {
+                    $tmpPath = $files['variant_images']['tmp_name'][$index];
+                    $finfo    = finfo_open(FILEINFO_MIME_TYPE);
+                    $mimeType = finfo_file($finfo, $tmpPath);
+                    finfo_close($finfo);
+
+                    $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/avif'];
+                    if (in_array($mimeType, $allowed, true)) {
+                        $fileName = $this->processUploadedImage($tmpPath, $mimeType, $uploadDir);
+                        $images[$index] = [
+                            'url' => 'uploads/products/' . $fileName,
+                            'is_primary' => false
+                        ];
+                    }
+                }
+            }
+        }
+        
+        // Also keep existing images if editing
+        if (isset($data['existing_variant_images']) && is_array($data['existing_variant_images'])) {
+            foreach ($data['existing_variant_images'] as $index => $url) {
+                if (!isset($images[$index]) && !empty($url)) {
+                    $images[$index] = [
+                        'url' => $url,
+                        'is_primary' => false
+                    ];
+                }
+            }
+        }
+
+        // Add variants
+        $formattedVariants = [];
+        foreach ($variants as $v) {
+            if (empty($v['name'])) continue;
+            
+            $formattedVariants[] = [
+                'name' => $v['name'],
+                'options' => isset($v['options']) ? explode(',', $v['options']) : [],
+                'sku' => $v['sku'] ?? null,
+                'price' => isset($v['price']) && $v['price'] !== '' ? $v['price'] : null,
+                'stock' => isset($v['stock']) ? (int)$v['stock'] : 0,
+                'image_index' => isset($v['image_index']) && $v['image_index'] !== '' ? (int)$v['image_index'] : null,
+            ];
+        }
+
+        if (!empty($groups) || !empty($formattedVariants)) {
+            $this->productService->saveVariants($productId, $groups, $options, $formattedVariants, $images);
+        }
     }
 
     public function delete(int $id, array $data = []): void {

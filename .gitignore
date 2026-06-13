@@ -9,4 +9,4 @@ src/uploads/
 public/uploads/
 public/css/app.css
 .htaccess
-
+database/

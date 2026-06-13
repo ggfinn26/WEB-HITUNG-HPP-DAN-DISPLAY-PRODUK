@@ -9,5 +9,6 @@ namespace App{
         public function findById(int $id): ?Pengeluaran;
         public function findAll(): array;
         public function findByMonthYear(int $month, int $year): array;
+        public function getDistinctMonthYears(): array;
     }
 }

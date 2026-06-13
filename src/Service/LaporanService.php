@@ -47,16 +47,14 @@ namespace App{
         }
 
         public function getAvailableMonths(): array {
-            $orders      = $this->orderRepository->findAll();
-            $pengeluaran = $this->pengeluaranRepository->findAll();
             $months = [];
-            foreach ($orders as $o) {
-                $key = $o->getCreatedAt()->format('Y-m');
-                $months[$key] = ['year' => (int)$o->getCreatedAt()->format('Y'), 'month' => (int)$o->getCreatedAt()->format('n')];
+            foreach ($this->orderRepository->getDistinctMonthYears() as $row) {
+                $key = sprintf('%04d-%02d', $row['year'], $row['month']);
+                $months[$key] = ['year' => (int)$row['year'], 'month' => (int)$row['month']];
             }
-            foreach ($pengeluaran as $p) {
-                $key = $p->getTanggal()->format('Y-m');
-                $months[$key] = ['year' => (int)$p->getTanggal()->format('Y'), 'month' => (int)$p->getTanggal()->format('n')];
+            foreach ($this->pengeluaranRepository->getDistinctMonthYears() as $row) {
+                $key = sprintf('%04d-%02d', $row['year'], $row['month']);
+                $months[$key] = ['year' => (int)$row['year'], 'month' => (int)$row['month']];
             }
             krsort($months);
             return array_values($months);

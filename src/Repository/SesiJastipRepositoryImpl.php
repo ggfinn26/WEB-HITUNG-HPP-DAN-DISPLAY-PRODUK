@@ -140,6 +140,27 @@ class SesiJastipRepositoryImpl implements SesiJastipInterface {
         ), $stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 
+    public function findAllProdukBySesiIds(array $ids): array {
+        if (empty($ids)) return [];
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $stmt = $this->connection->prepare(
+            "SELECT * FROM sesi_produk WHERE sesi_id IN ($placeholders) ORDER BY sesi_id ASC, id ASC"
+        );
+        $stmt->execute($ids);
+        $grouped = [];
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $r) {
+            $grouped[$r['sesi_id']][] = new SesiProduk(
+                (int)$r['id'], (int)$r['sesi_id'], (int)$r['hpp_id'],
+                $r['nama_snapshot'], (float)$r['harga_jual_snapshot'],
+                (float)$r['hpp_per_pcs_snapshot'], (float)$r['margin_snapshot'],
+                (int)$r['estimasi_qty'],
+                isset($r['aktual_qty']) ? (int)$r['aktual_qty'] : null,
+                new \DateTime($r['created_at'])
+            );
+        }
+        return $grouped;
+    }
+
     public function updateProdukAktualQty(int $sesiProdukId, int $aktualQty): void {
         $stmt = $this->connection->prepare(
             "UPDATE sesi_produk SET aktual_qty = ? WHERE id = ?"

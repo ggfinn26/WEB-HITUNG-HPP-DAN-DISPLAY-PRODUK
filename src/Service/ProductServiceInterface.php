@@ -13,6 +13,7 @@ namespace App{
         public function save(array $data): \App\Product;
         public function update(int $id, array $data): \App\Product;
         public function delete(int $id): bool;
+        public function saveVariants(int $productId, array $groups, array $options, array $variants, array $images): void;
         public function geocodeCity(string $location): ?array;
     }
 }

@@ -9,6 +9,7 @@ namespace App{
     use App\RincianHppInterface;
     use App\ValidationException;
     use App\ProductServiceInterface;
+    use App\ProductVariantRepository;
     use Geocoder\Provider\Nominatim\Nominatim;
     use Http\Adapter\Guzzle7\Client as HttpClient;
     use Geocoder\Query\GeocodeQuery;
@@ -16,10 +17,16 @@ namespace App{
     class ProductService implements ProductServiceInterface{
         private ProductInterface $productRepository;
         private RincianHppInterface $rincianHppRepository;
+        private ?ProductVariantRepository $variantRepository;
         
-        public function __construct(ProductInterface $productRepository, RincianHppInterface $rincianHppRepository){
+        public function __construct(ProductInterface $productRepository, RincianHppInterface $rincianHppRepository, ?ProductVariantRepository $variantRepository = null){
             $this->productRepository = $productRepository;
             $this->rincianHppRepository = $rincianHppRepository;
+            $this->variantRepository = $variantRepository;
+        }
+
+        public function getVariantRepository(): ?ProductVariantRepository {
+            return $this->variantRepository;
         }
 
         public function validateProductName(string $name): string{
@@ -128,7 +135,76 @@ namespace App{
         }
 
         public function delete(int $id): bool {
+            if ($this->variantRepository) {
+                $this->variantRepository->deleteVariantsByProduct($id);
+                $this->variantRepository->deleteGroupsByProduct($id);
+                $this->variantRepository->deleteImagesByProduct($id);
+            }
             return $this->productRepository->delete($id);
+        }
+
+        public function saveVariants(int $productId, array $groups, array $options, array $variants, array $images): void {
+            if (!$this->variantRepository) return;
+
+            // Delete old variants
+            $this->variantRepository->deleteVariantsByProduct($productId);
+            $this->variantRepository->deleteGroupsByProduct($productId);
+            $this->variantRepository->deleteImagesByProduct($productId);
+
+            // Save Images
+            $savedImages = $this->variantRepository->saveImages($productId, $images);
+            // map old image index to new image id
+            $imageMap = [];
+            foreach ($savedImages as $idx => $img) {
+                // assume images array keys are preserved or we match by url
+                foreach ($images as $origIdx => $origImg) {
+                    if ($origImg['url'] === $img['url']) {
+                        $imageMap[$origIdx] = $img['id'];
+                    }
+                }
+            }
+
+            // Save Groups
+            $savedGroups = $this->variantRepository->saveVariantGroups($productId, $groups);
+            
+            // map group name to group id
+            $groupMap = [];
+            foreach ($savedGroups as $sg) {
+                $groupMap[$sg['name']] = $sg['id'];
+            }
+
+            // Save Options
+            $optionMap = []; // old option name -> new option id
+            foreach ($options as $groupName => $opts) {
+                if (!isset($groupMap[$groupName])) continue;
+                $savedOpts = $this->variantRepository->saveVariantOptions($groupMap[$groupName], $opts);
+                foreach ($savedOpts as $so) {
+                    $optionMap[$so['name']] = $so['id'];
+                }
+            }
+
+            // Save Variants & Combinations
+            foreach ($variants as $v) {
+                // translate image
+                if (isset($v['image_index']) && isset($imageMap[$v['image_index']])) {
+                    $v['image_id'] = $imageMap[$v['image_index']];
+                }
+                
+                $savedV = $this->variantRepository->saveVariants($productId, [$v])[0];
+                
+                // Save combinations
+                $optIds = [];
+                if (!empty($v['options'])) {
+                    foreach ($v['options'] as $optName) {
+                        if (isset($optionMap[$optName])) {
+                            $optIds[] = $optionMap[$optName];
+                        }
+                    }
+                }
+                if (!empty($optIds)) {
+                    $this->variantRepository->saveVariantCombinations($savedV['id'], $optIds);
+                }
+            }
         }
 
         public function geocodeCity(string $location): ?array {

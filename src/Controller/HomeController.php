@@ -18,8 +18,7 @@ class HomeController {
     }
 
     public function index() {
-        $allProducts = $this->productService->findAll();
-        $products    = array_slice($allProducts, 0, 6);
+        $products = $this->productService->findPaginated(1, 6);
 
         $productsArray = array_map(fn($p) => $p->toArray(), $products);
         $productsJson  = json_encode($productsArray);

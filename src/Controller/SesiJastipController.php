@@ -20,13 +20,9 @@ class SesiJastipController {
     }
 
     public function index(): void {
-        $sesiList     = $this->service->findAll();
-        $sesiProdukMap = [];
-        foreach ($sesiList as $s) {
-            if ($s->getStatus() === 'draft') {
-                $sesiProdukMap[$s->getId()] = $this->service->findProdukBySesiId($s->getId());
-            }
-        }
+        $sesiList      = $this->service->findAll();
+        $draftIds      = array_map(fn($s) => $s->getId(), array_filter($sesiList, fn($s) => $s->getStatus() === 'draft'));
+        $sesiProdukMap = $this->service->findAllProdukBySesiIds($draftIds);
         $title = 'Analisis Sesi Trip';
 
         ob_start();

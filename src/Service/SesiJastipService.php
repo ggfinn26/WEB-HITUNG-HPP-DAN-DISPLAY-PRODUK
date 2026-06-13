@@ -231,7 +231,8 @@ class SesiJastipService {
     public function findById(int $id): ?SesiJastip      { return $this->repo->findById($id); }
     public function findAll(): array                     { return $this->repo->findAll(); }
     public function findKomponenBySesiId(int $id): array { return $this->repo->findKomponenBySesiId($id); }
-    public function findProdukBySesiId(int $id): array   { return $this->repo->findProdukBySesiId($id); }
+    public function findProdukBySesiId(int $id): array        { return $this->repo->findProdukBySesiId($id); }
+    public function findAllProdukBySesiIds(array $ids): array { return $this->repo->findAllProdukBySesiIds($ids); }
     public function findSesiBobotBySesiId(int $id): ?SesiBobot { return $this->repo->findSesiBobotBySesiId($id); }
 
     public function hapusSesi(int $id): void {

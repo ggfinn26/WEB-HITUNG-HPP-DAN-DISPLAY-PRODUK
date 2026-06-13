@@ -137,6 +137,12 @@ use PDO;
             return $result;
         }
 
+        public function orderNumberExists(string $orderNumber): bool {
+            $stmt = $this->connection->prepare("SELECT 1 FROM `order` WHERE order_number = ? LIMIT 1");
+            $stmt->execute([$orderNumber]);
+            return (bool)$stmt->fetchColumn();
+        }
+
         public function findByOrderNumber(string $orderNumber): ?Order{
             $stmt = $this->connection->prepare("SELECT * FROM `order` WHERE order_number = ?");
             $stmt->execute([$orderNumber]);
@@ -206,11 +212,22 @@ use PDO;
             return $result;
         }
 
+        public function getDistinctMonthYears(): array {
+            $stmt = $this->connection->prepare(
+                "SELECT DISTINCT YEAR(created_at) AS year, MONTH(created_at) AS month
+                 FROM `order` ORDER BY year DESC, month DESC"
+            );
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
         public function findByMonthYear(int $month, int $year): array{
             $stmt = $this->connection->prepare(
-                "SELECT * FROM `order` WHERE MONTH(created_at) = ? AND YEAR(created_at) = ? ORDER BY created_at ASC"
+                "SELECT * FROM `order` WHERE created_at >= ? AND created_at < ? ORDER BY created_at ASC"
             );
-            $stmt->execute([$month, $year]);
+            $from = sprintf('%04d-%02d-01', $year, $month);
+            $to   = date('Y-m-01', strtotime($from . ' +1 month'));
+            $stmt->execute([$from, $to]);
             $result = [];
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                 $result[] = new Order(

@@ -35,7 +35,7 @@
                         <th class="py-4 px-4 font-bold uppercase tracking-wider text-sm text-center whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="flex flex-col md:table-row-group gap-4 md:gap-0 divide-y divide-transparent md:divide-outline-variant/30">
+                <tbody class="flex flex-col md:table-row-group gap-4 md:gap-0 md:divide-y md:divide-outline-variant/30">
                     <?php if (empty($products)): ?>
                         <tr class="block md:table-row">
                             <td colspan="4" class="block md:table-cell py-10 text-center text-on-surface-variant">Belum ada produk. Silakan tambahkan produk baru.</td>
@@ -43,21 +43,21 @@
                     <?php else: ?>
                         <?php foreach($products as $product): ?>
                             <tr class="block md:table-row bg-surface hover:bg-surface-container-low transition-colors rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden">
-                                <td class="block md:table-cell py-3 md:py-4 px-4 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
-                                    <div class="flex justify-between items-center md:block">
-                                        <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant">Nama Produk</span>
-                                        <div class="font-bold text-on-surface text-right md:text-left"><?= htmlspecialchars($product->getName()) ?></div>
+                                <td class="block md:table-cell py-3 md:py-4 px-4 md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center md:block gap-1 sm:gap-4">
+                                        <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant flex-shrink-0">Nama Produk</span>
+                                        <div class="font-bold text-on-surface text-left sm:text-right md:text-left break-words"><?= htmlspecialchars($product->getName()) ?></div>
                                     </div>
                                 </td>
-                                <td class="block md:table-cell py-3 md:py-4 px-4 font-medium text-secondary-container whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                                <td class="block md:table-cell py-3 md:py-4 px-4 font-medium text-secondary-container md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
                                     <div class="flex justify-between items-center md:block">
-                                        <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant">Harga</span>
+                                        <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant flex-shrink-0">Harga</span>
                                         <div class="text-right md:text-left">Rp. <?= number_format((float)$product->getPrice(), 0, ',', '.') ?></div>
                                     </div>
                                 </td>
-                                <td class="block md:table-cell py-3 md:py-4 px-4 text-on-surface-variant text-sm whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                                <td class="block md:table-cell py-3 md:py-4 px-4 text-on-surface-variant text-sm md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
                                     <div class="flex justify-between items-center md:block">
-                                        <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant">Koordinat (Peta)</span>
+                                        <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant flex-shrink-0">Koordinat (Peta)</span>
                                         <div class="flex justify-end md:justify-start">
                                             <?php if ($product->getLatitude() && $product->getLongitude()): ?>
                                                 <div class="flex items-center gap-1 text-green-600 font-medium">
@@ -70,7 +70,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="block md:table-cell py-3 md:py-4 px-4 bg-surface-container-low/50 md:bg-transparent whitespace-nowrap">
+                                <td class="block md:table-cell py-3 md:py-4 px-4 bg-surface-container-low/50 md:bg-transparent md:whitespace-nowrap">
                                     <div class="flex gap-2 justify-center">
                                         <a href="?page=products&action=edit&id=<?= $product->getId() ?>" class="bg-secondary-container/10 text-secondary-container hover:bg-secondary-container hover:text-white px-3 py-1.5 rounded-lg transition-colors font-bold text-sm flex items-center gap-1">
                                             <span class="material-symbols-outlined text-[18px]">edit</span> Edit

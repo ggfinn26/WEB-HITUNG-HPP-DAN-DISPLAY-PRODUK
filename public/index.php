@@ -46,6 +46,7 @@ use App\LaporanController;
 use App\SesiJastipRepositoryImpl;
 use App\SesiJastipService;
 use App\SesiJastipController;
+use App\ProductVariantRepositoryImpl;
 
 // Inisialisasi Dependensi (Manual Dependency Injection)
 try {
@@ -57,8 +58,9 @@ try {
     // Product & HPP Module (harus sebelum Order karena OrderController membutuhkan kedua service ini)
     $productRepository = new ProductRepositoryImpl();
     $hppRepository = new RincianHppRepositoryImpl();
+    $variantRepository = new ProductVariantRepositoryImpl();
     $rincianHppService = new RincianHppService($hppRepository, $productRepository);
-    $productService = new ProductService($productRepository, $hppRepository);
+    $productService = new ProductService($productRepository, $hppRepository, $variantRepository);
     $productController = new ProductController($productService, $rincianHppService);
     $rincianHppController = new RincianHppController($rincianHppService);
 

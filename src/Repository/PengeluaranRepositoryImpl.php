@@ -91,11 +91,22 @@ namespace App{
             return array_map([$this, 'hydrate'], $stmt->fetchAll(\PDO::FETCH_ASSOC));
         }
 
+        public function getDistinctMonthYears(): array {
+            $stmt = $this->connection->prepare(
+                "SELECT DISTINCT YEAR(tanggal) AS year, MONTH(tanggal) AS month
+                 FROM pengeluaran ORDER BY year DESC, month DESC"
+            );
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
         public function findByMonthYear(int $month, int $year): array {
             $stmt = $this->connection->prepare(
-                "SELECT * FROM pengeluaran WHERE MONTH(tanggal) = ? AND YEAR(tanggal) = ? ORDER BY tanggal ASC"
+                "SELECT * FROM pengeluaran WHERE tanggal >= ? AND tanggal < ? ORDER BY tanggal ASC"
             );
-            $stmt->execute([$month, $year]);
+            $from = sprintf('%04d-%02d-01', $year, $month);
+            $to   = date('Y-m-01', strtotime($from . ' +1 month'));
+            $stmt->execute([$from, $to]);
             return array_map([$this, 'hydrate'], $stmt->fetchAll(\PDO::FETCH_ASSOC));
         }
     }
