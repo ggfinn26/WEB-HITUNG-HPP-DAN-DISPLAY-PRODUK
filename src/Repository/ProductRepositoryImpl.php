@@ -123,6 +123,30 @@ namespace App{
             return $result;
         }
 
+        public function countAll(): int {
+            $stmt = $this->connection->prepare("SELECT COUNT(*) FROM products WHERE is_deleted = 0");
+            $stmt->execute();
+            return (int)$stmt->fetchColumn();
+        }
+
+        public function findPaginated(int $page, int $perPage): array {
+            $offset = ($page - 1) * $perPage;
+            $stmt = $this->connection->prepare("SELECT * FROM products WHERE is_deleted = 0 ORDER BY created_at DESC LIMIT :limit OFFSET :offset");
+            $stmt->bindValue(':limit', $perPage, \PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $result = [];
+            foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+                $result[] = new \App\Product(
+                    $row['id'], $row['name'], $row['price'], $row['description'], $row['image_url'],
+                    new \DateTime($row['created_at']), new \DateTime($row['updated_at']), (bool)$row['is_deleted'],
+                    $row['latitude'] ?? null, $row['longitude'] ?? null
+                );
+            }
+            return $result;
+        }
+
         public function findAllSortedByPriceAsc(string $direction = 'ASC'): array {
             $dir = strtoupper($direction) === 'DESC' ? 'DESC' : 'ASC';
             $stmt = $this->connection->prepare("SELECT * FROM products WHERE is_deleted = 0 ORDER BY price $dir");

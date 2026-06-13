@@ -44,9 +44,9 @@
             </div>
 
             <!-- Table -->
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead class="bg-surface-container-low text-on-surface-variant text-xs uppercase tracking-wider">
+            <div class="overflow-x-auto relative z-10 bg-surface/50 md:rounded-2xl md:border border-outline-variant/30 md:border-outline-variant -mx-6 sm:-mx-8 md:mx-0">
+                <table class="w-full text-sm border-collapse block md:table">
+                    <thead class="bg-surface-container-low text-on-surface-variant text-xs uppercase tracking-wider hidden md:table-header-group border-b border-outline-variant/50">
                         <tr>
                             <th class="px-4 py-3 w-10"></th>
                             <th class="px-4 py-3 text-left">No. Order</th>
@@ -55,49 +55,77 @@
                             <th class="px-4 py-3 text-right">Margin</th>
                             <th class="px-4 py-3 text-center">Status</th>
                             <th class="px-4 py-3 text-center">Aksi</th>
-                            <th class="px-4 py-3 text-center">Edit</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-outline-variant/20">
+                    <tbody class="block md:table-row-group divide-y divide-transparent md:divide-outline-variant/30 px-4 md:px-0 bg-transparent md:bg-transparent">
                         <?php foreach ($orders as $order): ?>
-                        <tr class="hover:bg-surface-container/50 transition-colors">
-                            <td class="px-4 py-3">
-                                <input type="checkbox" name="order_ids[]" value="<?= $order->getId() ?>"
-                                       class="order-checkbox w-4 h-4 rounded accent-primary cursor-pointer">
+                        <tr class="block md:table-row bg-surface hover:bg-surface-container/50 transition-colors mb-4 md:mb-0 rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden pt-2 md:pt-0">
+                            <td class="block md:table-cell px-4 py-3 border-b border-outline-variant/10 md:border-none">
+                                <div class="flex justify-between items-center md:block">
+                                    <span class="md:hidden font-bold text-xs uppercase text-muted">Pilih</span>
+                                    <input type="checkbox" name="order_ids[]" value="<?= $order->getId() ?>"
+                                           class="order-checkbox w-5 h-5 md:w-4 md:h-4 rounded accent-primary cursor-pointer">
+                                </div>
                             </td>
-                            <td class="px-4 py-3 font-mono text-xs text-primary font-bold"><?= htmlspecialchars($order->getOrderNumber()) ?></td>
-                            <td class="px-4 py-3">
-                                <p class="font-bold text-on-surface"><?= htmlspecialchars($order->getNamaPemesan()) ?></p>
-                                <p class="text-xs text-on-surface-variant">@<?= htmlspecialchars($order->getInstagramUserNamePemesan()) ?></p>
+                            <td class="block md:table-cell px-4 py-3 border-b border-outline-variant/10 md:border-none">
+                                <div class="flex justify-between items-center md:block">
+                                    <span class="md:hidden font-bold text-xs uppercase text-muted">No. Order</span>
+                                    <div class="font-mono text-sm md:text-xs text-primary font-bold"><?= htmlspecialchars($order->getOrderNumber()) ?></div>
+                                </div>
                             </td>
-                            <td class="px-4 py-3 text-on-surface-variant text-xs hidden md:table-cell"><?= $order->getCreatedAt()->format('d M Y H:i') ?></td>
+                            <td class="block md:table-cell px-4 py-3 border-b border-outline-variant/10 md:border-none">
+                                <div class="flex justify-between items-center md:block">
+                                    <span class="md:hidden font-bold text-xs uppercase text-muted">Pemesan</span>
+                                    <div class="text-right md:text-left">
+                                        <p class="font-bold text-on-surface"><?= htmlspecialchars($order->getNamaPemesan()) ?></p>
+                                        <p class="text-xs text-on-surface-variant">@<?= htmlspecialchars($order->getInstagramUserNamePemesan()) ?></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="block md:hidden px-4 py-3 border-b border-outline-variant/10 md:border-none">
+                                <div class="flex justify-between items-center md:block">
+                                    <span class="md:hidden font-bold text-xs uppercase text-muted">Tanggal</span>
+                                    <div class="text-on-surface-variant text-xs"><?= $order->getCreatedAt()->format('d M Y H:i') ?></div>
+                                </div>
+                            </td>
+                            <td class="hidden md:table-cell px-4 py-3 text-on-surface-variant text-xs"><?= $order->getCreatedAt()->format('d M Y H:i') ?></td>
                             <?php
                                 $pItems  = json_decode($order->getListItemOrder(), true) ?? [];
                                 $pMargin = array_reduce($pItems, function($carry, $item) {
                                     return $carry + (((float)($item['price'] ?? 0) - (float)($item['modal'] ?? 0)) * (int)($item['qty'] ?? 1));
                                 }, 0.0);
                             ?>
-                            <td class="px-4 py-3 text-right font-black text-on-surface">Rp. <?= number_format($pMargin, 0, ',', '.') ?></td>
-                            <td class="px-4 py-3 text-center">
-                                <span class="text-xs px-2 py-1 rounded-full font-bold
-                                    <?= $order->getOrderStatus() === 'selesai' ? 'bg-green-100 text-green-700' : ($order->getOrderStatus() === 'dibatalkan' ? 'bg-red-100 text-red-600' : 'bg-yellow-100 text-yellow-700') ?>">
-                                    <?= htmlspecialchars($order->getOrderStatus()) ?>
-                                </span>
+                            <td class="block md:table-cell px-4 py-3 border-b border-outline-variant/10 md:border-none">
+                                <div class="flex justify-between items-center md:block">
+                                    <span class="md:hidden font-bold text-xs uppercase text-muted">Margin</span>
+                                    <div class="text-right font-black text-on-surface">Rp. <?= number_format($pMargin, 0, ',', '.') ?></div>
+                                </div>
                             </td>
-                            <td class="px-4 py-3 text-center">
-                                <form method="POST" action="?page=laporan&action=deleteOrder&id=<?= $order->getId() ?>"
-                                      onsubmit="return confirm('Hapus order <?= htmlspecialchars($order->getOrderNumber()) ?>?')">
-                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
-                                    <button type="submit" class="p-1.5 rounded-lg bg-surface-container hover:bg-red-100 text-red-500 transition-colors" title="Hapus">
-                                        <span class="material-symbols-outlined text-[18px]">delete</span>
-                                    </button>
-                                </form>
+                            <td class="block md:table-cell px-4 py-3 border-b border-outline-variant/10 md:border-none">
+                                <div class="flex justify-between items-center md:block">
+                                    <span class="md:hidden font-bold text-xs uppercase text-muted">Status</span>
+                                    <div class="text-right md:text-center">
+                                        <span class="text-xs px-2 py-1 rounded-full font-bold
+                                            <?= $order->getOrderStatus() === 'selesai' ? 'bg-green-100 text-green-700' : ($order->getOrderStatus() === 'dibatalkan' ? 'bg-red-100 text-red-600' : 'bg-yellow-100 text-yellow-700') ?>">
+                                            <?= htmlspecialchars($order->getOrderStatus()) ?>
+                                        </span>
+                                    </div>
+                                </div>
                             </td>
-                            <td class="px-4 py-3 text-center">
-                                <a href="?page=orders&action=editDetail&id=<?= urlencode($order->getOrderNumber()) ?>"
-                                   class="p-1.5 rounded-lg bg-surface-container hover:bg-primary/10 text-primary transition-colors inline-flex" title="Edit Detail">
-                                    <span class="material-symbols-outlined text-[18px]">edit</span>
-                                </a>
+                            <td class="block md:table-cell px-4 py-3 bg-surface-container-low/50 md:bg-transparent">
+                                <div class="flex justify-center md:justify-center gap-2">
+                                    <a href="?page=orders&action=editDetail&id=<?= urlencode($order->getOrderNumber()) ?>"
+                                       class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-primary/10 text-primary transition-colors flex items-center justify-center gap-1 font-bold text-xs w-full md:w-auto" title="Edit Detail">
+                                        <span class="material-symbols-outlined text-[16px]">edit</span> Edit
+                                    </a>
+                                    <form method="POST" action="?page=laporan&action=deleteOrder&id=<?= $order->getId() ?>"
+                                          onsubmit="return confirm('Hapus order <?= htmlspecialchars($order->getOrderNumber()) ?>?')" class="w-full md:w-auto flex">
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(\App\Helper\CsrfHelper::getToken()) ?>">
+                                        <button type="submit" class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-red-100 text-red-500 transition-colors flex items-center justify-center gap-1 font-bold text-xs w-full" title="Hapus">
+                                            <span class="material-symbols-outlined text-[16px]">delete</span> Hapus
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -127,6 +155,7 @@ const bulkBtn      = document.getElementById('bulk-delete-btn');
 const countLabel   = document.getElementById('selected-count');
 
 function updateBulkState() {
+    if (!bulkBtn) return;
     const checked = document.querySelectorAll('.order-checkbox:checked').length;
     bulkBtn.disabled = checked === 0;
     if (checked > 0) {
@@ -139,10 +168,12 @@ function updateBulkState() {
     selectAll.checked = checked === checkboxes.length && checkboxes.length > 0;
 }
 
-selectAll.addEventListener('change', () => {
-    checkboxes.forEach(cb => cb.checked = selectAll.checked);
-    updateBulkState();
-});
+if (selectAll) {
+    selectAll.addEventListener('change', () => {
+        checkboxes.forEach(cb => cb.checked = selectAll.checked);
+        updateBulkState();
+    });
 
-checkboxes.forEach(cb => cb.addEventListener('change', updateBulkState));
+    checkboxes.forEach(cb => cb.addEventListener('change', updateBulkState));
+}
 </script>

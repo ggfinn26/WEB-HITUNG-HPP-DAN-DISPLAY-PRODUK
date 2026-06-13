@@ -15,7 +15,13 @@ class ProductController {
     }
 
     public function index(): void {
-        $products = $this->productService->findAll();
+        $perPage = 10;
+        $currentPage = max(1, (int)($_GET['p'] ?? 1));
+        $totalProducts = $this->productService->countAll();
+        $totalPages = (int)ceil($totalProducts / $perPage);
+        $currentPage = min($currentPage, max(1, $totalPages));
+
+        $products = $this->productService->findPaginated($currentPage, $perPage);
         $title = "Manajemen Produk";
         
         ob_start();

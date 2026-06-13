@@ -11,6 +11,8 @@ namespace App{
         public function findById(int $id): ?Product;
         public function findByName(string $name): ?Product;
         public function findAll(): array;
+        public function countAll(): int;
+        public function findPaginated(int $page, int $perPage): array;
         public function findAllSortedByPriceAsc(string $direction = 'ASC'): array;
         public function findAllSortedByPriceDesc(string $direction = 'DESC'): array;
         public function updatePrice(int $id, string $price): void;

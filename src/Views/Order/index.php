@@ -13,22 +13,22 @@
         </a>
     </div>
 
-    <div class="overflow-x-auto relative z-10 bg-surface/50 rounded-2xl border border-outline-variant">
-        <table class="w-full text-left border-collapse">
-            <thead>
+    <div class="overflow-x-auto relative z-10 bg-surface/50 md:rounded-2xl border-y md:border border-outline-variant/30 md:border-outline-variant -mx-4 md:mx-0">
+        <table class="w-full text-left border-collapse block md:table">
+            <thead class="hidden md:table-header-group">
                 <tr class="text-muted border-b border-outline-variant bg-background/50">
-                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider">No. Seri</th>
-                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider">Pelanggan</th>
-                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider">Tanggal</th>
-                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider">Total</th>
-                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider">Status</th>
-                    <th class="py-4 px-6 text-right font-semibold text-sm uppercase tracking-wider">Aksi</th>
+                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider whitespace-nowrap">No. Seri</th>
+                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider whitespace-nowrap">Pelanggan</th>
+                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider whitespace-nowrap">Tanggal</th>
+                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider whitespace-nowrap">Total</th>
+                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider whitespace-nowrap">Status</th>
+                    <th class="py-4 px-6 text-right font-semibold text-sm uppercase tracking-wider whitespace-nowrap">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-outline-variant">
+            <tbody class="block md:table-row-group divide-y divide-transparent md:divide-outline-variant px-4 md:px-0 bg-transparent md:bg-transparent">
                 <?php if (empty($orders)): ?>
-                    <tr>
-                        <td colspan="6" class="py-12 text-center text-muted">
+                    <tr class="block md:table-row">
+                        <td colspan="6" class="block md:table-cell py-12 text-center text-muted">
                             <div class="flex flex-col items-center justify-center">
                                 <svg class="w-12 h-12 mb-3 text-muted/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                                 <span>Belum ada pesanan masuk.</span>
@@ -37,32 +37,59 @@
                     </tr>
                 <?php else: ?>
                     <?php foreach ($orders as $order): ?>
-                        <tr class="hover:bg-background/80 transition-colors group">
-                            <td class="py-4 px-6 font-mono font-bold text-primary text-sm">
-                                <?php echo htmlspecialchars($order->getOrderNumber()); ?>
+                        <tr class="block md:table-row bg-surface hover:bg-background/80 transition-colors group mb-4 md:mb-0 rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden pt-2 md:pt-0">
+                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                                <div class="flex justify-between items-center md:block">
+                                    <span class="md:hidden font-bold text-xs uppercase text-muted">No. Seri</span>
+                                    <div class="font-mono font-bold text-primary text-sm text-right md:text-left">
+                                        <?php echo htmlspecialchars($order->getOrderNumber()); ?>
+                                    </div>
+                                </div>
                             </td>
-                            <td class="py-4 px-6 font-medium text-text">
-                                <?php echo htmlspecialchars($order->getNamaPemesan()); ?>
+                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                                <div class="flex justify-between items-center md:block">
+                                    <span class="md:hidden font-bold text-xs uppercase text-muted">Pelanggan</span>
+                                    <div class="font-medium text-text text-right md:text-left">
+                                        <?php echo htmlspecialchars($order->getNamaPemesan()); ?>
+                                    </div>
+                                </div>
                             </td>
-                            <td class="py-4 px-6 text-muted text-sm">
-                                <?php echo htmlspecialchars($order->getCreatedAt()->format('d M Y, H:i')); ?>
+                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                                <div class="flex justify-between items-center md:block">
+                                    <span class="md:hidden font-bold text-xs uppercase text-muted">Tanggal</span>
+                                    <div class="text-muted text-sm text-right md:text-left">
+                                        <?php echo htmlspecialchars($order->getCreatedAt()->format('d M Y, H:i')); ?>
+                                    </div>
+                                </div>
                             </td>
-                            <td class="py-4 px-6 font-bold text-text tracking-tight">
-                                Rp. <?php echo number_format((float)$order->getSubTotal(), 0, ',', '.'); ?>
+                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                                <div class="flex justify-between items-center md:block">
+                                    <span class="md:hidden font-bold text-xs uppercase text-muted">Total</span>
+                                    <div class="font-bold text-text tracking-tight text-right md:text-left">
+                                        Rp. <?php echo number_format((float)$order->getSubTotal(), 0, ',', '.'); ?>
+                                    </div>
+                                </div>
                             </td>
-                            <td class="py-4 px-6">
-                                <?php 
-                                    $status = $order->getOrderStatus(); 
-                                    $statusColor = $status === 'Pending' ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-green-100 text-green-700 border-green-200';
-                                ?>
-                                <span class="px-3 py-1.5 rounded-full text-xs font-bold border shadow-sm <?php echo $statusColor; ?>">
-                                    <?php echo htmlspecialchars($status); ?>
-                                </span>
+                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                                <div class="flex justify-between items-center md:block">
+                                    <span class="md:hidden font-bold text-xs uppercase text-muted">Status</span>
+                                    <div class="text-right md:text-left">
+                                        <?php 
+                                            $status = $order->getOrderStatus(); 
+                                            $statusColor = $status === 'Pending' ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-green-100 text-green-700 border-green-200';
+                                        ?>
+                                        <span class="px-3 py-1.5 rounded-full text-xs font-bold border shadow-sm <?php echo $statusColor; ?>">
+                                            <?php echo htmlspecialchars($status); ?>
+                                        </span>
+                                    </div>
+                                </div>
                             </td>
-                            <td class="py-4 px-6 text-right">
-                                <a href="?page=orders&action=show&id=<?php echo urlencode($order->getOrderNumber()); ?>" class="inline-flex items-center gap-1 text-sm text-secondary hover:text-primary font-bold transition-colors py-1.5 px-3 bg-surface border border-outline-variant rounded-lg shadow-sm hover:shadow-md">
-                                    Detail <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                </a>
+                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 whitespace-nowrap bg-background/50 md:bg-transparent">
+                                <div class="flex justify-center md:justify-end">
+                                    <a href="?page=orders&action=show&id=<?php echo urlencode($order->getOrderNumber()); ?>" class="inline-flex items-center justify-center gap-1 text-sm text-secondary hover:text-primary font-bold transition-colors py-2 md:py-1.5 px-4 md:px-3 bg-surface border border-outline-variant rounded-lg shadow-sm hover:shadow-md w-full md:w-auto">
+                                        Detail <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>

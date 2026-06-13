@@ -59,6 +59,14 @@ namespace App{
             return $this->productRepository->findAll();
         }
 
+        public function countAll(): int {
+            return $this->productRepository->countAll();
+        }
+
+        public function findPaginated(int $page, int $perPage): array {
+            return $this->productRepository->findPaginated($page, $perPage);
+        }
+
         public function findById(int $id): ?\App\Product {
             return $this->productRepository->findById($id);
         }

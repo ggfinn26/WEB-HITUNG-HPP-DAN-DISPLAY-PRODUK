@@ -48,54 +48,75 @@
             </div>
         <?php else: ?>
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
+            <table class="w-full text-left border-collapse block md:table">
+                <thead class="hidden md:table-header-group">
                     <tr class="border-b-2 border-outline-variant/50 text-primary">
-                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider">Nama Produk</th>
-                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-right">Total Biaya Item</th>
-                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-right">HPP Dasar / item</th>
-                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-center">Margin</th>
-                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-right">Harga Jual Dasar</th>
-                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-center">Aksi</th>
+                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider whitespace-nowrap">Nama Produk</th>
+                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-right whitespace-nowrap">Total Biaya Item</th>
+                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-right whitespace-nowrap">HPP Dasar / item</th>
+                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-center whitespace-nowrap">Margin</th>
+                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-right whitespace-nowrap">Harga Jual Dasar</th>
+                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-center whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-outline-variant/30">
+                <tbody class="block md:table-row-group divide-y divide-transparent md:divide-outline-variant/30">
                     <?php foreach ($hppList as $hpp): ?>
-                    <tr class="hover:bg-surface-container-low transition-colors">
-                        <td class="py-4 px-4 font-bold text-on-surface"><?= htmlspecialchars($hpp->getName()) ?></td>
-                        <td class="py-4 px-4 text-right text-on-surface-variant text-sm">
-                            Rp. <?= number_format((float)$hpp->getTotalBiayaHpp(), 0, ',', '.') ?>
+                    <tr class="block md:table-row bg-surface hover:bg-surface-container-low transition-colors mb-4 md:mb-0 rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden">
+                        <td class="block md:table-cell py-3 md:py-4 px-4 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                            <div class="flex justify-between items-center md:block">
+                                <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant">Nama Produk</span>
+                                <div class="font-bold text-on-surface text-right md:text-left"><?= htmlspecialchars($hpp->getName()) ?></div>
+                            </div>
                         </td>
-                        <td class="py-4 px-4 text-right font-medium text-on-surface">
-                            Rp. <?= number_format((float)$hpp->getHppPerPcs(), 0, ',', '.') ?>
+                        <td class="block md:table-cell py-3 md:py-4 px-4 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                            <div class="flex justify-between items-center md:block">
+                                <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant">Total Biaya Item</span>
+                                <div class="text-on-surface-variant text-sm text-right md:text-right">Rp. <?= number_format((float)$hpp->getTotalBiayaHpp(), 0, ',', '.') ?></div>
+                            </div>
                         </td>
-                        <td class="py-4 px-4 text-center">
-                            <span class="bg-secondary-container/20 text-secondary-container px-3 py-1 rounded-full text-sm font-bold">
-                                +Rp. <?= number_format((float)$hpp->getMarginKeuntungan(), 0, ',', '.') ?>
-                            </span>
+                        <td class="block md:table-cell py-3 md:py-4 px-4 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                            <div class="flex justify-between items-center md:block">
+                                <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant">HPP Dasar / item</span>
+                                <div class="font-medium text-on-surface text-right md:text-right">Rp. <?= number_format((float)$hpp->getHppPerPcs(), 0, ',', '.') ?></div>
+                            </div>
                         </td>
-                        <td class="py-4 px-4 text-right font-black text-primary text-lg">
-                            Rp. <?= number_format((float)$hpp->getHargaJualProduk(), 0, ',', '.') ?>
+                        <td class="block md:table-cell py-3 md:py-4 px-4 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                            <div class="flex justify-between items-center md:block">
+                                <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant">Margin</span>
+                                <div class="text-right md:text-center">
+                                    <span class="bg-secondary-container/20 text-secondary-container px-3 py-1 rounded-full text-sm font-bold">
+                                        +Rp. <?= number_format((float)$hpp->getMarginKeuntungan(), 0, ',', '.') ?>
+                                    </span>
+                                </div>
+                            </div>
                         </td>
-                        <td class="py-4 px-4">
-                            <div class="flex gap-2 justify-center">
+                        <td class="block md:table-cell py-3 md:py-4 px-4 whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                            <div class="flex justify-between items-center md:block">
+                                <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant">Harga Jual Dasar</span>
+                                <div class="font-black text-primary text-lg text-right md:text-right">Rp. <?= number_format((float)$hpp->getHargaJualProduk(), 0, ',', '.') ?></div>
+                            </div>
+                        </td>
+                        <td class="block md:table-cell py-3 md:py-4 px-4 bg-surface-container-low/50 md:bg-transparent whitespace-nowrap">
+                            <div class="flex flex-col sm:flex-row gap-2 justify-center">
                                 <a href="?page=products&action=create&hpp_id=<?= $hpp->getId() ?>"
-                                   class="bg-primary/10 text-primary hover:bg-primary hover:text-white px-3 py-1.5 rounded-lg transition-colors font-bold text-sm flex items-center gap-1"
+                                   class="bg-primary/10 text-primary hover:bg-primary hover:text-white px-3 py-1.5 rounded-lg transition-colors font-bold text-sm flex justify-center items-center gap-1 w-full sm:w-auto"
                                    title="Buat Produk dari HPP ini">
                                     <span class="material-symbols-outlined text-[18px]">add_box</span> Buat Produk
                                 </a>
-                                <a href="?page=hpp&action=edit&id=<?= $hpp->getId() ?>"
-                                   class="bg-surface-container border border-outline-variant/50 text-on-surface hover:bg-outline-variant/20 px-3 py-1.5 rounded-lg transition-colors font-bold text-sm flex items-center gap-1"
-                                   title="Edit HPP">
-                                    <span class="material-symbols-outlined text-[18px]">edit</span>
-                                </a>
-                                <form method="POST" action="?page=hpp&action=delete&id=<?= $hpp->getId() ?>"
-                                      onsubmit="return confirm('Hapus HPP \'<?= htmlspecialchars(addslashes($hpp->getName())) ?>\'?');">
-                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(App\Helper\CsrfHelper::getToken()) ?>">
-                                    <button type="submit" class="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-lg transition-colors font-bold text-sm flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-[18px]">delete</span>
-                                    </button>
-                                </form>
+                                <div class="flex gap-2 w-full sm:w-auto">
+                                    <a href="?page=hpp&action=edit&id=<?= $hpp->getId() ?>"
+                                       class="bg-surface-container border border-outline-variant/50 text-on-surface hover:bg-outline-variant/20 px-3 py-1.5 rounded-lg transition-colors font-bold text-sm flex flex-1 justify-center items-center gap-1"
+                                       title="Edit HPP">
+                                        <span class="material-symbols-outlined text-[18px]">edit</span>
+                                    </a>
+                                    <form method="POST" action="?page=hpp&action=delete&id=<?= $hpp->getId() ?>"
+                                          onsubmit="return confirm('Hapus HPP \'<?= htmlspecialchars(addslashes($hpp->getName())) ?>\'?');" class="flex-1 flex">
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(\App\Helper\CsrfHelper::getToken()) ?>">
+                                        <button type="submit" class="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-lg transition-colors font-bold text-sm flex flex-1 justify-center items-center gap-1 w-full">
+                                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </td>
                     </tr>
