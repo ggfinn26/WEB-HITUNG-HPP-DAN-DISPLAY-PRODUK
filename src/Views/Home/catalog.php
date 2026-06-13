@@ -1,458 +1,569 @@
-<!-- Hero Section for Catalog -->
-<section class="relative overflow-hidden pt-20 sm:pt-28 pb-10 sm:pb-16 px-4 md:px-margin-desktop bg-surface-container-low rounded-b-[3rem] shadow-sm mb-10">
+<style>
+/* ── Catalog page styles — matches experiment-catalog.html ── */
+#catalogGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 12px;
+}
+@media (min-width: 640px)  { #catalogGrid { grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 20px; } }
+@media (min-width: 1024px) { #catalogGrid { grid-template-columns: repeat(4, 1fr); } }
+
+.cat-card {
+    background: var(--color-surface, #fff);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0,0,0,0.06);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.cat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+.cat-card-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: var(--color-surface-container-low, #eff4ff);
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cat-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.cat-card-body { padding: 8px 8px 10px; display: flex; flex-direction: column; flex: 1; }
+.cat-card-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-on-surface, #0b1c30);
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
+    flex: 1;
+    cursor: pointer;
+}
+@media (min-width: 640px) { .cat-card-name { font-size: 13px; } }
+.cat-card-price { font-size: 13px; font-weight: 800; color: var(--color-primary, #001e40); margin-bottom: 8px; }
+.cat-card-actions { display: flex; flex-direction: column; gap: 5px; }
+.cat-btn-detail {
+    width: 100%;
+    background: var(--color-primary, #001e40);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 0;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    transition: opacity 0.15s;
+}
+.cat-btn-detail:active { opacity: 0.8; transform: scale(0.97); }
+.cat-btn-cart {
+    width: 100%;
+    background: var(--color-surface-container-low, #eff4ff);
+    color: var(--color-primary, #001e40);
+    border: 1px solid var(--color-outline-variant, #c3c6d1);
+    border-radius: 8px;
+    padding: 7px 0;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    transition: all 0.15s;
+}
+.cat-btn-cart:active { background: var(--color-primary, #001e40); color: #fff; transform: scale(0.97); }
+
+/* Modal */
+#catalogModal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    background: rgba(0,0,0,0.5);
+}
+#catalogModal.open { opacity: 1; pointer-events: all; }
+#catalogModalSheet {
+    position: relative;
+    background: var(--color-surface, #fff);
+    width: 100%;
+    max-width: 480px;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+#catalogModalSheet.open { transform: translateY(0); }
+@media (min-width: 640px) {
+    #catalogModal { align-items: center; backdrop-filter: blur(12px); background: rgba(0,0,0,0.3); }
+    #catalogModalSheet {
+        height: auto;
+        max-height: 88vh;
+        border-radius: 20px;
+        max-width: 560px;
+        transform: scale(0.95);
+    }
+    #catalogModalSheet.open { transform: scale(1); }
+    #modalCarouselWrap { height: 300px !important; max-height: 300px !important; }
+}
+
+/* Carousel */
+#modalCarouselWrap {
+    position: relative;
+    width: 100%;
+    height: 60vw;
+    max-height: 320px;
+    overflow: hidden;
+    background: var(--color-surface-container-low, #eff4ff);
+    cursor: grab;
+    flex-shrink: 0;
+}
+#modalCarouselTrack { display: flex; height: 100%; transition: transform 0.3s ease-out; will-change: transform; }
+.carousel-slide { flex: 0 0 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.carousel-slide img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
+
+.modal-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.85);
+    border: none;
+    border-radius: 99px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    z-index: 2;
+    transition: background 0.15s;
+}
+.modal-nav-btn:hover { background: #fff; }
+.modal-nav-btn.hidden { display: none; }
+#modalPrev { left: 8px; }
+#modalNext { right: 8px; }
+
+#modalDots { display: flex; justify-content: center; gap: 4px; padding: 6px 0 2px; flex-shrink: 0; }
+.modal-dot { width: 5px; height: 5px; border-radius: 99px; background: #d1d5db; transition: all 0.2s; cursor: pointer; flex-shrink: 0; }
+.modal-dot.active { width: 14px; background: var(--color-primary, #001e40); }
+
+/* Modal inner */
+.modal-topbar { flex-shrink: 0; display: flex; align-items: center; justify-content: flex-end; padding: 12px 14px 6px; }
+.modal-close-btn {
+    background: var(--color-surface-container-low, #eff4ff);
+    border: none;
+    border-radius: 99px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--color-on-surface, #0b1c30);
+}
+.modal-close-btn:hover { background: var(--color-outline-variant, #c3c6d1); }
+.modal-scrollable { flex: 1; overflow-y: auto; padding: 10px 16px 0; }
+.modal-prod-name { font-size: 15px; font-weight: 700; color: var(--color-on-surface, #0b1c30); margin-bottom: 2px; line-height: 1.4; }
+.modal-prod-price { font-size: 20px; font-weight: 900; color: var(--color-primary, #001e40); margin-bottom: 10px; }
+.variant-group { margin-bottom: 10px; }
+.variant-group-label { font-size: 10px; font-weight: 700; color: var(--color-on-surface-variant, #43474f); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+.variant-opts { display: flex; flex-wrap: wrap; gap: 5px; }
+.variant-chip {
+    padding: 4px 12px;
+    border-radius: 99px;
+    border: 1.5px solid var(--color-outline-variant, #c3c6d1);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-on-surface, #0b1c30);
+    background: var(--color-surface, #fff);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.variant-chip.active { border-color: var(--color-primary, #001e40); background: var(--color-primary, #001e40); color: #fff; }
+.modal-desc-label { font-size: 10px; font-weight: 700; color: var(--color-on-surface-variant, #43474f); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; margin-top: 10px; }
+.modal-desc-text { font-size: 13px; color: var(--color-on-surface-variant, #43474f); line-height: 1.6; }
+.modal-footer { flex-shrink: 0; padding: 12px 16px 20px; border-top: 1px solid var(--color-outline-variant, #c3c6d1); background: var(--color-surface, #fff); }
+.modal-cart-btn {
+    width: 100%;
+    background: var(--color-primary, #001e40);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 0;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: opacity 0.15s;
+}
+.modal-cart-btn:active { opacity: 0.85; transform: scale(0.98); }
+.modal-cart-btn:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; transform: none; }
+</style>
+
+<?php
+$jsProducts = [];
+foreach ($products as $p) {
+    $pid = $p->getId();
+    $vd  = $variantsData[$pid] ?? ['groups' => [], 'variants' => [], 'images' => []];
+    $images = [];
+    if ($p->getImageUrl()) $images[] = $p->getImageUrl();
+    foreach ($vd['images'] as $img) {
+        if ($img['url'] !== $p->getImageUrl()) $images[] = $img['url'];
+    }
+    if (empty($images)) $images[] = '';
+    $jsProducts[$pid] = [
+        'id'          => $pid,
+        'name'        => $p->getName(),
+        'price'       => (float)$p->getPrice(),
+        'imageUrl'    => $p->getImageUrl() ?? '',
+        'description' => $p->getDescription() ?? '',
+        'images'      => $images,
+        'groups'      => $vd['groups'],
+        'variants'    => $vd['variants'],
+        'varImages'   => $vd['images'],
+    ];
+}
+?>
+
+<!-- Hero -->
+<section class="relative overflow-hidden pt-20 sm:pt-28 pb-10 sm:pb-16 px-4 md:px-margin-desktop bg-surface-container-low rounded-b-[3rem] shadow-sm mb-6">
     <div class="max-w-7xl mx-auto text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary font-bold text-sm mb-6">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-primary font-bold text-sm mb-6" style="background:rgba(0,30,64,0.08);">
             <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
             Jastip Arunga
         </div>
         <h1 class="font-display-lg text-4xl md:text-5xl font-bold text-primary mb-4">Katalog Produk Lengkap</h1>
         <p class="font-body-lg text-lg text-on-surface-variant max-w-2xl mx-auto">
-            Jelajahi seluruh koleksi barang jastip favorit keluarga dari berbagai pelosok negeri. 
+            Jelajahi seluruh koleksi barang jastip favorit keluarga dari berbagai pelosok negeri.
         </p>
     </div>
 </section>
 
-<!-- Product Catalog Section -->
-<section id="katalog-lengkap" class="py-12 mb-20 mx-4 md:mx-0">
-    <div class="max-w-7xl mx-auto px-6 md:px-margin-desktop">
-        <?php if (empty($products)): ?>
-            <div class="glass-panel p-16 text-center rounded-[2rem] border-2 border-dashed border-outline-variant/50 max-w-3xl mx-auto">
-                <div class="text-6xl mb-6">🛍️</div>
-                <h3 class="text-2xl font-bold text-primary mb-3">Belum Ada Produk</h3>
-                <p class="text-on-surface-variant text-lg">Admin sedang berkeliling nusantara mencari barang impianmu.</p>
-            </div>
-        <?php else: ?>
-            <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-                <?php foreach($products as $product): ?>
-                    <!-- Product Card -->
-                    <div class="group bg-surface rounded-2xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-xl transition-all duration-300 border border-outline-variant/20 flex flex-col">
-                        <div class="relative h-36 sm:h-52 overflow-hidden bg-surface-container-high flex items-center justify-center flex-shrink-0 cursor-pointer" onclick="openProductModal(<?= $product->getId() ?>)">
-                            <?php if ($product->getImageUrl()): ?>
-                                <img src="<?= htmlspecialchars($product->getImageUrl()) ?>" alt="<?= htmlspecialchars($product->getName()) ?>" class="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500" loading="lazy">
-                            <?php else: ?>
-                                <span class="text-4xl sm:text-6xl">📦</span>
-                            <?php endif; ?>
-                        </div>
-                        <div class="p-3 sm:p-5 flex flex-col flex-1">
-                            <h3 class="font-bold text-sm sm:text-base text-on-surface mb-1 line-clamp-2 cursor-pointer hover:text-primary transition-colors" title="<?= htmlspecialchars($product->getName()) ?>" onclick="openProductModal(<?= $product->getId() ?>)">
-                                <?= htmlspecialchars($product->getName()) ?>
-                            </h3>
-                            <div class="mt-auto pt-2 flex flex-col gap-2">
-                                <span class="font-black text-sm sm:text-base text-secondary dark:text-secondary-fixed">
-                                    Rp <?= number_format((float)$product->getPrice(), 0, ',', '.') ?>
-                                </span>
-                                <div class="flex flex-col gap-1.5">
-                                    <button onclick="openProductModal(<?= $product->getId() ?>)"
-                                       class="bg-primary text-white py-2 sm:py-2.5 rounded-xl flex items-center justify-center gap-1 hover:bg-primary-container transition-colors shadow-sm active:scale-95">
-                                        <span class="material-symbols-outlined text-[16px]">visibility</span>
-                                        <span class="font-bold text-xs">Detail</span>
-                                    </button>
-                                    <button onclick="addGridToCart(event, <?= $product->getId() ?>, this)"
-                                       class="bg-secondary-container text-on-secondary-container py-2 sm:py-2.5 rounded-xl flex items-center justify-center gap-1 hover:bg-secondary hover:text-white transition-colors shadow-sm active:scale-95 border border-transparent">
-                                        <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
-                                        <span class="font-bold text-xs">Keranjang</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-            
-            <!-- Pagination Controls -->
-            <?php if (isset($totalPages) && $totalPages > 1): ?>
-                <div class="flex justify-center items-center gap-2 mt-12">
-                    <?php if ($currentPage > 1): ?>
-                        <a href="?page=catalog&p=<?= $currentPage - 1 ?>" class="p-3 bg-surface-container-low hover:bg-outline-variant/30 text-on-surface rounded-xl transition-colors">
-                            <span class="material-symbols-outlined">chevron_left</span>
-                        </a>
-                    <?php else: ?>
-                        <div class="p-3 bg-surface-container-low text-on-surface-variant opacity-50 cursor-not-allowed rounded-xl">
-                            <span class="material-symbols-outlined">chevron_left</span>
-                        </div>
-                    <?php endif; ?>
-                    
-                    <div class="px-4 py-2 bg-primary/10 text-primary font-bold rounded-xl">
-                        Halaman <?= $currentPage ?> dari <?= $totalPages ?>
-                    </div>
-                    
-                    <?php if ($currentPage < $totalPages): ?>
-                        <a href="?page=catalog&p=<?= $currentPage + 1 ?>" class="p-3 bg-surface-container-low hover:bg-outline-variant/30 text-on-surface rounded-xl transition-colors">
-                            <span class="material-symbols-outlined">chevron_right</span>
-                        </a>
-                    <?php else: ?>
-                        <div class="p-3 bg-surface-container-low text-on-surface-variant opacity-50 cursor-not-allowed rounded-xl">
-                            <span class="material-symbols-outlined">chevron_right</span>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
-        <?php endif; ?>
+<!-- Search bar sticky -->
+<div style="position:sticky;top:72px;z-index:30;background:var(--color-surface,#fff);border-bottom:1px solid var(--color-outline-variant,#c3c6d1);padding:10px 16px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+    <div style="max-width:1280px;margin:0 auto;position:relative;">
+        <span class="material-symbols-outlined" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--color-on-surface-variant,#43474f);font-size:20px;">search</span>
+        <input type="text" id="catalogSearch" placeholder="Cari produk..."
+               style="width:100%;padding:10px 16px 10px 44px;border-radius:99px;border:1.5px solid var(--color-outline-variant,#c3c6d1);background:var(--color-surface-container-low,#eff4ff);font-size:14px;outline:none;transition:border-color 0.2s,background 0.2s;color:var(--color-on-surface,#0b1c30);"
+               onfocus="this.style.borderColor='var(--color-primary,#001e40)';this.style.background='var(--color-surface,#fff)'"
+               onblur="this.style.borderColor='var(--color-outline-variant,#c3c6d1)';this.style.background='var(--color-surface-container-low,#eff4ff)'">
     </div>
-</section>
+</div>
 
-<!-- Product Detail Modal -->
-<div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
-    <div class="bg-surface w-full max-w-2xl max-h-[92vh] rounded-3xl shadow-2xl flex flex-col mx-4 my-4 overflow-hidden transform scale-95 transition-transform duration-300" id="product-modal-content">
+<div style="max-width:1280px;margin:0 auto;padding:6px 16px 2px;font-size:12px;color:var(--color-on-surface-variant,#43474f);" id="catalogCount"></div>
 
-        <!-- Header -->
-        <div class="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-outline-variant/30">
-            <h3 class="font-bold text-base text-on-surface">Detail Produk</h3>
-            <button onclick="closeProductModal()" class="w-9 h-9 rounded-full hover:bg-surface-container-high flex items-center justify-center text-on-surface transition-colors">
-                <span class="material-symbols-outlined text-[20px]">close</span>
+<?php if (empty($products)): ?>
+<div style="max-width:1280px;margin:0 auto;padding:80px 20px;text-align:center;">
+    <div style="font-size:48px;margin-bottom:16px;">&#128717;</div>
+    <h3 class="text-2xl font-bold text-primary mb-3">Belum Ada Produk</h3>
+    <p class="text-on-surface-variant">Admin sedang berkeliling nusantara mencari barang impianmu.</p>
+</div>
+<?php else: ?>
+
+<div style="max-width:1280px;margin:0 auto;padding-bottom:100px;">
+    <div id="catalogGrid"></div>
+    <div id="catalogEmpty" style="display:none;text-align:center;padding:60px 20px;color:var(--color-on-surface-variant,#43474f);">
+        <span class="material-symbols-outlined" style="font-size:40px;display:block;margin-bottom:8px;color:var(--color-outline-variant,#c3c6d1);">search_off</span>
+        Produk tidak ditemukan
+    </div>
+    <div id="catalogSentinel" style="height:1px;margin-top:16px;"></div>
+    <div id="catalogLoader" style="display:none;text-align:center;padding:16px;font-size:13px;color:var(--color-on-surface-variant,#43474f);">Memuat...</div>
+</div>
+
+<?php endif; ?>
+
+<!-- Modal -->
+<div id="catalogModal" onclick="handleModalOverlayClick(event)">
+    <div id="catalogModalSheet">
+
+        <!-- Topbar -->
+        <div class="modal-topbar">
+            <button class="modal-close-btn" onclick="closeCatalogModal()">
+                <span class="material-symbols-outlined" style="font-size:18px;">close</span>
             </button>
         </div>
 
-        <!-- Body (Scrollable) -->
-        <div class="p-4 overflow-y-auto flex-1">
-            <div class="flex flex-row gap-4">
-                <!-- Product Image — fixed size via inline style -->
-                <div id="modal-img-wrap" style="width:120px;min-width:120px;height:120px;" class="flex-shrink-0">
-                    <div class="w-full h-full bg-surface-container-high rounded-xl flex items-center justify-center overflow-hidden border border-outline-variant/20">
-                        <img id="modal-img" src="" alt="" class="w-full h-full object-contain p-1">
-                        <div id="modal-no-img" class="hidden flex-col items-center justify-center text-outline-variant">
-                            <span class="material-symbols-outlined" style="font-size:2rem">image</span>
-                        </div>
-                    </div>
-                </div>
+        <!-- Carousel -->
+        <div id="modalCarouselWrap">
+            <div id="modalCarouselTrack"></div>
+            <button class="modal-nav-btn hidden" id="modalPrev" onclick="moveModalCarousel(-1)">&#8249;</button>
+            <button class="modal-nav-btn hidden" id="modalNext" onclick="moveModalCarousel(1)">&#8250;</button>
+        </div>
+        <div id="modalDots"></div>
 
-                <!-- Product Info -->
-                <div class="flex-1 min-w-0 flex flex-col">
-                    <h2 id="modal-title" class="font-bold text-sm text-on-surface mb-1" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden"></h2>
-                    <div id="modal-price" class="font-black text-secondary mb-2" style="font-size:1rem"></div>
-                    <div id="modal-stock-container" class="text-on-surface-variant mb-2" style="font-size:0.75rem">
-                        Stok: <span id="modal-stock" class="font-bold text-on-surface"></span>
-                    </div>
-                    <style>
-                        #modal-desc ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 0.5rem; }
-                        #modal-desc ol { list-style-type: decimal; margin-left: 1.5rem; margin-bottom: 0.5rem; }
-                        #modal-desc p { margin-bottom: 0.25rem; }
-                    </style>
-                    <div id="modal-desc" class="text-xs text-on-surface-variant mb-3 max-h-24 overflow-y-auto"></div>
-                    <div id="modal-variants-container" class="space-y-3"></div>
-                </div>
+        <!-- Scrollable content -->
+        <div class="modal-scrollable">
+            <p class="modal-prod-name" id="modalName"></p>
+            <p class="modal-prod-price" id="modalPrice"></p>
+            <div id="modalVariants"></div>
+            <div id="modalDescWrap" style="display:none;">
+                <p class="modal-desc-label">Deskripsi</p>
+                <div class="modal-desc-text" id="modalDesc"></div>
             </div>
         </div>
 
-        <!-- Footer (Sticky Button) -->
-        <div class="flex-shrink-0 p-3 sm:p-4 border-t border-outline-variant/30 bg-surface">
-            <button id="modal-cart-btn" onclick="addCurrentToCart()" class="w-full bg-primary text-white py-3.5 rounded-xl flex items-center justify-center gap-2 font-bold hover:bg-primary/90 transition-colors shadow-md active:scale-95">
-                <span class="material-symbols-outlined" data-weight="fill">add_shopping_cart</span>
+        <!-- Footer CTA -->
+        <div class="modal-footer">
+            <button class="modal-cart-btn" id="modalCartBtn" onclick="addCurrentToCart()">
+                <span class="material-symbols-outlined" style="font-size:20px;">add_shopping_cart</span>
                 Masuk Keranjang
             </button>
         </div>
     </div>
 </div>
 
-<?php
-// Prepare products array for JS
-$jsProducts = [];
-if (!empty($products)) {
-    foreach ($products as $p) {
-        $jsProducts[$p->getId()] = [
-            'id' => $p->getId(),
-            'name' => $p->getName(),
-            'price' => $p->getPrice(),
-            'imageUrl' => $p->getImageUrl(),
-            'description' => $p->getDescription()
-        ];
+<script>
+(function() {
+var PRODUCTS     = <?= json_encode(array_values($jsProducts), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
+var variantsData = <?= json_encode($variantsData, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
+var fmt = function(n){ return 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.round(n)); };
+var PER_PAGE = 12, filtered = PRODUCTS.slice(), rendered = 0, loading = false;
+
+// ── Grid cards ────────────────────────────────────────────────────────────────
+function cardHtml(p) {
+    var imgHtml = p.imageUrl
+        ? '<img src="'+p.imageUrl+'" alt="'+p.name.replace(/"/g,'&quot;')+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;">'
+        : '<span class="material-symbols-outlined" style="font-size:2.5rem;color:var(--color-outline-variant,#c3c6d1);">inventory_2</span>';
+    return '<div class="cat-card">'
+        + '<div class="cat-card-img" onclick="openCatalogModal('+p.id+')">'+imgHtml+'</div>'
+        + '<div class="cat-card-body">'
+        + '<p class="cat-card-name" onclick="openCatalogModal('+p.id+')">'+p.name+'</p>'
+        + '<div style="margin-top:auto;padding-top:8px;">'
+        + '<p class="cat-card-price">'+fmt(p.price)+'</p>'
+        + '<div class="cat-card-actions">'
+        + '<button class="cat-btn-detail" onclick="openCatalogModal('+p.id+')">'
+        + '<span class="material-symbols-outlined" style="font-size:15px;">visibility</span> Detail</button>'
+        + '<button class="cat-btn-cart" onclick="gridAddToCart('+p.id+',this)">'
+        + '<span class="material-symbols-outlined" style="font-size:15px;">add_shopping_cart</span> Keranjang</button>'
+        + '</div></div></div></div>';
+}
+
+function renderBatch() {
+    if (loading) return;
+    var batch = filtered.slice(rendered, rendered + PER_PAGE);
+    if (!batch.length) { document.getElementById('catalogLoader').style.display='none'; return; }
+    loading = true;
+    setTimeout(function() {
+        var grid = document.getElementById('catalogGrid');
+        batch.forEach(function(p) { grid.insertAdjacentHTML('beforeend', cardHtml(p)); });
+        rendered += batch.length; loading = false;
+        document.getElementById('catalogLoader').style.display = rendered < filtered.length ? 'block' : 'none';
+    }, 150);
+}
+
+function applySearch(q) {
+    document.getElementById('catalogGrid').innerHTML = ''; rendered = 0;
+    filtered = q ? PRODUCTS.filter(function(p){ return p.name.toLowerCase().indexOf(q.toLowerCase()) !== -1; }) : PRODUCTS.slice();
+    var empty = document.getElementById('catalogEmpty'), count = document.getElementById('catalogCount');
+    if (!filtered.length) { empty.style.display='block'; count.textContent=''; }
+    else { empty.style.display='none'; count.textContent=filtered.length+' produk'; renderBatch(); }
+}
+
+var dt;
+document.getElementById('catalogSearch').addEventListener('input', function() {
+    clearTimeout(dt); var v=this.value.trim(); dt=setTimeout(function(){ applySearch(v); },250);
+});
+
+new IntersectionObserver(function(e) {
+    if (e[0].isIntersecting && rendered < filtered.length) renderBatch();
+}, { rootMargin:'300px' }).observe(document.getElementById('catalogSentinel'));
+
+applySearch('');
+
+// ── Grid add to cart ──────────────────────────────────────────────────────────
+function gridAddToCart(id, btn) {
+    var p=PRODUCTS.find(function(x){return x.id===id;}); if(!p) return;
+    if (p.groups && p.groups.length > 0) { openCatalogModal(id); return; }
+    var cart=getCart(), exist=cart.find(function(i){return i.id===id;});
+    if (exist) exist.qty++; else cart.push({id:p.id,name:p.name,price:p.price,imageUrl:p.imageUrl,qty:1});
+    saveCart(cart);
+    var orig=btn.innerHTML;
+    btn.innerHTML='<span class="material-symbols-outlined" style="font-size:15px;">check</span> Ditambahkan';
+    btn.style.background='#16a34a'; btn.style.color='#fff'; btn.style.borderColor='#15803d';
+    setTimeout(function(){
+        btn.innerHTML=orig;
+        btn.style.background=''; btn.style.color=''; btn.style.borderColor='';
+    }, 1500);
+}
+window.gridAddToCart=gridAddToCart;
+
+// ── Carousel ──────────────────────────────────────────────────────────────────
+var ci=0, ct=0;
+function buildModalCarousel(images) {
+    var track=document.getElementById('modalCarouselTrack'), dots=document.getElementById('modalDots');
+    track.innerHTML=''; dots.innerHTML=''; ci=0; ct=images.length;
+    images.forEach(function(src,i) {
+        var slide=document.createElement('div'); slide.className='carousel-slide';
+        slide.innerHTML=src
+            ? '<img src="'+src+'" loading="lazy">'
+            : '<span class="material-symbols-outlined" style="font-size:3rem;color:#9ca3af;">inventory_2</span>';
+        track.appendChild(slide);
+        var dot=document.createElement('div'); dot.className='modal-dot'+(i===0?' active':'');
+        dot.onclick=function(){goToSlide(i);}; dots.appendChild(dot);
+    });
+    updateCarousel();
+}
+function updateCarousel() {
+    document.getElementById('modalCarouselTrack').style.transform='translateX(-'+(ci*100)+'%)';
+    document.querySelectorAll('.modal-dot').forEach(function(d,i){
+        d.style.width=i===ci?'14px':'5px';
+        d.style.background=i===ci?'var(--color-primary,#001e40)':'#d1d5db';
+    });
+    document.getElementById('modalPrev').classList.toggle('hidden',ci===0);
+    document.getElementById('modalNext').classList.toggle('hidden',ci===ct-1);
+}
+function moveModalCarousel(dir){ci=Math.max(0,Math.min(ct-1,ci+dir));updateCarousel();}
+function goToSlide(i){ci=i;updateCarousel();}
+window.moveModalCarousel=moveModalCarousel;
+
+// Touch swipe
+var txS=0,tyS=0,isH=null,cw=document.getElementById('modalCarouselWrap');
+cw.addEventListener('touchstart',function(e){txS=e.touches[0].clientX;tyS=e.touches[0].clientY;isH=null;},{passive:true});
+cw.addEventListener('touchmove',function(e){
+    if(isH===null){var dx=Math.abs(e.touches[0].clientX-txS),dy=Math.abs(e.touches[0].clientY-tyS);if(dx>5||dy>5)isH=dx>dy;}
+    if(isH)e.preventDefault();
+},{passive:false});
+cw.addEventListener('touchend',function(e){if(!isH)return;var d=txS-e.changedTouches[0].clientX;if(Math.abs(d)>40)moveModalCarousel(d>0?1:-1);});
+
+// Mouse drag
+var mx=0,drag=false,dragged=false;
+cw.addEventListener('mousedown',function(e){mx=e.clientX;drag=true;dragged=false;e.preventDefault();});
+document.addEventListener('mousemove',function(e){if(!drag)return;if(Math.abs(e.clientX-mx)>5)dragged=true;});
+document.addEventListener('mouseup',function(e){if(!drag)return;drag=false;if(!dragged)return;var d=mx-e.clientX;if(Math.abs(d)>40)moveModalCarousel(d>0?1:-1);});
+
+// Trackpad
+var wa=0,wl=false;
+cw.addEventListener('wheel',function(e){
+    if(Math.abs(e.deltaX)<Math.abs(e.deltaY))return;e.preventDefault();if(wl)return;
+    wa+=e.deltaX;if(Math.abs(wa)>60){moveModalCarousel(wa>0?1:-1);wa=0;wl=true;setTimeout(function(){wl=false;},500);}
+},{passive:false});
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+var curId=null, selOpts=[];
+
+function openCatalogModal(id) {
+    var p=PRODUCTS.find(function(x){return x.id===id;}); if(!p) return;
+    curId=id; selOpts=[];
+    buildModalCarousel(p.images);
+    document.getElementById('modalName').textContent=p.name;
+    document.getElementById('modalPrice').textContent=fmt(p.price);
+
+    var vsec=document.getElementById('modalVariants'); vsec.innerHTML='';
+    if (p.groups && p.groups.length > 0) {
+        p.groups.forEach(function(g,gi){
+            var sec=document.createElement('div'); sec.className='variant-group';
+            var lbl=document.createElement('p'); lbl.className='variant-group-label'; lbl.textContent=g.name;
+            var opts=document.createElement('div'); opts.className='variant-opts';
+            g.options.forEach(function(opt){
+                var chip=document.createElement('button'); chip.className='variant-chip'; chip.textContent=opt;
+                chip.onclick=function(){
+                    opts.querySelectorAll('.variant-chip').forEach(function(c){c.classList.remove('active');});
+                    chip.classList.add('active'); selOpts[gi]=opt; checkMatch();
+                };
+                opts.appendChild(chip);
+            });
+            sec.appendChild(lbl); sec.appendChild(opts); vsec.appendChild(sec);
+        });
+        setBtn(false);
+    } else { setBtn(true); }
+
+    var dw=document.getElementById('modalDescWrap');
+    if (p.description && p.description.trim()) {
+        document.getElementById('modalDesc').innerHTML=p.description; dw.style.display='block';
+    } else { dw.style.display='none'; }
+
+    document.getElementById('catalogModal').classList.add('open');
+    setTimeout(function(){ document.getElementById('catalogModalSheet').classList.add('open'); },10);
+    document.body.style.overflow='hidden';
+}
+
+function handleModalOverlayClick(e) {
+    if (e.target===document.getElementById('catalogModal')) closeCatalogModal();
+}
+
+function checkMatch() {
+    var p=PRODUCTS.find(function(x){return x.id===curId;}); if(!p||!p.groups.length) return;
+    if (selOpts.length!==p.groups.length||selOpts.indexOf(undefined)!==-1) return;
+    var key=selOpts.join(' - '), vd=variantsData[curId]; if(!vd) return;
+    var m=(vd.variants||[]).find(function(v){return v.name===key;});
+    if (m) {
+        document.getElementById('modalPrice').textContent=fmt(m.price||p.price);
+        if (m.image_id) {
+            var img=(vd.images||[]).find(function(i){return i.id===m.image_id;});
+            if (img){var idx=p.images.indexOf(img.url);if(idx!==-1)goToSlide(idx);}
+        }
+        setBtn(true);
     }
 }
-?>
 
-<script>
-    const productsData = <?= json_encode($jsProducts) ?>;
-    const variantsData = <?= isset($variantsData) ? json_encode($variantsData) : '{}' ?>;
-    const adminWa = "<?= htmlspecialchars($_ENV['ADMIN_WA'] ?? '62895380123352') ?>";
-    
-    // Format currency
-    function formatRupiah(number) {
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+function setBtn(on) {
+    var btn=document.getElementById('modalCartBtn');
+    btn.disabled=!on;
+    if (on) {
+        btn.innerHTML='<span class="material-symbols-outlined" style="font-size:20px;">add_shopping_cart</span> Masuk Keranjang';
+        btn.style.background='var(--color-primary,#001e40)'; btn.style.color='#fff'; btn.style.cursor='pointer';
+    } else {
+        btn.innerHTML='<span class="material-symbols-outlined" style="font-size:20px;">add_shopping_cart</span> Pilih Variasi Dulu';
+        btn.style.background='#e5e7eb'; btn.style.color='#9ca3af'; btn.style.cursor='not-allowed';
     }
-    
-    // Modal State
-    let currentProductId = null;
-    let selectedOptions = [];
-    
-    function openProductModal(productId) {
-        const product = productsData[productId];
-        if (!product) return;
-        
-        currentProductId = productId;
-        const vData = variantsData[productId];
-        
-        document.getElementById('modal-title').textContent = product.name;
-        
-        const descEl = document.getElementById('modal-desc');
-        if (product.description && product.description.trim() !== '') {
-            descEl.innerHTML = product.description;
-            descEl.classList.remove('hidden');
-        } else {
-            descEl.classList.add('hidden');
-        }
-        
-        // Setup initial image
-        const imgEl = document.getElementById('modal-img');
-        const noImgEl = document.getElementById('modal-no-img');
-        if (product.imageUrl) {
-            imgEl.src = product.imageUrl;
-            imgEl.classList.remove('hidden');
-            noImgEl.classList.add('hidden');
-        } else {
-            imgEl.classList.add('hidden');
-            noImgEl.classList.remove('hidden');
-        }
-        
-        // Check if has variants
-        const varContainer = document.getElementById('modal-variants-container');
-        varContainer.innerHTML = '';
-        selectedOptions = [];
-        
-        if (vData && vData.groups.length > 0) {
-            // Render groups
-            vData.groups.forEach((group, groupIdx) => {
-                const groupDiv = document.createElement('div');
-                
-                const label = document.createElement('p');
-                label.className = 'font-bold text-sm text-on-surface mb-2';
-                label.textContent = group.name;
-                groupDiv.appendChild(label);
-                
-                const btnContainer = document.createElement('div');
-                btnContainer.className = 'flex flex-wrap gap-2';
-                
-                group.options.forEach((opt) => {
-                    const btn = document.createElement('button');
-                    btn.className = 'variant-opt-btn px-4 py-2 border border-outline-variant/50 rounded-lg text-sm font-medium hover:bg-primary/5 hover:border-primary transition-colors text-on-surface';
-                    btn.textContent = opt;
-                    btn.onclick = () => selectVariantOption(groupIdx, opt, btn, btnContainer);
-                    btnContainer.appendChild(btn);
-                });
-                
-                groupDiv.appendChild(btnContainer);
-                varContainer.appendChild(groupDiv);
-            });
-            
-            // Initial reset of price/stock based on raw product
-            document.getElementById('modal-price').textContent = formatRupiah(product.price);
-            document.getElementById('modal-stock').textContent = 'Pilih Variasi';
-            updateWaButton();
-        } else {
-            // No variants
-            document.getElementById('modal-price').textContent = formatRupiah(product.price);
-            document.getElementById('modal-stock').textContent = 'Tersedia'; // We don't track base product stock currently, assume available
-            updateWaButton();
-        }
-        
-        // Show modal
-        const modal = document.getElementById('product-modal');
-        const content = document.getElementById('product-modal-content');
-        modal.classList.remove('opacity-0', 'pointer-events-none');
-        content.classList.remove('scale-95');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
-    }
-    
-    function selectVariantOption(groupIdx, opt, btnEl, containerEl) {
-        // Deselect others in group
-        containerEl.querySelectorAll('.variant-opt-btn').forEach(b => {
-            b.classList.remove('bg-primary/10', 'border-primary', 'text-primary');
-            b.classList.add('border-outline-variant/50', 'text-on-surface');
-        });
-        
-        // Select this one
-        btnEl.classList.remove('border-outline-variant/50', 'text-on-surface');
-        btnEl.classList.add('bg-primary/10', 'border-primary', 'text-primary');
-        
-        selectedOptions[groupIdx] = opt;
-        
-        checkVariantMatch();
-    }
-    
-    function checkVariantMatch() {
-        if (!currentProductId) return;
-        const vData = variantsData[currentProductId];
-        if (!vData || vData.groups.length === 0) return;
-        
-        // Are all groups selected?
-        if (selectedOptions.length === vData.groups.length && !selectedOptions.includes(undefined)) {
-            const comboString = selectedOptions.join(' - ');
-            const matchedVariant = vData.variants.find(v => v.name === comboString);
-            
-            if (matchedVariant) {
-                document.getElementById('modal-price').textContent = formatRupiah(matchedVariant.price);
-                document.getElementById('modal-stock').textContent = matchedVariant.stock;
-                
-                // Update image if any
-                if (matchedVariant.image_id) {
-                    const img = vData.images.find(i => i.id === matchedVariant.image_id);
-                    if (img) {
-                        const imgEl = document.getElementById('modal-img');
-                        imgEl.src = img.url;
-                        imgEl.classList.remove('hidden');
-                        document.getElementById('modal-no-img').classList.add('hidden');
-                    }
-                }
-                
-                updateWaButton(matchedVariant);
-            }
-        }
-    }
-    
-    function updateWaButton(variant = null) {
-        const btn = document.getElementById('modal-wa-btn');
-        const product = productsData[currentProductId];
-        
-        // Reset classes
-        if (btn) {
-            btn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-            btn.removeAttribute('href');
-        }
-        
-        const cartBtn = document.getElementById('modal-cart-btn');
-        cartBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-        
-        let text = `Halo Jastip Arunga, saya tertarik dengan ${product.name}`;
-        if (variant) {
-            text += ` variasi ${variant.name}`;
-            if (variant.stock <= 0) {
-                if (btn) {
-                    btn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">chat</span> Stok Habis`;
-                    btn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-                }
-                
-                cartBtn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">add_shopping_cart</span> Stok Habis`;
-                cartBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-                return;
-            }
-        } else {
-            // Require variant selection if variants exist
-            const vData = variantsData[currentProductId];
-            if (vData && vData.groups.length > 0) {
-                if (btn) {
-                    btn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">chat</span> Pilih Variasi`;
-                    btn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-                }
-                
-                cartBtn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">add_shopping_cart</span> Pilih Variasi`;
-                cartBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-                return;
-            }
-        }
-        
-        const waText = encodeURIComponent(text);
-        if (btn) {
-            btn.href = `https://wa.me/${adminWa}?text=${waText}`;
-            btn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">chat</span> Pesan via WA`;
-        }
-        
-        cartBtn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">add_shopping_cart</span> Masuk Keranjang`;
-    }
-    
-    function addGridToCart(event, productId, btnElement) {
-        event.stopPropagation();
-        const vData = variantsData[productId];
-        if (vData && vData.groups.length > 0) {
-            openProductModal(productId);
-            return;
-        }
-        
-        const product = productsData[productId];
-        const cart = getCart();
-        const exist = cart.find(i => i.id === product.id);
-        if (exist) exist.qty++;
-        else cart.push({ id: product.id, name: product.name, price: product.price, imageUrl: product.imageUrl, qty: 1 });
-        saveCart(cart);
-        
-        const originalText = btnElement.innerHTML;
-        btnElement.innerHTML = `<span class="material-symbols-outlined text-[18px]" data-weight="fill">check</span> <span class="font-label-md font-bold text-xs">Selesai</span>`;
-        btnElement.classList.add('bg-green-500', 'text-white', 'border-green-600');
-        btnElement.classList.remove('bg-secondary-container', 'text-on-secondary-container', 'border-transparent');
-        setTimeout(() => {
-            btnElement.innerHTML = originalText;
-            btnElement.classList.remove('bg-green-500', 'text-white', 'border-green-600');
-            btnElement.classList.add('bg-secondary-container', 'text-on-secondary-container', 'border-transparent');
-        }, 1500);
-    }
-    
-    function addCurrentToCart() {
-        const product = productsData[currentProductId];
-        const vData = variantsData[currentProductId];
-        
-        let cartItem = {
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            imageUrl: product.imageUrl,
-            qty: 1
-        };
-        
-        if (vData && vData.groups.length > 0) {
-            if (selectedOptions.length !== vData.groups.length || selectedOptions.includes(undefined)) {
-                showAlert('Pilih variasi terlebih dahulu!', 'warning');
-                return;
-            }
-            const comboString = selectedOptions.join(' - ');
-            const matchedVariant = vData.variants.find(v => v.name === comboString);
-            if (!matchedVariant) return;
-            if (matchedVariant.stock <= 0) return;
-            
-            cartItem.id = `${product.id}-${matchedVariant.id}`;
-            cartItem.name = `${product.name} (${matchedVariant.name})`;
-            cartItem.price = matchedVariant.price;
-            
-            if (matchedVariant.image_id) {
-                const img = vData.images.find(i => i.id === matchedVariant.image_id);
-                if (img) cartItem.imageUrl = img.url;
-            }
-        }
-        
-        const cart = getCart();
-        const exist = cart.find(i => i.id === cartItem.id);
-        if (exist) exist.qty++;
-        else cart.push(cartItem);
-        saveCart(cart);
-        
-        const btn = document.getElementById('modal-cart-btn');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">check</span> Berhasil`;
-        btn.classList.add('bg-green-500', 'text-white', 'border-green-600');
-        btn.classList.remove('bg-secondary-container', 'text-on-secondary-container', 'border-transparent');
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.classList.remove('bg-green-500', 'text-white', 'border-green-600');
-            btn.classList.add('bg-secondary-container', 'text-on-secondary-container', 'border-transparent');
-        }, 1500);
-    }
-    
-    function closeProductModal() {
-        const modal = document.getElementById('product-modal');
-        const content = document.getElementById('product-modal-content');
-        modal.classList.add('opacity-0', 'pointer-events-none');
-        content.classList.add('scale-95');
-        document.body.style.overflow = '';
-        currentProductId = null;
-    }
-    
-    // Close modal on click outside
-    document.getElementById('product-modal').addEventListener('click', (e) => {
-        if (e.target.id === 'product-modal') closeProductModal();
-    });
+}
 
-    // Responsive image size
-    function updateModalImgSize() {
-        const wrap = document.getElementById('modal-img-wrap');
-        if (!wrap) return;
-        const w = window.innerWidth;
-        const size = w < 640 ? '120px' : w < 1024 ? '180px' : '220px';
-        wrap.style.width  = size;
-        wrap.style.minWidth = size;
-        wrap.style.height = size;
+function addCurrentToCart() {
+    var p=PRODUCTS.find(function(x){return x.id===curId;}); if(!p) return;
+    var item={id:p.id,name:p.name,price:p.price,imageUrl:p.imageUrl,qty:1};
+    if (p.groups && p.groups.length > 0) {
+        var key=selOpts.join(' - '), vd=variantsData[curId];
+        var m=(vd&&vd.variants||[]).find(function(v){return v.name===key;}); if(!m) return;
+        item.id=p.id+'-'+m.id; item.name=p.name+' ('+m.name+')'; item.price=m.price||p.price;
+        if (m.image_id){var img=(vd.images||[]).find(function(i){return i.id===m.image_id;});if(img)item.imageUrl=img.url;}
     }
-    window.addEventListener('resize', updateModalImgSize);
-    // Auto-open modal from URL param ?open=<id>
-    (function() {
-        const params = new URLSearchParams(location.search);
-        const openId = parseInt(params.get('open'));
-        if (openId) openProductModal(openId);
-    })();
+    var cart=getCart(), exist=cart.find(function(i){return i.id===item.id;});
+    if (exist) exist.qty++; else cart.push(item);
+    saveCart(cart);
+    var btn=document.getElementById('modalCartBtn'), orig=btn.innerHTML;
+    btn.innerHTML='<span class="material-symbols-outlined" style="font-size:20px;">check</span> Ditambahkan!';
+    btn.style.background='#16a34a';
+    setTimeout(function(){btn.innerHTML=orig;btn.style.background='var(--color-primary,#001e40)';},1500);
+}
+
+function closeCatalogModal() {
+    document.getElementById('catalogModalSheet').classList.remove('open');
+    setTimeout(function(){document.getElementById('catalogModal').classList.remove('open');},300);
+    document.body.style.overflow=''; curId=null;
+}
+
+window.openCatalogModal=openCatalogModal;
+window.closeCatalogModal=closeCatalogModal;
+window.addCurrentToCart=addCurrentToCart;
+window.handleModalOverlayClick=handleModalOverlayClick;
+
+// Auto-open dari URL ?open=<id>
+(function(){
+    var oid=parseInt(new URLSearchParams(location.search).get('open'));
+    if(oid) openCatalogModal(oid);
+})();
+})();
 </script>

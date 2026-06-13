@@ -53,6 +53,25 @@ button.px-10 {
     background-color: #001E40 !important;
     color: #FFFFFF !important;
 }
+/* ── Product Carousel ── */
+.carousel-arrow {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    background: var(--color-surface, #fff);
+    border: 1.5px solid var(--color-outline-variant, #c3c6d1);
+    border-radius: 99px;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 5; transition: box-shadow 0.2s, opacity 0.2s;
+    color: var(--color-primary, #001e40);
+}
+.carousel-arrow:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+.arrow-prev { left: -18px; }
+.arrow-next { right: -18px; }
+@media (max-width: 639px) { .carousel-arrow { display: none; } }
+.carousel-dot { height: 8px; border-radius: 99px; border: none; cursor: pointer; transition: all 0.3s; display: inline-block; }
 </style>
 
         <!-- Map Pinpoint Modal -->
@@ -113,54 +132,68 @@ button.px-10 {
                 <p class="text-on-surface-variant text-lg">Admin sedang berkeliling nusantara mencari barang impianmu.</p>
             </div>
         <?php else: ?>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <?php foreach($products as $product): ?>
-                    <!-- Product Card -->
-                    <div class="group bg-surface rounded-3xl overflow-hidden shadow-sm hover:-translate-y-2 hover:shadow-xl transition-all duration-300 border border-outline-variant/20"
-                         data-product-id="<?= $product->getId() ?>"
-                         data-product-name="<?= htmlspecialchars($product->getName()) ?>"
-                         data-product-price="<?= (float)$product->getPrice() ?>"
-                         data-product-image="<?= htmlspecialchars($product->getImageUrl() ?? '') ?>">
-                        <div class="relative h-64 overflow-hidden bg-surface-container-high flex items-center justify-center">
-                            <?php if ($product->getImageUrl()): ?>
-                                <img src="<?= htmlspecialchars($product->getImageUrl()) ?>" alt="<?= htmlspecialchars($product->getName()) ?>" class="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500" loading="lazy">
-                            <?php else: ?>
-                                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary-container/10 group-hover:scale-110 transition-transform duration-500"></div>
-                                <span class="text-6xl relative z-10 drop-shadow-sm group-hover:scale-110 transition-transform duration-500">📦</span>
-                            <?php endif; ?>
-                            
-                            <div class="absolute top-4 left-4 bg-surface px-4 py-1.5 rounded-full text-xs font-bold text-primary flex items-center gap-1 shadow-sm backdrop-blur-sm location-pill"
-                                 data-lat="<?= htmlspecialchars($product->getLatitude()) ?>" 
-                                 data-lon="<?= htmlspecialchars($product->getLongitude()) ?>">
-                                <span class="material-symbols-outlined text-[16px]">location_on</span> <span class="location-text">INDONESIA</span>
-                            </div>
-                        </div>
-                        <div class="p-8 flex flex-col h-[calc(100%-16rem)]">
-                            <h3 class="font-headline-md text-xl font-bold text-on-surface mb-3 line-clamp-2" title="<?= htmlspecialchars($product->getName()) ?>">
-                                <?= htmlspecialchars($product->getName()) ?>
-                            </h3>
-                            <p class="font-body-md text-on-surface-variant mb-6 line-clamp-2">Barang jastip pilihan terbaik dengan kualitas terjamin.</p>
-                            
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto gap-4">
-                                <span class="font-headline-md text-xl font-black text-secondary dark:text-secondary-fixed">
-                                    Rp. <?= number_format((float)$product->getPrice(), 0, ',', '.') ?>
-                                </span>
-                                <div class="flex flex-row gap-2 mt-auto">
-                                    <a href="?page=catalog&open=<?= $product->getId() ?>"
-                                       class="flex-1 bg-primary text-white px-3 py-2.5 rounded-xl flex items-center justify-center gap-1.5 hover:bg-primary/90 transition-colors shadow-md active:scale-95">
-                                        <span class="material-symbols-outlined text-[18px]">visibility</span>
-                                        <span class="font-bold text-sm">Detail</span>
-                                    </a>
-                                    <button onclick="addToCart(this)"
-                                            class="flex-1 bg-secondary-container text-on-secondary-container px-3 py-2.5 rounded-xl flex items-center justify-center gap-1.5 hover:bg-secondary hover:text-white transition-colors shadow-md active:scale-95 border border-transparent">
-                                        <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
-                                        <span class="font-bold text-sm">Keranjang</span>
-                                    </button>
+            <!-- ── Product Carousel ── -->
+            <div class="relative px-6" id="product-carousel">
+                <div class="overflow-hidden" id="carousel-viewport">
+                    <div class="flex" id="carousel-track" style="gap:32px;transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);will-change:transform;">
+                        <?php foreach($products as $product): ?>
+                        <div class="carousel-slide flex-shrink-0 flex flex-col"
+                             data-product-id="<?= $product->getId() ?>"
+                             data-product-name="<?= htmlspecialchars($product->getName()) ?>"
+                             data-product-price="<?= (float)$product->getPrice() ?>"
+                             data-product-image="<?= htmlspecialchars($product->getImageUrl() ?? '') ?>">
+                            <div class="group bg-surface rounded-3xl overflow-hidden shadow-sm hover:-translate-y-2 hover:shadow-xl transition-all duration-300 border border-outline-variant/20 flex flex-col flex-1">
+                                <div class="relative h-64 overflow-hidden bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                                    <?php if ($product->getImageUrl()): ?>
+                                        <img src="<?= htmlspecialchars($product->getImageUrl()) ?>" alt="<?= htmlspecialchars($product->getName()) ?>" class="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500" loading="lazy">
+                                    <?php else: ?>
+                                        <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary-container/10"></div>
+                                        <span class="text-6xl relative z-10 drop-shadow-sm">📦</span>
+                                    <?php endif; ?>
+                                    <div class="absolute top-4 left-4 bg-surface px-4 py-1.5 rounded-full text-xs font-bold text-primary flex items-center gap-1 shadow-sm backdrop-blur-sm location-pill"
+                                         data-lat="<?= htmlspecialchars($product->getLatitude()) ?>"
+                                         data-lon="<?= htmlspecialchars($product->getLongitude()) ?>">
+                                        <span class="material-symbols-outlined text-[16px]">location_on</span>
+                                        <span class="location-text">INDONESIA</span>
+                                    </div>
+                                </div>
+                                <div class="p-8 flex flex-col flex-1">
+                                    <h3 class="font-headline-md text-xl font-bold text-on-surface mb-3 line-clamp-2" title="<?= htmlspecialchars($product->getName()) ?>">
+                                        <?= htmlspecialchars($product->getName()) ?>
+                                    </h3>
+                                    <p class="font-body-md text-on-surface-variant mb-6 line-clamp-2"><?= htmlspecialchars($product->getDescription() ?: 'Barang jastip pilihan terbaik dengan kualitas terjamin.') ?></p>
+                                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-auto gap-4">
+                                        <span class="font-headline-md text-xl font-black text-secondary dark:text-secondary-fixed">
+                                            Rp. <?= number_format((float)$product->getPrice(), 0, ',', '.') ?>
+                                        </span>
+                                        <div class="flex flex-row gap-2">
+                                            <a href="?page=catalog&open=<?= $product->getId() ?>"
+                                               class="flex-1 bg-primary text-white px-3 py-2.5 rounded-xl flex items-center justify-center gap-1.5 hover:bg-primary/90 transition-colors shadow-md active:scale-95">
+                                                <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                                <span class="font-bold text-sm">Detail</span>
+                                            </a>
+                                            <button onclick="addToCart(this)"
+                                                    class="flex-1 bg-secondary-container text-on-secondary-container px-3 py-2.5 rounded-xl flex items-center justify-center gap-1.5 hover:bg-secondary hover:text-white transition-colors shadow-md active:scale-95 border border-transparent">
+                                                <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                                <span class="font-bold text-sm">Keranjang</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
+                </div>
+
+                <button class="carousel-arrow arrow-prev" id="carousel-prev" aria-label="Sebelumnya">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button class="carousel-arrow arrow-next" id="carousel-next" aria-label="Berikutnya">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+
+                <div id="carousel-dots" style="display:flex;justify-content:center;gap:8px;padding-top:24px;"></div>
             </div>
         <?php endif; ?>
 
@@ -524,4 +557,139 @@ button.px-10 {
             gsap.from(".hero-logo", { scale: 0.8, opacity: 0, duration: 1, ease: "back.out(1.7)" });
         }
     });
+
+    // ── Product Carousel ──────────────────────────────────────────────────────
+    (function() {
+        var carousel = document.getElementById('product-carousel');
+        if (!carousel) return;
+
+        var track    = document.getElementById('carousel-track');
+        var viewport = document.getElementById('carousel-viewport');
+        var slides   = track.querySelectorAll('.carousel-slide');
+        var total    = slides.length;
+        var idx      = 0;
+        var GAP      = 32;
+        var paused   = false;
+        var timer    = null;
+        var resumeTO = null;
+
+        function getVisible() {
+            return window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1;
+        }
+
+        function slideW() {
+            var v = getVisible();
+            return (viewport.offsetWidth - (v - 1) * GAP) / v;
+        }
+
+        function layout() {
+            var w = slideW();
+            slides.forEach(function(s) { s.style.width = w + 'px'; });
+            clampIdx();
+            moveTo(false);
+            buildDots();
+        }
+
+        function clampIdx() {
+            var max = Math.max(0, total - getVisible());
+            if (idx > max) idx = max;
+        }
+
+        function moveTo(animate) {
+            track.style.transition = animate === false
+                ? 'none'
+                : 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+            track.style.transform = 'translateX(-' + (idx * (slideW() + GAP)) + 'px)';
+            if (animate === false) { void track.offsetHeight; track.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)'; }
+            updateDots();
+            updateArrows();
+        }
+
+        function goTo(i) {
+            var max = Math.max(0, total - getVisible());
+            idx = Math.max(0, Math.min(i, max));
+            moveTo(true);
+        }
+
+        function next() { var max = Math.max(0, total - getVisible()); goTo(idx >= max ? 0 : idx + 1); }
+        function prev() { var max = Math.max(0, total - getVisible()); goTo(idx <= 0 ? max : idx - 1); }
+
+        // Dots
+        function buildDots() {
+            var el = document.getElementById('carousel-dots');
+            el.innerHTML = '';
+            var pages = Math.max(1, total - getVisible() + 1);
+            for (var i = 0; i < pages; i++) {
+                var dot = document.createElement('button');
+                dot.className = 'carousel-dot';
+                dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+                (function(i) { dot.addEventListener('click', function() { goTo(i); resetTimer(); }); })(i);
+                el.appendChild(dot);
+            }
+            updateDots();
+        }
+
+        function updateDots() {
+            document.querySelectorAll('.carousel-dot').forEach(function(d, i) {
+                d.style.width    = i === idx ? '24px' : '8px';
+                d.style.background = i === idx ? 'var(--color-primary,#001e40)' : '#d1d5db';
+            });
+        }
+
+        function updateArrows() {
+            var max = Math.max(0, total - getVisible());
+            document.getElementById('carousel-prev').style.opacity = idx <= 0  ? '0.35' : '1';
+            document.getElementById('carousel-next').style.opacity = idx >= max ? '0.35' : '1';
+        }
+
+        // Auto-play
+        function resetTimer() {
+            clearInterval(timer);
+            timer = setInterval(function() { if (!paused) next(); }, 3500);
+        }
+
+        function tempPause(ms) {
+            paused = true;
+            clearTimeout(resumeTO);
+            resumeTO = setTimeout(function() { paused = false; }, ms || 8000);
+        }
+
+        // Controls
+        document.getElementById('carousel-prev').addEventListener('click', function() { prev(); resetTimer(); });
+        document.getElementById('carousel-next').addEventListener('click', function() { next(); resetTimer(); });
+
+        carousel.addEventListener('mouseenter', function() { paused = true; });
+        carousel.addEventListener('mouseleave', function() { paused = false; clearTimeout(resumeTO); });
+        carousel.addEventListener('click',      function() { tempPause(8000); });
+
+        // Touch swipe
+        var txStart = 0;
+        track.addEventListener('touchstart', function(e) { txStart = e.touches[0].clientX; paused = true; }, { passive: true });
+        track.addEventListener('touchend',   function(e) {
+            var d = txStart - e.changedTouches[0].clientX;
+            if (Math.abs(d) > 40) { d > 0 ? next() : prev(); }
+            resetTimer(); tempPause(5000);
+        }, { passive: true });
+
+        // Trackpad horizontal swipe (Mac)
+        var wheelAccum = 0, wheelLocked = false;
+        viewport.addEventListener('wheel', function(e) {
+            if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+            e.preventDefault();
+            if (wheelLocked) return;
+            wheelAccum += e.deltaX;
+            if (Math.abs(wheelAccum) > 60) {
+                wheelAccum > 0 ? next() : prev();
+                wheelAccum = 0;
+                wheelLocked = true;
+                resetTimer(); tempPause(5000);
+                setTimeout(function() { wheelLocked = false; }, 500);
+            }
+        }, { passive: false });
+
+        window.addEventListener('resize', layout);
+
+        layout();
+        resetTimer();
+    })();
 </script>

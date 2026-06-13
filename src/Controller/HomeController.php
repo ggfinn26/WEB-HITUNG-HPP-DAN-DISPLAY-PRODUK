@@ -60,20 +60,15 @@ class HomeController {
     }
 
     public function catalog() {
-        $perPage = 12;
-        $currentPage = max(1, (int)($_GET['p'] ?? 1));
-        $totalProducts = $this->productService->countAll();
-        $totalPages = max(1, (int)ceil($totalProducts / $perPage));
-        $currentPage = min($currentPage, $totalPages);
-
-        $products = $this->productService->findPaginated($currentPage, $perPage);
+        $products = $this->productService->findAll();
+        $products = array_values(array_filter($products, fn($p) => !$p->getIsDeleted()));
 
         $scheme  = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
         $baseUrl = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
 
         $title       = 'Katalog Produk Jastip | Mbu Titip Arunga Arungi Dunia';
         $description = 'Jelajahi katalog lengkap barang jastip dari berbagai pelosok nusantara. Produk pilihan tangan pertama dengan kualitas terjamin untuk keluarga tersayang.';
-        $canonical   = $baseUrl . '/?page=catalog&p=' . $currentPage;
+        $canonical   = $baseUrl . '/?page=catalog';
         $ogImage     = $baseUrl . '/logo.webp';
 
         // ItemList structured data for catalog

@@ -206,7 +206,8 @@ $_seoLd      = $structuredData ?? null;
     <script src="js/cart.js"></script>
 
     <!-- Main Content -->
-    <main class="flex-grow w-full relative z-10 p-6 md:p-10 max-w-7xl mx-auto">
+    <?php $isFullWidth = in_array($_GET['page'] ?? '', ['catalog', 'home', '']); ?>
+    <main class="flex-grow w-full relative z-10 <?= $isFullWidth ? '' : 'p-6 md:p-10 max-w-7xl mx-auto' ?>">
         <?php echo $content ?? ''; ?>
     </main>
 

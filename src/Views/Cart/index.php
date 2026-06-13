@@ -198,7 +198,7 @@ window._ADMIN_IG = <?= json_encode($adminIg,  JSON_UNESCAPED_UNICODE) ?>;
 
         try { navigator.clipboard.writeText(igMsg); } catch(e) {}
 
-        location.href = 'https://ig.me/m/' + adminIg;
+        window.open('https://instagram.com/' + adminIg, '_blank');
 
         btn.disabled = true;
         btn.style.background = '#16a34a';
