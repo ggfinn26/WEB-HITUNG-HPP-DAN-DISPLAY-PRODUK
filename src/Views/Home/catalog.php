@@ -502,7 +502,8 @@ function openCatalogModal(id) {
 
     var dw=document.getElementById('modalDescWrap');
     if (p.description && p.description.trim()) {
-        document.getElementById('modalDesc').innerHTML=p.description; dw.style.display='block';
+        var safeDesc = (typeof DOMPurify !== 'undefined') ? DOMPurify.sanitize(p.description) : p.description;
+        document.getElementById('modalDesc').innerHTML=safeDesc; dw.style.display='block';
     } else { dw.style.display='none'; }
 
     document.getElementById('catalogModal').classList.add('open');
