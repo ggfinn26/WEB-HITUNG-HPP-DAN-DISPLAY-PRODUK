@@ -147,7 +147,8 @@ if (!empty($products)) {
             'id' => $p->getId(),
             'name' => $p->getName(),
             'price' => $p->getPrice(),
-            'imageUrl' => $p->getImageUrl()
+            'imageUrl' => $p->getImageUrl(),
+            'description' => $p->getDescription()
         ];
     }
 }
