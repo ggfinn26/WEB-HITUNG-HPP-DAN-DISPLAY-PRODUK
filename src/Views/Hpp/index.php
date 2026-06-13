@@ -67,25 +67,25 @@
                     <?php else: ?>
                     <?php foreach ($hppList as $hpp): ?>
                     <tr class="block md:table-row bg-surface hover:bg-surface-container/50 transition-colors rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden md:overflow-visible pt-2 md:pt-0">
-                        <td class="block md:table-cell py-3 md:py-4 px-4 md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                        <td class="block md:table-cell py-3 md:py-4 px-4 border-b border-outline-variant/10 md:border-none">
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center md:block gap-1 sm:gap-4">
                                 <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant flex-shrink-0">Nama Produk</span>
                                 <div class="font-bold text-on-surface text-left sm:text-right md:text-left break-words"><?= htmlspecialchars($hpp->getName()) ?></div>
                             </div>
                         </td>
-                        <td class="block md:table-cell py-3 md:py-4 px-4 md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                        <td class="block md:table-cell py-3 md:py-4 px-4 border-b border-outline-variant/10 md:border-none">
                             <div class="flex justify-between items-center md:block">
                                 <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant flex-shrink-0">Total Biaya Item</span>
                                 <div class="text-on-surface-variant text-sm text-right md:text-right">Rp. <?= number_format((float)$hpp->getTotalBiayaHpp(), 0, ',', '.') ?></div>
                             </div>
                         </td>
-                        <td class="block md:table-cell py-3 md:py-4 px-4 md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                        <td class="block md:table-cell py-3 md:py-4 px-4 border-b border-outline-variant/10 md:border-none">
                             <div class="flex justify-between items-center md:block">
                                 <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant flex-shrink-0">HPP Dasar / item</span>
                                 <div class="font-medium text-on-surface text-right md:text-right">Rp. <?= number_format((float)$hpp->getHppPerPcs(), 0, ',', '.') ?></div>
                             </div>
                         </td>
-                        <td class="block md:table-cell py-3 md:py-4 px-4 md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                        <td class="block md:table-cell py-3 md:py-4 px-4 border-b border-outline-variant/10 md:border-none">
                             <div class="flex justify-between items-center md:block">
                                 <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant flex-shrink-0">Margin</span>
                                 <div class="text-right md:text-center">
@@ -95,13 +95,13 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="block md:table-cell py-3 md:py-4 px-4 md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                        <td class="block md:table-cell py-3 md:py-4 px-4 border-b border-outline-variant/10 md:border-none">
                             <div class="flex justify-between items-center md:block">
                                 <span class="md:hidden font-bold text-xs uppercase text-on-surface-variant flex-shrink-0">Harga Jual Dasar</span>
                                 <div class="font-black text-primary text-lg text-right md:text-right">Rp. <?= number_format((float)$hpp->getHargaJualProduk(), 0, ',', '.') ?></div>
                             </div>
                         </td>
-                        <td class="block md:table-cell py-3 md:py-4 px-4 bg-surface-container-low/50 md:bg-transparent md:whitespace-nowrap">
+                        <td class="block md:table-cell py-3 md:py-4 px-4 bg-surface-container-low/50 md:bg-transparent">
                             <div class="flex flex-col sm:flex-row gap-2 justify-center">
                                 <a href="?page=products&action=create&hpp_id=<?= $hpp->getId() ?>"
                                    class="bg-primary/10 text-primary hover:bg-primary hover:text-white px-3 py-1.5 rounded-lg transition-colors font-bold text-sm flex justify-center items-center gap-1 w-full sm:w-auto"

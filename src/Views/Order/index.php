@@ -38,7 +38,7 @@
                 <?php else: ?>
                     <?php foreach ($orders as $order): ?>
                         <tr class="block md:table-row bg-surface hover:bg-background/80 transition-colors group rounded-2xl md:rounded-none border border-outline-variant/30 md:border-none shadow-sm md:shadow-none overflow-hidden md:overflow-visible pt-2 md:pt-0">
-                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 border-b border-outline-variant/10 md:border-none">
                                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center md:block gap-1 sm:gap-4">
                                     <span class="md:hidden font-bold text-xs uppercase text-muted flex-shrink-0">No. Seri</span>
                                     <div class="font-mono font-bold text-primary text-sm text-left sm:text-right md:text-left break-words">
@@ -46,7 +46,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 border-b border-outline-variant/10 md:border-none">
                                 <div class="flex justify-between items-center md:block gap-1">
                                     <span class="md:hidden font-bold text-xs uppercase text-muted flex-shrink-0">Pelanggan</span>
                                     <div class="font-medium text-text text-right md:text-left break-words">
@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 border-b border-outline-variant/10 md:border-none">
                                 <div class="flex justify-between items-center md:block">
                                     <span class="md:hidden font-bold text-xs uppercase text-muted flex-shrink-0">Tanggal</span>
                                     <div class="text-muted text-sm text-right md:text-left">
@@ -62,7 +62,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 border-b border-outline-variant/10 md:border-none">
                                 <div class="flex justify-between items-center md:block">
                                     <span class="md:hidden font-bold text-xs uppercase text-muted flex-shrink-0">Total</span>
                                     <div class="font-bold text-text tracking-tight text-right md:text-left">
@@ -70,7 +70,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 md:whitespace-nowrap border-b border-outline-variant/10 md:border-none">
+                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 border-b border-outline-variant/10 md:border-none">
                                 <div class="flex justify-between items-center md:block">
                                     <span class="md:hidden font-bold text-xs uppercase text-muted flex-shrink-0">Status</span>
                                     <div class="text-right md:text-left">
@@ -84,7 +84,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 md:whitespace-nowrap bg-background/50 md:bg-transparent">
+                            <td class="block md:table-cell py-3 md:py-4 px-4 md:px-6 bg-background/50 md:bg-transparent">
                                 <div class="flex justify-center md:justify-end">
                                     <a href="?page=orders&action=show&id=<?php echo urlencode($order->getOrderNumber()); ?>" class="inline-flex items-center justify-center gap-1 text-sm text-secondary hover:text-primary font-bold transition-colors py-2 md:py-1.5 px-4 md:px-3 bg-surface border border-outline-variant rounded-lg shadow-sm hover:shadow-md w-full md:w-auto">
                                         Detail <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
