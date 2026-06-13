@@ -88,7 +88,7 @@
 #catalogModal {
     position: fixed;
     inset: 0;
-    z-index: 50;
+    z-index: 80;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -337,6 +337,10 @@ foreach ($products as $p) {
 
 <script>
 (function() {
+// Move modal to <body> so it escapes <main>'s stacking context and covers the sticky header
+var _m = document.getElementById('catalogModal');
+if (_m && _m.parentNode !== document.body) document.body.appendChild(_m);
+
 var PRODUCTS     = <?= json_encode(array_values($jsProducts), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
 var variantsData = <?= json_encode($variantsData, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
 var fmt = function(n){ return 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.round(n)); };
