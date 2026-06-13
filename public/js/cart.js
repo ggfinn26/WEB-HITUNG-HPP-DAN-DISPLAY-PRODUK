@@ -45,8 +45,8 @@ function addToCart(btn) {
 
 // ── Alert Modal ───────────────────────────────────────────────────────────────
 
-const _alertIcons = { info: 'info', warning: 'warning', error: 'cancel', success: 'check_circle' };
-const _alertColors = { info: 'text-primary', warning: 'text-amber-500', error: 'text-red-500', success: 'text-green-600' };
+var _alertIcons = { info: 'info', warning: 'warning', error: 'cancel', success: 'check_circle' };
+var _alertColors = { info: 'text-primary', warning: 'text-amber-500', error: 'text-red-500', success: 'text-green-600' };
 
 function showAlert(message, type = 'info') {
     const overlay = document.getElementById('app-alert-overlay');
