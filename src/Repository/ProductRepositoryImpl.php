@@ -168,13 +168,11 @@ namespace App{
             return $result;
         }
 
-        /** @deprecated Use findAllSortedByPrice('ASC') */
-        public function findAllSortedByPriceAsc(string $direction = 'ASC'): array {
+        public function findAllSortedByPriceAsc(): array {
             return $this->findAllSortedByPrice('ASC');
         }
 
-        /** @deprecated Use findAllSortedByPrice('DESC') */
-        public function findAllSortedByPriceDesc(string $direction = 'DESC'): array {
+        public function findAllSortedByPriceDesc(): array {
             return $this->findAllSortedByPrice('DESC');
         }
 

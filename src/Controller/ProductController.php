@@ -239,20 +239,22 @@ class ProductController {
         // Handle uploaded variant images
         if (isset($files['variant_images']) && is_array($files['variant_images']['name'])) {
             foreach ($files['variant_images']['name'] as $index => $name) {
-                if ($files['variant_images']['error'][$index] === UPLOAD_ERR_OK) {
-                    $tmpPath = $files['variant_images']['tmp_name'][$index];
-                    $finfo    = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_file($finfo, $tmpPath);
-                    finfo_close($finfo);
-
-                    $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/avif'];
-                    if (in_array($mimeType, $allowed, true)) {
-                        $fileName = $this->processUploadedImage($tmpPath, $mimeType, $uploadDir);
+                $entry = [
+                    'error'    => $files['variant_images']['error'][$index],
+                    'size'     => $files['variant_images']['size'][$index],
+                    'tmp_name' => $files['variant_images']['tmp_name'][$index],
+                ];
+                try {
+                    $fileName = $this->validateAndHandleImageUpload($entry, $uploadDir);
+                    if ($fileName !== null) {
                         $images[$index] = [
-                            'url' => 'uploads/products/' . $fileName,
-                            'is_primary' => false
+                            'url'        => 'uploads/products/' . $fileName,
+                            'is_primary' => false,
                         ];
                     }
+                } catch (\Exception $e) {
+                    // Skip invalid variant images without failing the whole save
+                    error_log("Variant image [$index] skipped: " . $e->getMessage());
                 }
             }
         }

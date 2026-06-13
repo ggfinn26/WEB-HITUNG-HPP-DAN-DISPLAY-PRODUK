@@ -13,8 +13,8 @@ namespace App{
         public function findAll(): array;
         public function countAll(): int;
         public function findPaginated(int $page, int $perPage): array;
-        public function findAllSortedByPriceAsc(string $direction = 'ASC'): array;
-        public function findAllSortedByPriceDesc(string $direction = 'DESC'): array;
+        public function findAllSortedByPriceAsc(): array;
+        public function findAllSortedByPriceDesc(): array;
         public function updatePrice(int $id, string $price): void;
         public function findByHppId(int $hppId): ?Product;
     }
