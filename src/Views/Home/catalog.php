@@ -300,8 +300,10 @@ if (!empty($products)) {
         if (variant) {
             text += ` variasi ${variant.name}`;
             if (variant.stock <= 0) {
-                btn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">chat</span> Stok Habis`;
-                btn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                if (btn) {
+                    btn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">chat</span> Stok Habis`;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                }
                 
                 cartBtn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">add_shopping_cart</span> Stok Habis`;
                 cartBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
@@ -311,8 +313,10 @@ if (!empty($products)) {
             // Require variant selection if variants exist
             const vData = variantsData[currentProductId];
             if (vData && vData.groups.length > 0) {
-                btn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">chat</span> Pilih Variasi`;
-                btn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                if (btn) {
+                    btn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">chat</span> Pilih Variasi`;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                }
                 
                 cartBtn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">add_shopping_cart</span> Pilih Variasi`;
                 cartBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
@@ -321,8 +325,10 @@ if (!empty($products)) {
         }
         
         const waText = encodeURIComponent(text);
-        btn.href = `https://wa.me/${adminWa}?text=${waText}`;
-        btn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">chat</span> Pesan via WA`;
+        if (btn) {
+            btn.href = `https://wa.me/${adminWa}?text=${waText}`;
+            btn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">chat</span> Pesan via WA`;
+        }
         
         cartBtn.innerHTML = `<span class="material-symbols-outlined" data-weight="fill">add_shopping_cart</span> Masuk Keranjang`;
     }
