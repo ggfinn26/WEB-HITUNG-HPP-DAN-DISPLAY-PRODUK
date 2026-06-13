@@ -151,6 +151,8 @@ unset($_SESSION['cart_error']);
     </div>
 </section>
 
+<?php endif; ?>
+
 <script src="js/cart-page.js"></script>
 <script>
 (function() {
@@ -172,7 +174,6 @@ unset($_SESSION['cart_error']);
 
         try { navigator.clipboard.writeText(igMsg); } catch(e) {}
 
-        // Buka langsung dari click handler — window.open di setInterval diblokir popup blocker
         window.open('https://ig.me/m/' + adminIg, '_blank');
 
         btn.disabled = true;
@@ -195,4 +196,3 @@ unset($_SESSION['cart_error']);
     });
 })();
 </script>
-<?php endif; ?>
