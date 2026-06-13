@@ -29,10 +29,10 @@
             <table class="w-full text-left border-collapse block md:table">
                 <thead class="hidden md:table-header-group">
                     <tr class="border-b-2 border-outline-variant/50 text-primary">
-                        <th class="py-4 px-4 font-bold uppercase tracking-wider text-sm whitespace-nowrap">Nama Produk</th>
-                        <th class="py-4 px-4 font-bold uppercase tracking-wider text-sm whitespace-nowrap">Harga</th>
-                        <th class="py-4 px-4 font-bold uppercase tracking-wider text-sm whitespace-nowrap">Koordinat (Peta)</th>
-                        <th class="py-4 px-4 font-bold uppercase tracking-wider text-sm text-center whitespace-nowrap">Aksi</th>
+                        <th class="py-4 px-4 font-bold uppercase tracking-wider text-sm">Nama Produk</th>
+                        <th class="py-4 px-4 font-bold uppercase tracking-wider text-sm">Harga</th>
+                        <th class="py-4 px-4 font-bold uppercase tracking-wider text-sm">Koordinat (Peta)</th>
+                        <th class="py-4 px-4 font-bold uppercase tracking-wider text-sm text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="flex flex-col md:table-row-group gap-4 md:gap-0 md:divide-y md:divide-outline-variant/30">
@@ -97,7 +97,7 @@
             </p>
             <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto justify-center">
                 <?php if ($currentPage > 1): ?>
-                    <a href="?page=products&p=<?= $currentPage - 1 ?>" class="px-4 py-2 rounded-xl bg-surface border border-outline-variant text-sm font-semibold hover:border-primary hover:text-primary transition-colors whitespace-nowrap">
+                    <a href="?page=products&p=<?= $currentPage - 1 ?>" class="px-4 py-2 rounded-xl bg-surface border border-outline-variant text-sm font-semibold hover:border-primary hover:text-primary transition-colors">
                         &larr; Prev
                     </a>
                 <?php endif; ?>
@@ -107,12 +107,12 @@
                     for ($i = $start; $i <= $end; $i++):
                 ?>
                     <a href="?page=products&p=<?= $i ?>"
-                       class="px-4 py-2 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap <?= $i === $currentPage ? 'bg-primary text-on-primary shadow-sm' : 'bg-surface border border-outline-variant hover:border-primary hover:text-primary' ?>">
+                       class="px-4 py-2 rounded-xl text-sm font-semibold transition-colors <?= $i === $currentPage ? 'bg-primary text-on-primary shadow-sm' : 'bg-surface border border-outline-variant hover:border-primary hover:text-primary' ?>">
                         <?= $i ?>
                     </a>
                 <?php endfor; ?>
                 <?php if ($currentPage < $totalPages): ?>
-                    <a href="?page=products&p=<?= $currentPage + 1 ?>" class="px-4 py-2 rounded-xl bg-surface border border-outline-variant text-sm font-semibold hover:border-primary hover:text-primary transition-colors whitespace-nowrap">
+                    <a href="?page=products&p=<?= $currentPage + 1 ?>" class="px-4 py-2 rounded-xl bg-surface border border-outline-variant text-sm font-semibold hover:border-primary hover:text-primary transition-colors">
                         Next &rarr;
                     </a>
                 <?php endif; ?>

@@ -51,12 +51,12 @@
             <table class="w-full text-left border-collapse block md:table">
                 <thead class="hidden md:table-header-group">
                     <tr class="border-b-2 border-outline-variant/50 text-primary">
-                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider whitespace-nowrap">Nama Produk</th>
-                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-right whitespace-nowrap">Total Biaya Item</th>
-                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-right whitespace-nowrap">HPP Dasar / item</th>
-                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-center whitespace-nowrap">Margin</th>
-                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-right whitespace-nowrap">Harga Jual Dasar</th>
-                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-center whitespace-nowrap">Aksi</th>
+                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider">Nama Produk</th>
+                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-right">Total Biaya Item</th>
+                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-right">HPP Dasar / item</th>
+                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-center">Margin</th>
+                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-right">Harga Jual Dasar</th>
+                        <th class="py-4 px-4 font-bold text-sm uppercase tracking-wider text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="flex flex-col md:table-row-group gap-4 md:gap-0 md:divide-y md:divide-outline-variant/30 px-4 md:px-0">

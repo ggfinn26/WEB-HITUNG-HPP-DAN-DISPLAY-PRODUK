@@ -17,12 +17,12 @@
         <table class="w-full text-left border-collapse block md:table">
             <thead class="hidden md:table-header-group">
                 <tr class="text-muted border-b border-outline-variant bg-background/50">
-                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider whitespace-nowrap">No. Seri</th>
-                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider whitespace-nowrap">Pelanggan</th>
-                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider whitespace-nowrap">Tanggal</th>
-                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider whitespace-nowrap">Total</th>
-                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider whitespace-nowrap">Status</th>
-                    <th class="py-4 px-6 text-right font-semibold text-sm uppercase tracking-wider whitespace-nowrap">Aksi</th>
+                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider">No. Seri</th>
+                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider">Pelanggan</th>
+                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider">Tanggal</th>
+                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider">Total</th>
+                    <th class="py-4 px-6 font-semibold text-sm uppercase tracking-wider">Status</th>
+                    <th class="py-4 px-6 text-right font-semibold text-sm uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
             <tbody class="flex flex-col md:table-row-group gap-4 md:gap-0 md:divide-y md:divide-outline-variant px-4 md:px-0 bg-transparent md:bg-transparent">
