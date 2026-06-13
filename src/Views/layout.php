@@ -13,7 +13,7 @@ $_seoTitle   = $title       ?? 'Mbu Titip by Arunga Arungi Dunia';
 $_seoDesc    = $description ?? 'Jasa titip terpercaya dari berbagai penjuru Nusantara. Temukan barang-barang favorit keluarga dengan layanan personal shopper terbaik.';
 $_seoRobots  = $metaRobots  ?? (in_array($_curPage, $_adminPages) ? 'noindex, nofollow' : 'index, follow');
 $_seoCanon   = $canonical   ?? ($_seoBaseUrl . $_seoUri);
-$_seoOgImg   = $ogImage     ?? ($_seoBaseUrl . '/logo_transparent.svg');
+$_seoOgImg   = $ogImage     ?? ($_seoBaseUrl . '/logo.webp');
 $_seoOgType  = $ogType      ?? 'website';
 $_seoLd      = $structuredData ?? null;
 ?>
@@ -209,7 +209,7 @@ $_seoLd      = $structuredData ?? null;
     <footer class="bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline w-full mt-auto no-print">
         <div class="flex flex-col items-center text-center px-6 py-12 max-w-2xl mx-auto">
             <span class="font-headline-md text-headline-md font-extrabold text-primary dark:text-primary-fixed-dim mb-4 flex items-center justify-center gap-2">
-                <img src="logo_transparent.svg" alt="Logo" class="w-8 h-8 rounded-full object-cover" />
+                <img src="logo.webp" alt="Logo" class="w-8 h-8 rounded-full object-cover" />
                 Mbu Titip
             </span>
             <p class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant mb-6">Membawa keajaiban Nusantara ke depan pintu rumah Anda dengan layanan personal shopper terpercaya untuk keluarga.</p>
