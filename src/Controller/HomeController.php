@@ -30,7 +30,7 @@ class HomeController {
         $title       = 'Mbu Titip by Arunga Arungi Dunia | Jasa Titip Terpercaya Se-Indonesia';
         $description = 'Jasa titip (jastip) terpercaya dari berbagai penjuru Nusantara. Temukan barang-barang favorit keluarga dari berbagai daerah dengan layanan personal shopper terbaik dan harga terjangkau.';
         $canonical   = $baseUrl . '/';
-        $ogImage     = $baseUrl . '/logo_transparent.svg';
+        $ogImage     = $baseUrl . '/logo.webp';
         $structuredData = json_encode([
             '@context'    => 'https://schema.org',
             '@type'       => 'LocalBusiness',
@@ -38,8 +38,8 @@ class HomeController {
             'alternateName' => 'Jastip Arunga',
             'description' => $description,
             'url'         => $baseUrl . '/',
-            'logo'        => $baseUrl . '/logo_transparent.svg',
-            'image'       => $baseUrl . '/logo_transparent.svg',
+            'logo'        => $baseUrl . '/logo.webp',
+            'image'       => $baseUrl . '/logo.webp',
             'telephone'   => '+' . ($_ENV['ADMIN_WA'] ?? '62895380123352'),
             'priceRange'  => '$$',
             'serviceType' => 'Jasa Titip / Personal Shopper',
@@ -69,7 +69,7 @@ class HomeController {
         $title       = 'Katalog Produk Jastip | Mbu Titip Arunga Arungi Dunia';
         $description = 'Jelajahi katalog lengkap barang jastip dari berbagai pelosok nusantara. Produk pilihan tangan pertama dengan kualitas terjamin untuk keluarga tersayang.';
         $canonical   = $baseUrl . '/?page=catalog';
-        $ogImage     = $baseUrl . '/logo_transparent.svg';
+        $ogImage     = $baseUrl . '/logo.webp';
 
         // ItemList structured data for catalog
         $itemListElements = [];

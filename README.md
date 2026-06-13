@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/logo_transparent.svg" alt="Mbu Titip by Arunga Logo" width="220" />
+  <img src="public/logo.webp" alt="Mbu Titip by Arunga Logo" width="220" />
 </p>
 
 <h1 align="center">Mbu Titip by Arunga — Web HPP & Display Produk</h1>
