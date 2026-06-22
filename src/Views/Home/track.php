@@ -5,7 +5,10 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Tracking Error - Mbu Titip</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/material-symbols.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 </head>
 <body class="bg-[#f8f9ff] text-[#0b1c30] min-h-screen flex flex-col justify-center items-center p-4">
     <div class="bg-surface p-8 rounded-xl shadow-sm border border-[#c3c6d1] text-center max-w-md w-full">
@@ -24,100 +27,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Order Tracking Result - Mbu Titip</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="css/app.css">
 <link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/material-symbols.css">
-<script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              "colors": {
-                      "surface": "#f8f9ff",
-                      "secondary-fixed": "#ffdcc3",
-                      "on-error-container": "#93000a",
-                      "surface-container-high": "#dce9ff",
-                      "inverse-on-surface": "#eaf1ff",
-                      "outline-variant": "#c3c6d1",
-                      "tertiary-container": "#003a3a",
-                      "on-tertiary-fixed-variant": "#004f4f",
-                      "surface-dim": "#cbdbf5",
-                      "on-tertiary-container": "#47aaaa",
-                      "secondary": "#904d00",
-                      "primary-fixed": "#d5e3ff",
-                      "on-tertiary": "#ffffff",
-                      "on-secondary-container": "#603100",
-                      "inverse-surface": "#213145",
-                      "tertiary-fixed-dim": "#76d6d5",
-                      "primary": "#001e40",
-                      "on-secondary": "#ffffff",
-                      "inverse-primary": "#a7c8ff",
-                      "tertiary-fixed": "#93f2f2",
-                      "error": "#ba1a1a",
-                      "outline": "#737780",
-                      "surface-container-low": "#eff4ff",
-                      "secondary-container": "#fd8b00",
-                      "surface-tint": "#3a5f94",
-                      "error-container": "#ffdad6",
-                      "surface-container": "#e5eeff",
-                      "on-secondary-fixed": "#2f1500",
-                      "on-primary-fixed-variant": "#1f477b",
-                      "primary-fixed-dim": "#a7c8ff",
-                      "tertiary": "#002323",
-                      "primary-container": "#003366",
-                      "surface-container-lowest": "#ffffff",
-                      "on-secondary-fixed-variant": "#6e3900",
-                      "on-primary-fixed": "#001b3c",
-                      "on-primary": "#ffffff",
-                      "surface-bright": "#f8f9ff",
-                      "on-tertiary-fixed": "#002020",
-                      "on-surface-variant": "#43474f",
-                      "surface-variant": "#d3e4fe",
-                      "secondary-fixed-dim": "#ffb77d",
-                      "on-background": "#0b1c30",
-                      "on-primary-container": "#799dd6",
-                      "background": "#f8f9ff",
-                      "on-surface": "#0b1c30",
-                      "surface-container-highest": "#d3e4fe",
-                      "on-error": "#ffffff"
-              },
-              "borderRadius": {
-                      "DEFAULT": "0.25rem",
-                      "lg": "0.5rem",
-                      "xl": "0.75rem",
-                      "full": "9999px"
-              },
-              "spacing": {
-                      "margin-mobile": "16px",
-                      "unit": "8px",
-                      "gutter": "24px",
-                      "container-max": "1280px",
-                      "margin-desktop": "48px"
-              },
-              "fontFamily": {
-                      "headline-lg": ["Montserrat"],
-                      "body-lg": ["Inter"],
-                      "headline-md": ["Montserrat"],
-                      "body-md": ["Inter"],
-                      "display-lg": ["Montserrat"],
-                      "headline-lg-mobile": ["Montserrat"],
-                      "label-sm": ["Inter"],
-                      "label-md": ["Inter"]
-              },
-              "fontSize": {
-                      "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
-                      "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
-                      "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
-                      "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
-                      "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-                      "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
-                      "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
-                      "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }]
-              }
-            }
-          }
-        }
-    </script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 <style>
         .flight-path-stepper::before {
             content: '';
